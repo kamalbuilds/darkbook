@@ -1,0 +1,73 @@
+.anchor/
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+
+# Faucet authority keypair — contains private key, never commit
+.faucet-authority.json
+
+
+# Anchor / Solana
+target/
+.anchor/
+test-ledger/
+
+# Node / Bun
+node_modules/
+bun.lock
+
+# Next.js
+.next/
+out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Debug
+log-*.txt
+
+# Private — internal audit, idea research, application drafts, agent state
+# These contain critique receipts, sidetrack strategy notes, application
+# drafts, and brain-os memory. Public repo should not expose them.
+findings/
+progress/
+.brain/
+.claude/
+.cursor/
+semgrep_output.json
+*.local.md
+EXECUTOR_TEST.md
+
+# Build outputs
+sdk/dist/
+services/*/dist/
+*.tsbuildinfo
+
+# Session cookies / auth — NEVER commit
+**/cookies.json
+**/*.cookies
+.colosseum-cli/
+
+# Anchor build target — keypairs MUST never be public; .so + idl are
+# rebuildable. SDK consumers run `anchor build` first per README.
+.gstack/
+
+.cargo-home
+
+LOOM-SCRIPT.md
+private
