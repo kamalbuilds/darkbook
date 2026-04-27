@@ -1,0 +1,48 @@
+{
+  "name": "@darkbook/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for the DarkBook Anchor program",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.32.1",
+    "@ika.xyz/sdk": "^0.4.0",
+    "@magicblock-labs/ephemeral-rollups-sdk": "^0.11.1",
+    "@mysten/sui": "^2.16.0",
+    "@noble/curves": "^1.6.0",
+    "@noble/hashes": "^1.5.0",
+    "@scure/base": "^1.1.1",
+    "@solana/spl-token": "^0.4.13",
+    "@solana/web3.js": "^1.98.0",
+    "bn.js": "^5.2.1",
+    "ws": "^8.18.0"
+  },
+  "optionalDependencies": {
+    "@umbra-privacy/sdk": "*"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.6",
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.13",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0"
+  }
+}
