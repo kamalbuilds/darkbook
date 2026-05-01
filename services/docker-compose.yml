@@ -1,0 +1,77 @@
+# DarkBook services orchestration.
+# Run from repo root: `docker compose -f services/docker-compose.yml --env-file .env up -d`
+#
+# Build context for each service is the repo root (..) so workspace packages
+# (sdk/, services/*) and the lockfile resolve correctly.
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:1.62
+    container_name: darkbook-jaeger
+    ports:
+      - "16686:16686" # Jaeger UI
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    restart: unless-stopped
+
+  settler:
+    build:
+      context: ..
+      dockerfile: services/settler/Dockerfile
+    container_name: darkbook-settler
+    env_file:
+      - ../.env
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+      OTEL_SERVICE_NAME: darkbook-settler
+    ports:
+      - "${SETTLER_PORT:-8081}:8081"
+    depends_on:
+      - jaeger
+    restart: unless-stopped
+
+  er-broadcaster:
+    build:
+      context: ..
+      dockerfile: services/er-broadcaster/Dockerfile
+    container_name: darkbook-er-broadcaster
+    env_file:
+      - ../.env
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+      OTEL_SERVICE_NAME: darkbook-er-broadcaster
+    ports:
+      - "${ER_BROADCASTER_PORT:-8082}:8082"
+    depends_on:
+      - jaeger
+    restart: unless-stopped
+
+  funding-cron:
+    build:
+      context: ..
+      dockerfile: services/funding-cron/Dockerfile
+    container_name: darkbook-funding-cron
+    env_file:
+      - ../.env
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+      OTEL_SERVICE_NAME: darkbook-funding-cron
+    depends_on:
+      - jaeger
+    restart: unless-stopped
+
+  liquidation-watcher:
+    build:
+      context: ..
+      dockerfile: services/liquidation-watcher/Dockerfile
+    container_name: darkbook-liquidation-watcher
+    env_file:
+      - ../.env
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+      OTEL_SERVICE_NAME: darkbook-liquidation-watcher
+    depends_on:
+      - jaeger
+    restart: unless-stopped
