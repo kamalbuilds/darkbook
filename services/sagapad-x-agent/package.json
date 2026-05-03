@@ -1,0 +1,22 @@
+{
+  "name": "@darkbook/sagapad-x-agent",
+  "version": "1.0.0",
+  "description": "SagaPad X agent for DarkBook hackathon visibility and social engagement",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@darkbook/sdk": "workspace:*",
+    "@solana/web3.js": "^1.98.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.7.3"
+  }
+}
