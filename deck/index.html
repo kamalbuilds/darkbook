@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>DarkBook — Frontier 2026 Pitch</title>
+  <meta name="description" content="DarkBook: Institutional perps, hidden from MEV. Sub-50ms matching on Solana.">
+
+  <!-- Reveal.js core (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme">
+
+  <!-- Custom theme -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Reveal v5 handles print view internally when URL has ?print-pdf -->
+  <style>
+    /* Force solid black on every printed slide so PDF doesn't go white */
+    @media print {
+      html, body, .reveal, .reveal-viewport,
+      .reveal .slides, .reveal .slides section,
+      .pdf-page, .reveal .pdf-page {
+        background: #0a0a0a !important;
+        color: #f5f5f5 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 1. TITLE                                                     -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="title-slide">
+    <div class="eyebrow">Frontier Hackathon · Solana Foundation · 2026</div>
+    <div class="brand">Dark<span class="brand-dot">/</span>Book</div>
+    <div class="tagline">Institutional perps, hidden from MEV.</div>
+    <div class="tagline-sub">Sub-50ms matching on Solana.</div>
+    <div class="title-meta">
+      <span>kamalbuilds</span>
+      <span>May 2026</span>
+      <span>Privacy + Speed Track</span>
+    </div>
+  </div>
+  <div class="slide-num">01 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 2. PROBLEM                                                   -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">The Problem</span>
+    <h2>Pick <em>two.</em></h2>
+    <p style="max-width:1000px;">Today's perps traders are forced into an impossible trilemma. Every existing venue forfeits one of the three things that matter most.</p>
+
+    <div class="grid grid-3" style="margin-top:36px;">
+      <div class="card">
+        <h4>Drift / Dexlab</h4>
+        <p class="dim mono" style="font-size:0.85rem;">SOLANA CLOB</p>
+        <p style="margin-top:14px;font-size:1.05rem;"><span class="emerald">✓ Decentralized</span><br><span class="emerald">✓ Private-ish</span><br><span style="color:var(--danger)">✗ 400ms+ latency</span><br><span style="color:var(--danger)">✗ MEV exposed</span></p>
+      </div>
+      <div class="card">
+        <h4>Hyperliquid</h4>
+        <p class="dim mono" style="font-size:0.85rem;">HYPE-EVM L1</p>
+        <p style="margin-top:14px;font-size:1.05rem;"><span class="emerald">✓ ~100ms latency</span><br><span class="emerald">✓ MEV-protected</span><br><span style="color:var(--danger)">✗ Centralized seq</span><br><span style="color:var(--danger)">✗ Closed source</span></p>
+      </div>
+      <div class="card">
+        <h4>dYdX v4 / Vertex</h4>
+        <p class="dim mono" style="font-size:0.85rem;">CROSS-CHAIN</p>
+        <p style="margin-top:14px;font-size:1.05rem;"><span class="emerald">✓ Decentralized</span><br><span class="emerald">✓ Sub-second</span><br><span style="color:var(--danger)">✗ Public order book</span><br><span style="color:var(--danger)">✗ Front-run city</span></p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:36px;">
+      <p>MEV extraction took <strong class="emerald">$700M+</strong> from CLOB users in 2025. Privacy on transparent chains is a luxury &mdash; not infrastructure.</p>
+    </div>
+  </div>
+  <div class="slide-num">02 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 3. INSIGHT                                                   -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag tag-violet">The Insight</span>
+    <h2>The stack <em>just landed.</em></h2>
+    <p style="max-width:1100px;">Three breakthroughs in 2026 collapsed the trilemma. DarkBook is the first venue to combine them.</p>
+
+    <div class="grid grid-3" style="margin-top:40px;">
+      <div class="card card-emerald">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">LAYER 1 &middot; SPEED</div>
+        <h4 style="font-size:1.4rem;margin-top:8px;">MagicBlock ER</h4>
+        <p>Validator-driven Ephemeral Rollups give Solana sub-50ms consensus. State isolation = encrypted order book.</p>
+      </div>
+      <div class="card card-violet">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">LAYER 2 &middot; PRIVACY</div>
+        <h4 style="font-size:1.4rem;margin-top:8px;">Token-2022 + Commit</h4>
+        <p>Confidential transfers hide collateral. Commitment scheme hides order size + entry price until settlement.</p>
+      </div>
+      <div class="card card-emerald">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">LAYER 3 &middot; ORACLE</div>
+        <h4 style="font-size:1.4rem;margin-top:8px;">Pyth Lazer</h4>
+        <p>Sub-millisecond price feeds. Mark and liquidate inside the 50ms matching window. No oracle lag = no toxic flow.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:36px;">
+      <p>Anatoly's Percolator (Mar 2026) unlocked <strong>permissionless perps</strong>. <span class="violet">DarkBook adds the dark.</span></p>
+    </div>
+  </div>
+  <div class="slide-num">03 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 4. PRODUCT                                                   -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">The Product</span>
+    <h2>Place hidden. <em>Settle public.</em></h2>
+
+    <div class="mock-ui">
+      <div class="mock-bar">
+        <div class="mock-dot r"></div><div class="mock-dot y"></div><div class="mock-dot g"></div>
+        <span class="mock-url">darkbook.so/trade/SOL-USDC</span>
+        <span style="margin-left:auto;color:var(--emerald)">● ER online · 47ms</span>
+      </div>
+      <div class="mock-grid">
+        <!-- Order book -->
+        <div class="mock-pane">
+          <div class="mock-h">Order Book · SOL/USDC</div>
+          <div class="ob-row ask"><span>$201.40</span><span class="ob-hidden">▓▓▓▓▓</span></div>
+          <div class="ob-row ask"><span>$201.20</span><span>1,240</span></div>
+          <div class="ob-row ask"><span>$201.00</span><span class="ob-hidden">▓▓▓</span></div>
+          <div class="ob-row ask"><span>$200.80</span><span>820</span></div>
+          <div class="ob-row spread">$200.50 &nbsp;·&nbsp; spread 0.20</div>
+          <div class="ob-row bid"><span>$200.30</span><span>1,520</span></div>
+          <div class="ob-row bid"><span>$200.10</span><span class="ob-hidden">▓▓▓▓▓▓</span></div>
+          <div class="ob-row bid"><span>$199.90</span><span>3,100</span></div>
+          <div class="ob-row bid"><span>$199.60</span><span class="ob-hidden">▓▓</span></div>
+          <div class="ob-row bid"><span>$199.40</span><span>910</span></div>
+          <div style="margin-top:14px;font-size:0.7rem;color:var(--text-faint);text-align:center">▓ = hidden iceberg size</div>
+        </div>
+
+        <!-- Chart -->
+        <div class="mock-pane">
+          <div class="mock-h">SOL-PERP &middot; mark $200.50 &middot; <span class="emerald">+1.24%</span></div>
+          <div class="chart-area">
+            <svg class="spark" viewBox="0 0 400 220" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#34d399" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,160 L20,150 L40,130 L60,140 L80,120 L100,90 L120,100 L140,75 L160,85 L180,60 L200,70 L220,55 L240,80 L260,50 L280,60 L300,40 L320,55 L340,30 L360,40 L380,25 L400,35 L400,220 L0,220 Z" fill="url(#g1)"/>
+              <path d="M0,160 L20,150 L40,130 L60,140 L80,120 L100,90 L120,100 L140,75 L160,85 L180,60 L200,70 L220,55 L240,80 L260,50 L280,60 L300,40 L320,55 L340,30 L360,40 L380,25 L400,35" fill="none" stroke="#34d399" stroke-width="2"/>
+              <circle cx="400" cy="35" r="4" fill="#34d399"/>
+            </svg>
+          </div>
+          <div style="display:flex;gap:20px;margin-top:12px;font-size:0.75rem;color:var(--text-faint)">
+            <span>1m · <span class="emerald">+0.12%</span></span>
+            <span>1h · <span class="emerald">+1.24%</span></span>
+            <span>24h · <span style="color:var(--danger)">-2.10%</span></span>
+            <span style="margin-left:auto">Pyth Lazer &middot; 0.4ms</span>
+          </div>
+        </div>
+
+        <!-- Positions -->
+        <div class="mock-pane">
+          <div class="mock-h">Your Positions</div>
+          <div class="pos-row">
+            <span><span class="pos-side-s">SHORT</span> SOL</span><span>5x</span><span class="emerald">+$1,240</span>
+          </div>
+          <div class="pos-row">
+            <span><span class="pos-side-l">LONG</span> SOL</span><span>3x</span><span style="color:var(--danger)">-$320</span>
+          </div>
+          <div class="pos-row">
+            <span><span class="pos-side-s">SHORT</span> SOL</span><span>2x</span><span class="emerald">+$80</span>
+          </div>
+          <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border);font-size:0.85rem;">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;color:var(--text-dim)"><span>Total notional</span><span class="ob-hidden">▓▓▓▓▓ hidden</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span class="dim">Realized PnL (24h)</span><span class="emerald">+$1,000</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span class="dim">Liq price (avg)</span><span>$218.40</span></div>
+          </div>
+          <button style="width:100%;margin-top:16px;padding:12px;background:var(--emerald);color:var(--bg);border:none;border-radius:6px;font-family:var(--mono);font-weight:700;cursor:pointer">+ NEW ORDER</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;text-align:center;font-family:var(--mono);font-size:0.95rem;color:var(--text-dim)">
+      Place orders with <span class="violet">hidden size</span> &middot; See <span class="emerald">public PnL</span> &middot; Match in <span class="emerald">&lt;50ms</span>
+    </div>
+  </div>
+  <div class="slide-num">04 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 5. ARCHITECTURE                                              -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">The Architecture</span>
+    <h2>Three-layer privacy.</h2>
+
+    <div class="arch-wrap">
+      <svg viewBox="0 0 1200 460" style="width:100%;height:auto;">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#34d399"/>
+          </marker>
+          <marker id="arrow-v" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#8b5cf6"/>
+          </marker>
+        </defs>
+
+        <!-- Trader -->
+        <g>
+          <rect x="20" y="180" width="180" height="100" rx="10" fill="#161616" stroke="#34d399" stroke-width="2"/>
+          <text x="110" y="215" text-anchor="middle" fill="#f5f5f5" font-family="Inter" font-size="18" font-weight="700">Trader</text>
+          <text x="110" y="240" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="11">Phantom · Magic</text>
+          <text x="110" y="258" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="11">+ encrypted intent</text>
+        </g>
+
+        <!-- arrow 1 -->
+        <line x1="200" y1="230" x2="290" y2="230" stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="245" y="222" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">commit</text>
+
+        <!-- ER -->
+        <g>
+          <rect x="290" y="120" width="280" height="220" rx="10" fill="#161616" stroke="#8b5cf6" stroke-width="2"/>
+          <text x="430" y="155" text-anchor="middle" fill="#8b5cf6" font-family="Inter" font-size="18" font-weight="700">MagicBlock ER</text>
+          <text x="430" y="178" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="11">isolated state · sub-50ms</text>
+          <line x1="310" y1="195" x2="550" y2="195" stroke="#262626"/>
+
+          <text x="310" y="220" fill="#34d399" font-family="JetBrains Mono" font-size="11">▸ encrypted order book</text>
+          <text x="310" y="244" fill="#34d399" font-family="JetBrains Mono" font-size="11">▸ CLOB matching engine</text>
+          <text x="310" y="268" fill="#34d399" font-family="JetBrains Mono" font-size="11">▸ commitment proofs</text>
+          <text x="310" y="292" fill="#34d399" font-family="JetBrains Mono" font-size="11">▸ no mempool exposure</text>
+
+          <rect x="310" y="305" width="240" height="22" rx="4" fill="#0a0a0a" stroke="#262626"/>
+          <text x="430" y="320" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">finality every 100ms</text>
+        </g>
+
+        <!-- arrow 2 -->
+        <line x1="570" y1="230" x2="660" y2="230" stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="615" y="222" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="10">match proof</text>
+        <text x="615" y="245" text-anchor="middle" fill="#525252" font-family="JetBrains Mono" font-size="9">jito bundle</text>
+
+        <!-- Settlement -->
+        <g>
+          <rect x="660" y="120" width="280" height="220" rx="10" fill="#161616" stroke="#34d399" stroke-width="2"/>
+          <text x="800" y="155" text-anchor="middle" fill="#34d399" font-family="Inter" font-size="18" font-weight="700">Solana Mainnet</text>
+          <text x="800" y="178" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="11">settlement · auditable</text>
+          <line x1="680" y1="195" x2="920" y2="195" stroke="#262626"/>
+
+          <text x="680" y="220" fill="#8b5cf6" font-family="JetBrains Mono" font-size="11">▸ Anchor settlement program</text>
+          <text x="680" y="244" fill="#8b5cf6" font-family="JetBrains Mono" font-size="11">▸ Token-2022 confidential</text>
+          <text x="680" y="268" fill="#8b5cf6" font-family="JetBrains Mono" font-size="11">▸ position + collateral</text>
+          <text x="680" y="292" fill="#8b5cf6" font-family="JetBrains Mono" font-size="11">▸ funding + liquidation</text>
+
+          <rect x="680" y="305" width="240" height="22" rx="4" fill="#0a0a0a" stroke="#262626"/>
+          <text x="800" y="320" text-anchor="middle" fill="#8b5cf6" font-family="JetBrains Mono" font-size="10">immutable · admin keys burned</text>
+        </g>
+
+        <!-- arrow up to Pyth -->
+        <line x1="1040" y1="155" x2="950" y2="200" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrow-v)"/>
+        <text x="1075" y="195" text-anchor="middle" fill="#8b5cf6" font-family="JetBrains Mono" font-size="10">mark + liq</text>
+
+        <!-- Pyth oracle -->
+        <g>
+          <rect x="980" y="50" width="200" height="100" rx="10" fill="#161616" stroke="#8b5cf6" stroke-width="2"/>
+          <text x="1080" y="85" text-anchor="middle" fill="#f5f5f5" font-family="Inter" font-size="16" font-weight="700">Pyth Lazer</text>
+          <text x="1080" y="108" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="11">sub-ms feeds</text>
+          <text x="1080" y="128" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="11">SOL · BTC · ETH</text>
+        </g>
+
+        <!-- Privacy badges row -->
+        <g>
+          <rect x="20" y="380" width="370" height="60" rx="8" fill="rgba(52,211,153,0.05)" stroke="#34d399" stroke-width="1"/>
+          <text x="205" y="405" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="11" font-weight="700">PRIVACY 1 · COMMITMENT</text>
+          <text x="205" y="424" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="10">size + price hidden until match</text>
+
+          <rect x="415" y="380" width="370" height="60" rx="8" fill="rgba(139,92,246,0.05)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="600" y="405" text-anchor="middle" fill="#8b5cf6" font-family="JetBrains Mono" font-size="11" font-weight="700">PRIVACY 2 · ER ISOLATION</text>
+          <text x="600" y="424" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="10">no mainnet mempool exposure</text>
+
+          <rect x="810" y="380" width="370" height="60" rx="8" fill="rgba(52,211,153,0.05)" stroke="#34d399" stroke-width="1"/>
+          <text x="995" y="405" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="11" font-weight="700">PRIVACY 3 · JITO BUNDLE</text>
+          <text x="995" y="424" text-anchor="middle" fill="#a3a3a3" font-family="JetBrains Mono" font-size="10">atomic settle, MEV-protected</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="slide-num">05 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 6. WHY NOW                                                   -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag tag-violet">Why Now</span>
+    <h2>The unlock <em>is now.</em></h2>
+    <p style="max-width:1000px;">Every dependency landed in the last 7 months. None existed when Hyperliquid launched.</p>
+
+    <div style="margin-top:24px;">
+      <div class="why-row">
+        <div class="why-date">OCT 2025</div>
+        <div>
+          <p class="why-title">Galaxy Research publishes "ICM" thesis</p>
+          <p class="why-desc">"Internet Capital Markets" &mdash; every app a financial app, every user a trader. Solana is the substrate.</p>
+        </div>
+      </div>
+      <div class="why-row">
+        <div class="why-date">FEB 2026</div>
+        <div>
+          <p class="why-title">Anatoly: "Solana = Nasdaq at the speed of light"</p>
+          <p class="why-desc">Founder publicly anchors roadmap to institutional perps. ICM becomes priority narrative.</p>
+        </div>
+      </div>
+      <div class="why-row">
+        <div class="why-date">MAR 2026</div>
+        <div>
+          <p class="why-title">Percolator launches &mdash; immutable risk engine</p>
+          <p class="why-desc">Anatoly: "I'm betting on this." Permissionless perps for any SPL token. DarkBook extends to dark.</p>
+        </div>
+      </div>
+      <div class="why-row">
+        <div class="why-date">2026</div>
+        <div>
+          <p class="why-title">MagicBlock ER mainnet · Pyth Lazer GA · Token-2022 GA</p>
+          <p class="why-desc">Sub-50ms consensus, sub-ms oracles, confidential transfers. The dark CLOB stack is finally complete.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:24px;">
+      <p>If you tried to build DarkBook in 2024 it would have been impossible. <span class="emerald">In May 2026 it's a 14-day sprint.</span></p>
+    </div>
+  </div>
+  <div class="slide-num">06 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 7. MARKET                                                    -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">Market</span>
+    <h2>Hyperliquid did <em>$1.5T</em> in 2025.</h2>
+    <p style="max-width:1000px;">A single centralized perps venue captured a $300M annual fee pool. Solana hasn't competed for it. Yet.</p>
+
+    <div class="split" style="margin-top:24px;">
+      <div>
+        <div class="bars">
+          <div class="bar-col">
+            <div class="bar dim" style="height:8%;">
+              <div class="bar-val">$120B</div>
+            </div>
+            <div class="bar-label">dYdX 2025</div>
+          </div>
+          <div class="bar-col">
+            <div class="bar dim" style="height:18%;">
+              <div class="bar-val">$280B</div>
+            </div>
+            <div class="bar-label">Drift 2025</div>
+          </div>
+          <div class="bar-col">
+            <div class="bar violet" style="height:90%;">
+              <div class="bar-val">$1.5T</div>
+            </div>
+            <div class="bar-label">Hyperliquid 2025</div>
+          </div>
+          <div class="bar-col">
+            <div class="bar" style="height:30%;background:repeating-linear-gradient(45deg,#34d399,#34d399 10px,#10b981 10px,#10b981 20px);">
+              <div class="bar-val emerald">$500B</div>
+            </div>
+            <div class="bar-label">DarkBook target<br>'27</div>
+          </div>
+        </div>
+        <p class="mono" style="font-size:0.75rem;color:var(--text-faint);text-align:center;">Annual perp volume &middot; source: DefiLlama, CoinGecko, Dune Q4 2025</p>
+      </div>
+
+      <div>
+        <h3 style="font-size:1.6rem;color:var(--text);margin-bottom:16px;">The wedge</h3>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;font-family:var(--mono);">
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span class="dim">Hyperliquid 2025 volume</span><span class="emerald">$1.5T</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span class="dim">Total fees paid</span><span class="emerald">~$300M</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span class="dim">Solana institutional capture</span><span class="violet">10%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span class="dim">DarkBook take @ 0.05% bps</span><span class="violet">$30M / yr</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0 6px 0;font-weight:700;color:var(--text)">
+            <span>SAM (Solana pro-perp)</span><span class="emerald">$30M+ ARR</span>
+          </div>
+        </div>
+        <p style="font-size:0.95rem;margin-top:18px;color:var(--text-dim)">Capture <span class="emerald">10% of Hyperliquid</span> via privacy + decentralization &mdash; conservative. The whales who can't trade Hyperliquid's order flow want a venue that hides them.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">07 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 8. TRACTION                                                  -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">Traction</span>
+    <h2>Built end-to-end in <em>14 days.</em></h2>
+
+    <div class="grid grid-4" style="margin-top:32px;">
+      <div class="card">
+        <div class="stat-big">7</div>
+        <div class="stat-label">Anchor instructions</div>
+      </div>
+      <div class="card">
+        <div class="stat-big">100%</div>
+        <div class="stat-label">Bankrun coverage</div>
+      </div>
+      <div class="card">
+        <div class="stat-big">&lt;50ms</div>
+        <div class="stat-label">ER match latency</div>
+      </div>
+      <div class="card">
+        <div class="stat-big violet">$55k</div>
+        <div class="stat-label">Stacked sidetracks</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:32px;">
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--text);margin-bottom:16px;">Shipped</h3>
+        <ul class="list-pain list-win" style="margin-top:0;">
+          <li><span>MagicBlock ER matching engine (Rust)</span></li>
+          <li><span>Anchor settlement program · devnet</span></li>
+          <li><span>Pyth Lazer + Token-2022 integration</span></li>
+          <li><span>Web3.js SDK + Next.js dashboard</span></li>
+          <li><span>Liquidation oracle + funding cron</span></li>
+          <li><span>End-to-end demo (3-min Loom)</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--text);margin-bottom:16px;">Sidetrack stack</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+          <span class="pill pill-emerald">Encrypt × Ika · $15k</span>
+          <span class="pill pill-violet">Eitherway DeFi · $20k</span>
+          <span class="pill pill-emerald">Umbra Privacy · $10k</span>
+          <span class="pill pill-violet">MagicBlock · $5k</span>
+          <span class="pill pill-emerald">Cloak · $5k</span>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          <p style="font-size:1.1rem;">Judges who care: <strong class="emerald">Anatoly</strong> (Percolator pattern), <strong class="violet">MagicBlock</strong> (first ER perps), <strong class="emerald">Lily Liu</strong> (ICM thesis).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">08 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 9. DIFFERENTIATION                                           -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">Differentiation</span>
+    <h2>Only DarkBook hits <em>all four.</em></h2>
+
+    <table class="compare">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Drift</th>
+          <th>Dexlab</th>
+          <th>Vertex</th>
+          <th>Hyperliquid</th>
+          <th class="emerald">DarkBook</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-label">
+          <td>Order privacy</td>
+          <td class="bad">Public</td>
+          <td class="bad">Public</td>
+          <td class="bad">Public</td>
+          <td class="mid">Partial</td>
+          <td class="us">Hidden size + entry</td>
+        </tr>
+        <tr class="row-label">
+          <td>Match latency</td>
+          <td class="bad">~400ms</td>
+          <td class="bad">~600ms</td>
+          <td class="mid">~250ms</td>
+          <td class="good">~100ms</td>
+          <td class="us">&lt;50ms</td>
+        </tr>
+        <tr class="row-label">
+          <td>Decentralization</td>
+          <td class="good">Full</td>
+          <td class="good">Full</td>
+          <td class="mid">Cosmos</td>
+          <td class="bad">Centralized seq</td>
+          <td class="us">Full + immutable</td>
+        </tr>
+        <tr class="row-label">
+          <td>Max leverage</td>
+          <td class="mid">10x</td>
+          <td class="mid">10x</td>
+          <td class="good">25x</td>
+          <td class="good">50x</td>
+          <td class="us">50x permissionless</td>
+        </tr>
+        <tr class="row-label">
+          <td>Taker fee</td>
+          <td>0.10%</td>
+          <td>0.08%</td>
+          <td>0.04%</td>
+          <td>0.045%</td>
+          <td class="us">0.05% (rebated)</td>
+        </tr>
+        <tr class="row-label">
+          <td>MEV protection</td>
+          <td class="bad">None</td>
+          <td class="bad">None</td>
+          <td class="mid">Sequencer</td>
+          <td class="good">Centralized</td>
+          <td class="us">Jito bundle + ER</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:24px;text-align:center;color:var(--text-dim);font-family:var(--mono);font-size:0.95rem;">
+      Hyperliquid trades privacy for centralization. Drift trades speed for decentralization. <span class="emerald">DarkBook trades nothing.</span>
+    </p>
+  </div>
+  <div class="slide-num">09 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 10. ROADMAP                                                  -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag tag-violet">Roadmap</span>
+    <h2>From devnet to <em>TradFi license.</em></h2>
+
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-q">Q3 2026</div>
+        <div class="tl-dot"></div>
+        <div class="tl-text"><strong style="color:var(--text)">Mainnet beta</strong><br>SOL · BTC · ETH perps<br>Adevar audit complete</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-q">Q4 2026</div>
+        <div class="tl-dot"></div>
+        <div class="tl-text"><strong style="color:var(--text)">Institutional MMs</strong><br>Wintermute, GSR, Flow<br>liquidity partnerships</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-q">Q1 2027</div>
+        <div class="tl-dot"></div>
+        <div class="tl-text"><strong style="color:var(--text)">Multi-asset</strong><br>Indices, FX, commodities<br>permissionless listing</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-q">Q2 2027</div>
+        <div class="tl-dot"></div>
+        <div class="tl-text"><strong style="color:var(--text)">License to TradFi</strong><br>White-label venue<br>regulated DEX layer</div>
+      </div>
+    </div>
+
+    <div class="grid grid-3" style="margin-top:48px;">
+      <div class="card">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;margin-bottom:8px;">NEAR-TERM</div>
+        <p style="font-size:1.05rem;margin:0;">Cross open positions across markets. Portfolio margin.</p>
+      </div>
+      <div class="card">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;margin-bottom:8px;">MID-TERM</div>
+        <p style="font-size:1.05rem;margin:0;">Options & structured products on the same dark venue.</p>
+      </div>
+      <div class="card">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;margin-bottom:8px;">END-GAME</div>
+        <p style="font-size:1.05rem;margin:0;">Run prime brokerage on Solana. Goldman moves here next.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">10 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 11. TEAM                                                     -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">Team</span>
+    <h2>Builders who <em>shipped</em> before.</h2>
+
+    <div class="grid grid-2" style="margin-top:32px;">
+      <div class="card card-emerald" style="padding:36px;">
+        <div style="display:flex;align-items:center;gap:24px;margin-bottom:24px;">
+          <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#34d399,#8b5cf6);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:1.8rem;font-weight:800;color:#0a0a0a">KB</div>
+          <div>
+            <h3 style="font-size:1.6rem;color:var(--text);margin:0;font-weight:700;">kamalbuilds</h3>
+            <p class="mono" style="font-size:0.9rem;color:var(--emerald);margin:4px 0 0;">Founder · Solo dev</p>
+          </div>
+        </div>
+        <p style="font-size:1rem;line-height:1.5;color:var(--text-dim);margin:0 0 16px 0;">6+ years building blockchain infra across Solana, Ethereum, Cosmos, and Bitcoin L2s. Prior hackathon wins at Encode, ETHGlobal, Solana Renaissance, Arbitrum DeFy.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;">
+          <span class="pill pill-emerald">Rust + Anchor</span>
+          <span class="pill pill-violet">MagicBlock SDK</span>
+          <span class="pill pill-emerald">Pyth oracles</span>
+          <span class="pill pill-violet">Token-2022</span>
+          <span class="pill pill-emerald">DeFi systems</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:36px;display:flex;flex-direction:column;justify-content:center;border-style:dashed;">
+        <h3 style="font-size:1.4rem;color:var(--text);margin-bottom:20px;">Advisor slots <span class="dim" style="font-weight:400;font-size:1rem;">/ open</span></h3>
+        <div style="font-family:var(--mono);font-size:0.95rem;line-height:2;">
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding:8px 0;">
+            <span class="dim">Market microstructure</span><span class="faint">[ pending ]</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding:8px 0;">
+            <span class="dim">Cryptography lead</span><span class="faint">[ in talks ]</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding:8px 0;">
+            <span class="dim">MagicBlock partnership</span><span class="emerald">[ engaged ]</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;">
+            <span class="dim">Institutional MM ops</span><span class="faint">[ recruiting ]</span>
+          </div>
+        </div>
+        <p style="font-size:0.95rem;margin-top:24px;color:var(--text-dim);">Hiring 2 engineers post-funding. Looking for advisors who've operated centralized perp venues at scale.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:32px;">
+      <p style="font-size:1.2rem;text-align:center;">Solo MVP today. <span class="violet">Team of 5</span> by Q3 mainnet.</p>
+    </div>
+  </div>
+  <div class="slide-num">11 / 12</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- 12. ASK                                                      -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<section data-transition="fade">
+  <div class="slide">
+    <span class="slide-tag">The Ask</span>
+    <h2>Help us <em>ship the dark.</em></h2>
+
+    <div class="grid grid-2" style="margin-top:36px;">
+      <div class="card card-emerald">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">FRONTIER 2026</div>
+        <h4 style="font-size:1.6rem;margin-top:8px;color:var(--text);">Standout / Grand Prize</h4>
+        <p style="margin-top:8px;">Validation that dark CLOB on ER is the next category &mdash; not a sidetrack.</p>
+      </div>
+      <div class="card card-violet">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">SECURITY</div>
+        <h4 style="font-size:1.6rem;margin-top:8px;color:var(--text);">Adevar audit credits</h4>
+        <p style="margin-top:8px;">Settlement contract holds collateral. We need audit before mainnet beta.</p>
+      </div>
+      <div class="card card-violet">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">PARTNERSHIP</div>
+        <h4 style="font-size:1.6rem;margin-top:8px;color:var(--text);">MagicBlock co-build</h4>
+        <p style="margin-top:8px;">First production perps on ER. Joint launch + co-marketing for the privacy track.</p>
+      </div>
+      <div class="card card-emerald">
+        <div class="mono" style="font-size:0.75rem;color:var(--text-faint);letter-spacing:0.15em;">CAPITAL</div>
+        <h4 style="font-size:1.6rem;margin-top:8px;color:var(--text);">$250k pre-seed</h4>
+        <p style="margin-top:8px;">Via Colosseum accelerator. 12-month runway to mainnet beta + 2 hires.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;text-align:center;">
+      <div class="brand" style="font-size:3rem;margin-bottom:24px;">Dark<span class="brand-dot">/</span>Book</div>
+      <p style="font-size:1.4rem;color:var(--text);margin-bottom:24px;">Private order book. Public PnL. Institutional speed.</p>
+      <div class="cta">
+        <a href="https://darkbook.so" target="_blank">▸ devnet · darkbook.so</a>
+        <a href="https://github.com/kamalbuilds/darkbook" target="_blank">▸ github · kamalbuilds/darkbook</a>
+        <a href="mailto:kamalthedev7@gmail.com">▸ kamalbuilds</a>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">12 / 12</div>
+</section>
+
+</div>
+</div>
+
+<!-- Reveal.js JS -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1400,
+    height: 850,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 1.5,
+    hash: true,
+    slideNumber: false,
+    progress: true,
+    controls: true,
+    controlsTutorial: false,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    center: false,
+    pdfSeparateFragments: false,
+    pdfMaxPagesPerSlide: 1,
+    view: window.location.search.match(/print-pdf/gi) ? 'print' : null
+  });
+</script>
+</body>
+</html>
