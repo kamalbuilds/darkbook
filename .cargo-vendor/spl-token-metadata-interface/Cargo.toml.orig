@@ -1,0 +1,39 @@
+[package]
+name = "spl-token-metadata-interface"
+version = "0.7.0"
+description = "Solana Program Library Token Metadata Interface"
+documentation = "https://docs.rs/spl-token-metadata-interface"
+authors = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+edition = { workspace = true }
+
+[features]
+serde-traits = ["dep:serde", "spl-pod/serde-traits"]
+
+[dependencies]
+borsh = "1.5.6"
+num-derive = "0.4"
+num-traits = "0.2"
+serde = { version = "1.0.219", optional = true }
+solana-borsh = "2.2.1"
+solana-decode-error = "2.2.1"
+solana-instruction = "2.2.1"
+solana-msg = "2.2.1"
+solana-program-error = { version = "2.2.1", features = ["borsh"] }
+solana-pubkey = "2.2.1"
+spl-discriminator = "0.4.0"
+spl-type-length-value = "0.8.0"
+spl-pod = { version = "0.5.0", features = ["borsh"] }
+thiserror = "2.0"
+
+[dev-dependencies]
+serde_json = "1.0.133"
+solana-sha256-hasher = "2.2.1"
+
+[lib]
+crate-type = ["lib"]
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

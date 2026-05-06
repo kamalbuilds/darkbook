@@ -1,0 +1,33 @@
+[package]
+name = "spl-token-group-interface"
+version = "0.6.0"
+description = "Solana Program Library Token Group Interface"
+documentation = "https://docs.rs/spl-token-group-interface"
+authors = { workspace = true }
+repository = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+edition = { workspace = true }
+
+[dependencies]
+bytemuck = "1.22.0"
+num-derive = "0.4"
+num-traits = "0.2"
+solana-decode-error = "2.2.1"
+solana-instruction = "2.2.1"
+solana-msg = "2.2.1"
+solana-program-error = "2.2.1"
+solana-pubkey = "2.2.1"
+spl-discriminator = "0.4.0"
+spl-pod = "0.5.1"
+thiserror = "2.0"
+
+[dev-dependencies]
+solana-sha256-hasher = "2.2.1"
+spl-type-length-value = { version = "0.8.0", features = ["derive"] }
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
