@@ -1,0 +1,588 @@
+{
+  "project": "darkbook-dashboard",
+  "generatedAt": "2026-05-09T18:51:05.396Z",
+  "note": "Fixture matching the /birdeye-proof export schema and runBirdeyeQualificationBatch traffic shape (6 rounds x 3 mints: token_overview + base_quote 1m/15m/1H). For sponsor review, prefer a fresh Download JSON from /birdeye-proof after a live keyed session.",
+  "totalHttpCalls": 72,
+  "byPath": {
+    "/defi/token_overview": 18,
+    "/defi/ohlcv/base_quote": 54
+  },
+  "entries": [
+    {
+      "seq": 1,
+      "iso": "2026-05-09T16:40:00.000Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=So11111111111111111111111111111111111111112"
+    },
+    {
+      "seq": 2,
+      "iso": "2026-05-09T16:40:00.405Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 3,
+      "iso": "2026-05-09T16:40:00.835Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 4,
+      "iso": "2026-05-09T16:40:01.290Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 476,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 5,
+      "iso": "2026-05-09T16:40:01.770Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+    },
+    {
+      "seq": 6,
+      "iso": "2026-05-09T16:40:02.275Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 400,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 7,
+      "iso": "2026-05-09T16:40:02.655Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 8,
+      "iso": "2026-05-09T16:40:03.060Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 454,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 9,
+      "iso": "2026-05-09T16:40:03.490Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+    },
+    {
+      "seq": 10,
+      "iso": "2026-05-09T16:40:03.945Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 480,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 11,
+      "iso": "2026-05-09T16:40:04.425Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 12,
+      "iso": "2026-05-09T16:40:04.930Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 432,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 13,
+      "iso": "2026-05-09T16:40:05.310Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=So11111111111111111111111111111111111111112"
+    },
+    {
+      "seq": 14,
+      "iso": "2026-05-09T16:40:05.715Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 460,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 15,
+      "iso": "2026-05-09T16:40:06.145Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 16,
+      "iso": "2026-05-09T16:40:06.600Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 410,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 17,
+      "iso": "2026-05-09T16:40:07.080Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+    },
+    {
+      "seq": 18,
+      "iso": "2026-05-09T16:40:07.585Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 440,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 19,
+      "iso": "2026-05-09T16:40:07.965Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 20,
+      "iso": "2026-05-09T16:40:08.370Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 498,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 21,
+      "iso": "2026-05-09T16:40:08.800Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+    },
+    {
+      "seq": 22,
+      "iso": "2026-05-09T16:40:09.255Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 23,
+      "iso": "2026-05-09T16:40:09.735Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 24,
+      "iso": "2026-05-09T16:40:10.240Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 476,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 25,
+      "iso": "2026-05-09T16:40:10.620Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=So11111111111111111111111111111111111111112"
+    },
+    {
+      "seq": 26,
+      "iso": "2026-05-09T16:40:11.025Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 400,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 27,
+      "iso": "2026-05-09T16:40:11.455Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 28,
+      "iso": "2026-05-09T16:40:11.910Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 454,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 29,
+      "iso": "2026-05-09T16:40:12.390Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+    },
+    {
+      "seq": 30,
+      "iso": "2026-05-09T16:40:12.895Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 480,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 31,
+      "iso": "2026-05-09T16:40:13.275Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 32,
+      "iso": "2026-05-09T16:40:13.680Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 432,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 33,
+      "iso": "2026-05-09T16:40:14.110Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+    },
+    {
+      "seq": 34,
+      "iso": "2026-05-09T16:40:14.565Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 460,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 35,
+      "iso": "2026-05-09T16:40:15.045Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 36,
+      "iso": "2026-05-09T16:40:15.550Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 410,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 37,
+      "iso": "2026-05-09T16:40:15.930Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=So11111111111111111111111111111111111111112"
+    },
+    {
+      "seq": 38,
+      "iso": "2026-05-09T16:40:16.335Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 440,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 39,
+      "iso": "2026-05-09T16:40:16.765Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 40,
+      "iso": "2026-05-09T16:40:17.220Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 498,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 41,
+      "iso": "2026-05-09T16:40:17.700Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+    },
+    {
+      "seq": 42,
+      "iso": "2026-05-09T16:40:18.205Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 43,
+      "iso": "2026-05-09T16:40:18.585Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 44,
+      "iso": "2026-05-09T16:40:18.990Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 476,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 45,
+      "iso": "2026-05-09T16:40:19.420Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+    },
+    {
+      "seq": 46,
+      "iso": "2026-05-09T16:40:19.875Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 400,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 47,
+      "iso": "2026-05-09T16:40:20.355Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 48,
+      "iso": "2026-05-09T16:40:20.860Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 454,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 49,
+      "iso": "2026-05-09T16:40:21.240Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=So11111111111111111111111111111111111111112"
+    },
+    {
+      "seq": 50,
+      "iso": "2026-05-09T16:40:21.645Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 480,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 51,
+      "iso": "2026-05-09T16:40:22.075Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 52,
+      "iso": "2026-05-09T16:40:22.530Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 432,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 53,
+      "iso": "2026-05-09T16:40:23.010Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+    },
+    {
+      "seq": 54,
+      "iso": "2026-05-09T16:40:23.515Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 460,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 55,
+      "iso": "2026-05-09T16:40:23.895Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 56,
+      "iso": "2026-05-09T16:40:24.300Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 410,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 57,
+      "iso": "2026-05-09T16:40:24.730Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+    },
+    {
+      "seq": 58,
+      "iso": "2026-05-09T16:40:25.185Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 440,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 59,
+      "iso": "2026-05-09T16:40:25.665Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 60,
+      "iso": "2026-05-09T16:40:26.170Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 498,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 61,
+      "iso": "2026-05-09T16:40:26.550Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=So11111111111111111111111111111111111111112"
+    },
+    {
+      "seq": 62,
+      "iso": "2026-05-09T16:40:26.955Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 63,
+      "iso": "2026-05-09T16:40:27.385Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 64,
+      "iso": "2026-05-09T16:40:27.840Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 476,
+      "queryPreview": "base_address=So11111111111111111111111111111111111111112&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 65,
+      "iso": "2026-05-09T16:40:28.320Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 360,
+      "queryPreview": "address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+    },
+    {
+      "seq": 66,
+      "iso": "2026-05-09T16:40:28.825Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 400,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 67,
+      "iso": "2026-05-09T16:40:29.205Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 68,
+      "iso": "2026-05-09T16:40:29.610Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 454,
+      "queryPreview": "base_address=3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 69,
+      "iso": "2026-05-09T16:40:30.040Z",
+      "path": "/defi/token_overview",
+      "httpStatus": 200,
+      "durationMs": 420,
+      "queryPreview": "address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+    },
+    {
+      "seq": 70,
+      "iso": "2026-05-09T16:40:30.495Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 480,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 71,
+      "iso": "2026-05-09T16:40:30.975Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 456,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=15m&time_from=1778349065&time_to=1778352665"
+    },
+    {
+      "seq": 72,
+      "iso": "2026-05-09T16:40:31.480Z",
+      "path": "/defi/ohlcv/base_quote",
+      "httpStatus": 200,
+      "durationMs": 432,
+      "queryPreview": "base_address=7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs&quote_address=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&type=1H&time_from=1778349065&time_to=1778352665"
+    }
+  ]
+}
