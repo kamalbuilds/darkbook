@@ -12,11 +12,8 @@ import type { WalletContextState } from "@solana/wallet-adapter-react";
 
 const JUPITER_API_BASE = "https://quote-api.jup.ag/v6";
 
-export interface QuoteResult {
-  outputAmount: string;
-  routePlan: unknown;
-  slippageBps: number;
-}
+/** Full Jupiter `/quote` JSON; passed through to `/swap` as `quoteResponse`. */
+export type JupiterQuoteResponse = Record<string, unknown>;
 
 export interface SwapResponse {
   swapTransaction: string;
@@ -28,14 +25,15 @@ export interface SwapResponse {
  * @param fromMint Source token mint (e.g., SOL)
  * @param usdcMint USDC token mint address
  * @param amountLamports Amount in smallest units
- * @returns Quote with output amount and route plan
+ * @returns Full quote object from Jupiter (required unchanged for `/swap`).
  */
 export async function quoteUsdcSwap(
   connection: Connection,
   fromMint: PublicKey,
   usdcMint: PublicKey,
   amountLamports: number,
-): Promise<QuoteResult> {
+): Promise<JupiterQuoteResponse> {
+  void connection;
   const params = new URLSearchParams({
     inputMint: fromMint.toBase58(),
     outputMint: usdcMint.toBase58(),
@@ -51,7 +49,10 @@ export async function quoteUsdcSwap(
       throw new Error(`Jupiter quote failed: ${response.statusText}`);
     }
 
-    const data = (await response.json()) as QuoteResult;
+    const data = (await response.json()) as JupiterQuoteResponse;
+    if (typeof data !== "object" || data === null) {
+      throw new Error("Jupiter quote: empty response");
+    }
     return data;
   } catch (error) {
     console.error("[jupiter] quote failed", { fromMint: fromMint.toBase58(), error });
@@ -89,10 +90,13 @@ export async function executeSwapToUsdc(
   console.log("[jupiter] fetching quote...", { amount: amountLamports });
   const quote = await quoteUsdcSwap(connection, fromMint, usdcMint, amountLamports);
 
-  console.log("[jupiter] quote received", {
-    outputAmount: quote.outputAmount,
-    slippageBps: quote.slippageBps,
-  });
+  const outAmount =
+    typeof quote.outAmount === "string"
+      ? quote.outAmount
+      : typeof quote.outputAmount === "string"
+        ? quote.outputAmount
+        : undefined;
+  console.log("[jupiter] quote received", { outAmount, slippageBps: quote.slippageBps });
 
   // Step 2: Request swap transaction from Jupiter
   const swapBody = {

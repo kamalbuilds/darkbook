@@ -5,7 +5,7 @@ import { ArchitectureDiagram } from "@/components/landing/architecture-diagram";
 import { OrderBookTeaser } from "@/components/landing/order-book-teaser";
 import { ComparisonTable } from "@/components/landing/comparison-table";
 import { TechStack } from "@/components/landing/tech-stack";
-import { Sponsors } from "@/components/landing/sponsors";
+import { FrontierEarnStrip } from "@/components/landing/frontier-earn-strip";
 import { Footer } from "@/components/landing/footer";
 
 export default function LandingPage() {
@@ -32,8 +32,8 @@ export default function LandingPage() {
       {/* 7. Tech stack badges */}
       <TechStack />
 
-      {/* 8. Sponsor tracks */}
-      <Sponsors />
+      {/* 8. Superteam Earn / Eitherway + Tether filing strip */}
+      <FrontierEarnStrip />
 
       {/* 9. Footer */}
       <Footer />

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { AnimatedGradientMesh } from "./animated-gradient";
-import { ArrowRight, Play, Lock } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -20,8 +20,8 @@ export function Hero() {
       {/* Nav bar */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-6 py-4 border-b border-zinc-800/50 backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center">
-            <Lock className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="w-7 h-7 rounded-md bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center font-mono text-[10px] font-semibold text-emerald-400">
+            DB
           </div>
           <span className="font-mono font-bold text-zinc-100 tracking-tight">DarkBook</span>
           <span className="text-zinc-600 text-xs font-mono ml-1">v0.1-devnet</span>
@@ -31,7 +31,7 @@ export function Hero() {
           <a href="/positions" className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors">Positions</a>
           <a href="/leaderboard" className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors">Leaderboard</a>
           <a
-            href="https://github.com"
+            href="https://github.com/aarav1656/darkbook"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
@@ -64,9 +64,7 @@ export function Hero() {
         >
           Private orders.{" "}
           <br />
-          <span className="bg-gradient-to-r from-emerald-400 to-violet-400 bg-clip-text text-transparent">
-            Public PnL.
-          </span>
+          <span className="text-emerald-400/95">Public PnL.</span>
           <br />
           Sub-50ms matching.
         </motion.h1>
@@ -97,7 +95,7 @@ export function Hero() {
             <ArrowRight className="w-4 h-4" />
           </a>
           <a
-            href="https://github.com"
+            href="https://github.com/aarav1656/darkbook"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900/60 px-6 py-3 text-sm font-mono text-zinc-300 hover:border-zinc-500 hover:text-zinc-100 transition-colors backdrop-blur-sm"
@@ -106,8 +104,8 @@ export function Hero() {
             View on GitHub
           </a>
           <a
-            href="#"
-            className="inline-flex items-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/10 px-6 py-3 text-sm font-mono text-violet-300 hover:border-violet-400/50 hover:text-violet-200 transition-colors"
+            href="/#demo"
+            className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900/50 px-6 py-3 text-sm font-mono text-zinc-300 hover:border-emerald-500/30 hover:text-emerald-200/90 transition-colors"
           >
             <Play className="w-4 h-4 fill-current" />
             Watch Demo
@@ -123,8 +121,8 @@ export function Hero() {
         >
           {[
             { label: "Matching Latency", value: "<50ms", accent: "text-emerald-400" },
-            { label: "Settlement", value: "On-chain", accent: "text-violet-400" },
-            { label: "Privacy Model", value: "ECIES", accent: "text-cyan-400" },
+            { label: "Settlement", value: "On-chain", accent: "text-emerald-400/80" },
+            { label: "Privacy Model", value: "ECIES", accent: "text-zinc-300" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className={`font-mono text-2xl font-bold ${stat.accent}`}>{stat.value}</div>

@@ -19,6 +19,7 @@ import { AnchorProvider, BN, Program, type Idl } from "@coral-xyz/anchor";
 import { sha256 } from "@noble/hashes/sha2";
 import idl from "./darkbook-idl.json";
 import type { OrderBookLevel, Position, Fill, MarketInfo, Side, SizeBand } from "./darkbook-types";
+import { pythUsdFeedIdForMarket } from "./market-assets";
 
 // RPC selection priority: explicit env > Helius > Quicknode > public devnet.
 // Lets the dashboard run against any of the three sponsor-tier RPC providers
@@ -30,8 +31,11 @@ const RPC =
   process.env.NEXT_PUBLIC_QUICKNODE_RPC ??
   clusterApiUrl("devnet");
 const ER_WS = process.env.NEXT_PUBLIC_ER_WS ?? "wss://devnet-us.magicblock.app/";
-const PYTH_WS = process.env.NEXT_PUBLIC_PYTH_LAZER_WS ?? "wss://pyth-lazer.dourolabs.app/v1/stream";
-const SOL_FEED = process.env.NEXT_PUBLIC_SOL_USD_FEED ?? "";
+const PYTH_WS =
+  process.env.NEXT_PUBLIC_PYTH_LAZER_WS ?? "wss://pyth-lazer-0.dourolabs.app/v1/stream";
+const HERMES_URL = process.env.NEXT_PUBLIC_PYTH_HERMES_URL ?? "https://hermes.pyth.network";
+/** Legacy override: if set, used for SOL market only instead of bundled SOL feed id. */
+const SOL_FEED_ENV = process.env.NEXT_PUBLIC_SOL_USD_FEED ?? "";
 
 const PROGRAM_ID_STR = process.env.NEXT_PUBLIC_PROGRAM_ID ?? "11111111111111111111111111111111";
 
@@ -235,66 +239,101 @@ export async function fetchMarketInfo(assetId: string): Promise<MarketInfo | nul
   }
 }
 
+function hermesFeedId(marketId: string): string {
+  if (marketId === "SOL" && SOL_FEED_ENV) return SOL_FEED_ENV;
+  return pythUsdFeedIdForMarket(marketId);
+}
+
+/** Pull latest USD price from Hermes (works in the browser without a Lazer token). */
+async function fetchHermesUsdPrice(feedId: string): Promise<number | null> {
+  const url = `${HERMES_URL}/v2/updates/price/latest?ids[]=${feedId}&encoding=hex`;
+  const resp = await fetch(url);
+  if (!resp.ok) return null;
+  const json = (await resp.json()) as {
+    parsed?: Array<{
+      price: { price: string; expo: number };
+    }>;
+  };
+  const p = json.parsed?.[0]?.price;
+  if (!p?.price) return null;
+  const raw = Number(p.price);
+  if (!Number.isFinite(raw)) return null;
+  const usd = raw * 10 ** p.expo;
+  return Number.isFinite(usd) ? usd : null;
+}
+
 /**
- * Subscribe to Pyth Lazer price stream for the SOL/USD feed.
- * Calls onPrice(priceUsd) on each update. Returns an unsubscribe function.
+ * Subscribe to mark price (USD) for the selected perp reference market.
  *
- * The stream requires a bearer token (PYTH_LAZER_TOKEN env var).
- * Without a token it will fail to connect — the caller shows a loading state.
+ * Primary path: Hermes REST polling (no API key, stable in the browser).
+ * Optional: Pyth Lazer WebSocket when `NEXT_PUBLIC_PYTH_LAZER_TOKEN` is set for lower latency.
  */
-export function subscribeMarkPrice(onPrice: (price: number) => void): () => void {
+export function subscribeMarkPrice(
+  onPrice: (price: number) => void,
+  marketId: string = "SOL",
+): () => void {
   if (typeof window === "undefined") return () => {};
 
-  const token = "";
-  const feedId = SOL_FEED;
+  const feedId = hermesFeedId(marketId);
+  const lazerToken = process.env.NEXT_PUBLIC_PYTH_LAZER_TOKEN ?? "";
 
-  let ws: WebSocket | null = null;
   let closed = false;
+  let ws: WebSocket | null = null;
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
 
-  function connect() {
+  const poll = async () => {
     if (closed) return;
+    const p = await fetchHermesUsdPrice(feedId);
+    if (!closed && p != null) onPrice(p);
+  };
+
+  void poll();
+  pollTimer = setInterval(poll, 5000);
+
+  const connectWs = () => {
+    if (!lazerToken || closed) return;
     try {
       ws = new WebSocket(PYTH_WS);
       ws.onopen = () => {
-        if (!ws) return;
+        if (!ws || closed) return;
         ws.send(
           JSON.stringify({
             type: "subscribe",
             channel: "lazer",
             feeds: [{ feedId }],
-            ...(token ? { token } : {}),
-          })
+            token: lazerToken,
+          }),
         );
       };
       ws.onmessage = (evt) => {
         try {
           const data = JSON.parse(evt.data as string);
-          // Pyth Lazer binary frames come as ArrayBuffer — text frames are JSON metadata
           if (data?.price) {
             onPrice(Number(data.price) / 1e8);
           } else if (data?.priceInUsd) {
             onPrice(Number(data.priceInUsd));
           }
         } catch {
-          // binary frame or non-JSON — ignore
+          // binary frame or non-JSON
         }
       };
       ws.onerror = () => {};
       ws.onclose = () => {
-        if (!closed) {
-          // Reconnect after 3s
-          setTimeout(connect, 3000);
-        }
+        if (!closed) setTimeout(connectWs, 4000);
       };
     } catch {
-      // WebSocket not available in this environment
+      // ignore
     }
-  }
+  };
 
-  connect();
+  connectWs();
 
   return () => {
     closed = true;
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
     if (ws) {
       ws.close();
       ws = null;

@@ -12,38 +12,45 @@ interface OrderRow {
   depth: number;
 }
 
-const BANDS = ["SMALL", "MED", "LARGE", "WHALE"] as const;
+/** Deterministic PRNG so SSR and first client paint match (avoids hydration mismatch). */
+function mulberry32(seed: number) {
+  return () => {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
-function randomBand(): OrderRow["band"] {
-  const r = Math.random();
+function bandFromRoll(r: number): OrderRow["band"] {
   if (r < 0.5) return "SMALL";
   if (r < 0.8) return "MED";
   if (r < 0.95) return "LARGE";
   return "WHALE";
 }
 
-let orderIdCounter = 0;
-
-function generateRows(basePrice: number): OrderRow[] {
+function generateRows(basePrice: number, seed: number): OrderRow[] {
+  const rng = mulberry32(seed);
   const asks: OrderRow[] = [];
   const bids: OrderRow[] = [];
+  const levs = ["2x", "5x", "10x", "20x"] as const;
 
   for (let i = 0; i < 6; i++) {
     asks.push({
-      id: orderIdCounter++,
+      id: 100 + i,
       price: (basePrice + 0.5 + i * 0.25).toFixed(2),
-      band: randomBand(),
-      leverage: `${[2, 5, 10, 20][Math.floor(Math.random() * 4)]}x`,
+      band: bandFromRoll(rng()),
+      leverage: levs[Math.floor(rng() * 4)]!,
       side: "ask",
-      depth: Math.random() * 0.9 + 0.05,
+      depth: rng() * 0.9 + 0.05,
     });
     bids.push({
-      id: orderIdCounter++,
+      id: 200 + i,
       price: (basePrice - i * 0.25).toFixed(2),
-      band: randomBand(),
-      leverage: `${[2, 5, 10, 20][Math.floor(Math.random() * 4)]}x`,
+      band: bandFromRoll(rng()),
+      leverage: levs[Math.floor(rng() * 4)]!,
       side: "bid",
-      depth: Math.random() * 0.9 + 0.05,
+      depth: rng() * 0.9 + 0.05,
     });
   }
 
@@ -58,17 +65,16 @@ const BAND_COLORS: Record<string, string> = {
 };
 
 export function OrderBookTeaser() {
-  const [rows, setRows] = useState<OrderRow[]>(() => generateRows(175.0));
+  const [rows, setRows] = useState<OrderRow[]>(() => generateRows(175.0, 42_424_242));
   const [basePrice, setBasePrice] = useState(175.0);
-  const [lastUpdate, setLastUpdate] = useState(Date.now());
 
   useEffect(() => {
     const interval = setInterval(() => {
       setBasePrice((p) => {
         const newP = p + (Math.random() - 0.5) * 0.5;
         const clamped = Math.max(170, Math.min(180, newP));
-        setRows(generateRows(clamped));
-        setLastUpdate(Date.now());
+        const tickSeed = Math.floor(Date.now() / 1800) ^ 0x9e3779b9;
+        setRows(generateRows(clamped, tickSeed));
         return clamped;
       });
     }, 1800);
@@ -81,7 +87,7 @@ export function OrderBookTeaser() {
   const spread = (parseFloat(asks[asks.length - 1]?.price ?? "0") - parseFloat(bids[0]?.price ?? "0")).toFixed(2);
 
   return (
-    <section className="py-24 px-6 bg-zinc-950 relative">
+    <section id="demo" className="py-24 px-6 bg-zinc-950 relative scroll-mt-24">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

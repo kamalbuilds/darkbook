@@ -10,7 +10,8 @@ import {
 } from "lightweight-charts";
 import { useDarkbookStore } from "@/store/darkbook-store";
 import { subscribeMarkPrice } from "@/lib/darkbook-client";
-import { fetchHistoricalPrice, type Candle } from "@/lib/birdeye";
+import { fetchOhlcvBaseQuote, type Candle } from "@/lib/birdeye";
+import { spotBaseMintForMarket, USDC_MINT_MAINNET } from "@/lib/market-assets";
 
 export function MarkChart() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -93,16 +94,14 @@ export function MarkChart() {
     };
   }, []);
 
-  // Load Birdeye historical candles on mount
+  // Birdeye aggregate OHLCV (base vs USDC) for the selected perp reference asset
   useEffect(() => {
     const loadBirdeyeCandles = async () => {
       try {
-        // SOL/USDC JUP address on Solana mainnet
-        const jupPairAddress = "JUP6LkbZbjS1jKKB1QrYsV7zJjg1KwpzuJanomPeRec";
-        const candles = await fetchHistoricalPrice(jupPairAddress, "1m", 100);
+        const base = spotBaseMintForMarket(selectedMarket);
+        const candles = await fetchOhlcvBaseQuote(base, USDC_MINT_MAINNET, "1m", 100);
 
         if (candles.length > 0 && candleSeriesRef.current) {
-          // Convert Birdeye candles to lightweight-charts format
           const chartCandles = candles.map((c: Candle) => ({
             time: c.time as Time,
             open: c.open,
@@ -111,7 +110,6 @@ export function MarkChart() {
             close: c.close,
           }));
           candleSeriesRef.current.setData(chartCandles);
-          console.log("[mark-chart] Birdeye candles loaded", { count: candles.length });
         }
       } catch (error) {
         console.warn("[mark-chart] Birdeye load failed, relying on Pyth stream", { error });
@@ -121,13 +119,13 @@ export function MarkChart() {
     if (candleSeriesRef.current) {
       loadBirdeyeCandles();
     }
-  }, []);
+  }, [selectedMarket]);
 
-  // Subscribe to Pyth Lazer mark price for real-time updates
+  // Hermes poll (+ optional Pyth Lazer WS) for mark vs USD for the selected market
   useEffect(() => {
     const unsubscribe = subscribeMarkPrice((price) => {
       setMarkPrice(price);
-    });
+    }, selectedMarket);
     return unsubscribe;
   }, [selectedMarket, setMarkPrice]);
 

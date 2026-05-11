@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "/positions", label: "Positions" },
   { href: "/history", label: "History" },
   { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/birdeye-proof", label: "Birdeye log" },
 ];
 
 export function NavBar() {

@@ -1,4 +1,5 @@
 import { NavBar } from "@/components/nav-bar";
+import { BirdeyeMarketIntel } from "@/components/birdeye-market-intel";
 import { MarketHeader } from "@/components/market-header";
 import { OrderEntry } from "@/components/order-entry";
 import { OrderBook } from "@/components/order-book";
@@ -10,6 +11,8 @@ export default function TradePage() {
   return (
     <div className="h-screen flex flex-col bg-zinc-950 overflow-hidden">
       <NavBar />
+
+      <BirdeyeMarketIntel />
 
       {/* Market header bar */}
       <div className="h-12 border-b border-zinc-800 shrink-0">

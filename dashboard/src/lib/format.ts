@@ -19,6 +19,16 @@ export function fmtPct(value: number | null | undefined, decimals = 2): string {
   return `${sign}${value.toFixed(decimals)}%`;
 }
 
+/** Compact USD for large stats (e.g. Birdeye 24h volume). */
+export function fmtUsdCompact(usd: number | null | undefined): string {
+  if (usd == null || !Number.isFinite(usd)) return "—";
+  if (usd >= 1e12) return `$${(usd / 1e12).toFixed(2)}T`;
+  if (usd >= 1e9) return `$${(usd / 1e9).toFixed(2)}B`;
+  if (usd >= 1e6) return `$${(usd / 1e6).toFixed(2)}M`;
+  if (usd >= 1e3) return `$${(usd / 1e3).toFixed(1)}K`;
+  return fmtUsdc(usd, 0);
+}
+
 export function fmtSol(lamports: number | null | undefined): string {
   if (lamports == null) return "-";
   const sol = lamports / 1e9;
