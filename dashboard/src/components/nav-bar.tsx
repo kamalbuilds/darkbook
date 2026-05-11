@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "/positions", label: "Positions" },
   { href: "/history", label: "History" },
   { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/ika", label: "Ika" },
   { href: "/birdeye-proof", label: "Birdeye log" },
 ];
 

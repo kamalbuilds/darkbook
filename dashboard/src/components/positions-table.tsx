@@ -3,15 +3,20 @@
 import { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useConnection } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, Transaction } from "@solana/web3.js";
 import { useDarkbookStore } from "@/store/darkbook-store";
-import { fetchPositions, deriveMarketPda } from "@/lib/darkbook-client";
+import { fetchPositions, deriveMarketPda, buildClosePositionTx } from "@/lib/darkbook-client";
 import { fmtUsdc, fmtPrice, shortenAddress, fmtPct } from "@/lib/format";
 import { resolveSnsNameCached } from "@/lib/sns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { Position } from "@/lib/darkbook-types";
+
+const PYTH_PRICE_UPDATE_PUBKEY =
+  process.env.NEXT_PUBLIC_PYTH_PRICE_UPDATE_PUBKEY
+    ? new PublicKey(process.env.NEXT_PUBLIC_PYTH_PRICE_UPDATE_PUBKEY)
+    : PublicKey.default;
 
 function PnlCell({ pnl }: { pnl: number | undefined }) {
   if (pnl == null) return <span className="text-zinc-600">—</span>;
@@ -22,14 +27,20 @@ function PnlCell({ pnl }: { pnl: number | undefined }) {
   );
 }
 
-function PositionRow({ position, connection }: { position: Position; connection: any }) {
+function PositionRow({ position, connection, selectedMarket, signTransaction }: { 
+  position: Position; 
+  connection: any; 
+  selectedMarket: string;
+  signTransaction: ((tx: Transaction) => Promise<Transaction>) | undefined;
+}) {
   const { snsCache, setSnsCache } = useDarkbookStore();
   const [snsName, setSnsName] = useState<string | null>(null);
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
     if (!connection) return;
 
-    const pubkeyStr = position.pubkey;
+    const pubkeyStr = position.owner;
     const cached = snsCache.get(pubkeyStr);
     if (cached && Date.now() < cached.expiresAt) {
       setSnsName(cached.name);
@@ -45,16 +56,48 @@ function PositionRow({ position, connection }: { position: Position; connection:
       .catch(() => {
         setSnsName(null);
       });
-  }, [position.pubkey, connection, snsCache, setSnsCache]);
+  }, [position.owner, connection, snsCache, setSnsCache]);
 
-  function handleClose() {
-    const displayName = snsName || shortenAddress(position.pubkey);
-    toast.info("Close position — program not yet deployed", {
-      description: `Will call close_position on ${displayName}`,
-    });
+  async function handleClose() {
+    if (!signTransaction) {
+      toast.error("Wallet does not support signing");
+      return;
+    }
+    setClosing(true);
+    try {
+      const marketPda = deriveMarketPda(selectedMarket);
+      const positionPda = new PublicKey(position.pubkey);
+
+      const { tx, blockhash } = await buildClosePositionTx({
+        connection,
+        owner: new PublicKey(position.owner),
+        market: marketPda,
+        positionPda,
+        priceUpdateAccount: PYTH_PRICE_UPDATE_PUBKEY,
+      });
+
+      const signed = await signTransaction(tx);
+      const sig = await connection.sendRawTransaction(signed.serialize(), {
+        skipPreflight: false,
+        maxRetries: 3,
+      });
+      await connection.confirmTransaction(
+        { signature: sig, blockhash: blockhash.blockhash, lastValidBlockHeight: blockhash.lastValidBlockHeight },
+        "confirmed",
+      );
+
+      toast.success("Position closed", {
+        description: `${position.side} position · sig ${sig.slice(0, 8)}…`,
+        duration: 6000,
+      });
+    } catch (err: any) {
+      toast.error("Close failed", { description: err?.message ?? "Unknown error" });
+    } finally {
+      setClosing(false);
+    }
   }
 
-  const displayName = snsName || shortenAddress(position.pubkey);
+  const displayName = snsName || shortenAddress(position.owner);
 
   return (
     <tr className="border-b border-zinc-900 hover:bg-zinc-900/30 text-xs font-mono">
@@ -72,17 +115,18 @@ function PositionRow({ position, connection }: { position: Position; connection:
       <td className="px-3 py-1.5">
         <PnlCell pnl={position.unrealized_pnl} />
       </td>
-      <td className="px-3 py-1.5 text-[10px] text-zinc-500" title={position.pubkey}>
-        {snsName ? <span className="text-emerald-400">{displayName}</span> : shortenAddress(position.pubkey)}
+      <td className="px-3 py-1.5 text-[10px] text-zinc-500" title={position.owner}>
+        {snsName ? <span className="text-emerald-400">{displayName}</span> : shortenAddress(position.owner)}
       </td>
       <td className="px-3 py-1.5">
         <Button
           variant="ghost"
           size="sm"
+          disabled={closing}
           onClick={handleClose}
           className="h-5 px-2 text-[10px] text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10"
         >
-          Close
+          {closing ? "…" : "Close"}
         </Button>
       </td>
     </tr>
@@ -90,7 +134,7 @@ function PositionRow({ position, connection }: { position: Position; connection:
 }
 
 export function PositionsTable({ showEmpty = true }: { showEmpty?: boolean }) {
-  const { publicKey } = useWallet();
+  const { publicKey, signTransaction } = useWallet();
   const { connection } = useConnection();
   const { positions, selectedMarket, setPositions } = useDarkbookStore();
 
@@ -149,7 +193,7 @@ export function PositionsTable({ showEmpty = true }: { showEmpty?: boolean }) {
               ) : null
             ) : (
               positions.map((pos) => (
-                <PositionRow key={pos.pubkey} position={pos} connection={connection} />
+                <PositionRow key={pos.pubkey} position={pos} connection={connection} selectedMarket={selectedMarket} signTransaction={signTransaction} />
               ))
             )}
           </tbody>

@@ -454,3 +454,54 @@ export async function buildPlaceOrderTx(opts: {
   tx.add(ix as never);
   return { tx, blockhash };
 }
+
+/**
+ * Build a closePosition transaction.
+ * Returns unsigned tx + blockhash for caller to sign and send.
+ *
+ * @param priceUpdateAccount - Pyth PriceUpdateV2 account pubkey used as oracle at close.
+ */
+export async function buildClosePositionTx(opts: {
+  connection: Connection;
+  owner: PublicKey;
+  market: PublicKey;
+  positionPda: PublicKey;
+  priceUpdateAccount: PublicKey;
+}): Promise<{ tx: Transaction; blockhash: BlockhashWithExpiryBlockHeight }> {
+  if (PROGRAM_ID.equals(PublicKey.default)) {
+    throw new Error(
+      "PROGRAM_ID env var not set. Set NEXT_PUBLIC_PROGRAM_ID after running scripts/deploy-devnet.sh.",
+    );
+  }
+
+  const provider = new AnchorProvider(
+    opts.connection,
+    { publicKey: opts.owner, signTransaction: undefined as never, signAllTransactions: undefined as never },
+    AnchorProvider.defaultOptions(),
+  );
+  const program = new Program(idl as Idl, provider);
+
+  const userAccount = deriveUserAccountPda(opts.market, opts.owner);
+
+  const ix = await (program.methods as unknown as {
+    closePosition: () => { accounts: (a: Record<string, PublicKey>) => { instruction: () => Promise<unknown> } };
+  })
+    .closePosition()
+    .accounts({
+      market: opts.market,
+      position: opts.positionPda,
+      userAccount,
+      priceUpdate: opts.priceUpdateAccount,
+      owner: opts.owner,
+    })
+    .instruction();
+
+  const blockhash = await opts.connection.getLatestBlockhash("confirmed");
+  const tx = new Transaction({
+    feePayer: opts.owner,
+    blockhash: blockhash.blockhash,
+    lastValidBlockHeight: blockhash.lastValidBlockHeight,
+  });
+  tx.add(ix as never);
+  return { tx, blockhash };
+}

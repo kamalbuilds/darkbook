@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd ../.. && bun install && cd dashboard && bun run build",
+  "outputDirectory": ".next",
+  "installCommand": "cd ../.. && bun install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_RPC": "https://api.devnet.solana.com",
+    "NEXT_PUBLIC_ER_RPC": "https://devnet-us.magicblock.app/",
+    "NEXT_PUBLIC_ER_WS": "wss://devnet-us.magicblock.app/",
+    "NEXT_PUBLIC_PROGRAM_ID": "3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf"
+  }
+}

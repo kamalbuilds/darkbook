@@ -6,6 +6,7 @@ import { OrderBook } from "@/components/order-book";
 import { MarkChart } from "@/components/mark-chart";
 import { RecentFills } from "@/components/recent-fills";
 import { PositionsTable } from "@/components/positions-table";
+import { JupiterDeposit } from "@/components/jupiter-deposit";
 
 export default function TradePage() {
   return (
@@ -21,8 +22,9 @@ export default function TradePage() {
 
       {/* Main trading area */}
       <div className="flex-1 flex min-h-0">
-        {/* Left: order entry */}
+        {/* Left: deposit + order entry */}
         <div className="w-56 shrink-0 border-r border-zinc-800 overflow-y-auto">
+          <JupiterDeposit />
           <OrderEntry />
         </div>
 
