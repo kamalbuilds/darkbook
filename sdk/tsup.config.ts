@@ -13,6 +13,7 @@ export default defineConfig({
     "@solana/web3.js",
     "@solana/spl-token",
     "@magicblock-labs/ephemeral-rollups-sdk",
+    "@umbra-privacy/sdk",
     "bn.js",
     "ws",
   ],

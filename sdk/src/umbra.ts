@@ -1,37 +1,191 @@
 /**
- * Umbra Shielded Withdrawals Integration
+ * Umbra privacy completion for DarkBook.
  *
- * Route closePosition + liquidatePosition PnL refunds through Umbra's
- * shielded pool to hide withdrawal amounts and recipient identities.
+ * Dark Commit hides intent before fill; Umbra direct deposit shields USDC that
+ * already sits in the trader's public ATA after settlement (post-trade graph break).
  *
- * Architecture:
- * 1. Position closes in DarkBook (PnL computed onchain)
- * 2. Instead of direct SPL transfer to trader/liquidator,
- *    route through Umbra's DepositFromATA -> Unified Mixer -> BurnToETA
- * 3. Withdrawal amount + recipient unlinkable from original trade
+ * Uses the official `@umbra-privacy/sdk` (getUmbraClient, registration, public→encrypted deposit).
+ * Atomic close→Umbra in one transaction would need a new DarkBook ix with Umbra CPI (future).
  */
 
 import {
-  Connection,
-  PublicKey,
-  TransactionSignature,
-} from "@solana/web3.js";
+  createInMemorySigner,
+  createSignerFromPrivateKeyBytes,
+  createSignerFromWalletAccount,
+  getPublicBalanceToEncryptedBalanceDirectDepositorFunction,
+  getUmbraClient,
+  getUserRegistrationFunction,
+} from "@umbra-privacy/sdk";
+import type { GetUmbraClientArgs } from "@umbra-privacy/sdk";
+import type { IUmbraClient } from "@umbra-privacy/sdk/interfaces";
+import type { U64 } from "@umbra-privacy/sdk/types";
 import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
-import {
-  getAssociatedTokenAddressSync,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
-import { BN } from "@coral-xyz/anchor";
+import { Connection, PublicKey, TransactionSignature } from "@solana/web3.js";
+
+/** Devnet program (Umbra docs). */
+export const UMBRA_PROGRAM_ID_DEVNET = new PublicKey(
+  "DSuKkyqGVGgo4QtPABfxKJKygUDACbUhirnuv63mEpAJ",
+);
+
+/** Mainnet program (Umbra docs). */
+export const UMBRA_PROGRAM_ID_MAINNET = new PublicKey(
+  "UMBRAD2ishebJTcgCLkTkNUx1v3GyoAgpTRPeWoLykh",
+);
+
+/** Default Umbra indexer (devnet). */
+export const UMBRA_INDEXER_DEVNET_DEFAULT =
+  "https://utxo-indexer.api-devnet.umbraprivacy.com";
+
+/** Default Umbra indexer (mainnet). */
+export const UMBRA_INDEXER_MAINNET_DEFAULT =
+  "https://utxo-indexer.api.umbraprivacy.com";
+
+/** Default relayer API (devnet); used for claim/mixer flows, not direct deposit. */
+export const UMBRA_RELAYER_DEVNET_DEFAULT =
+  "https://relayer.api-devnet.umbraprivacy.com";
+
+/** Default relayer API (mainnet). */
+export const UMBRA_RELAYER_MAINNET_DEFAULT =
+  "https://relayer.api.umbraprivacy.com";
+
+export type UmbraCluster = "devnet" | "mainnet";
 
 /**
- * Umbra SDK client wrapper for shielded position withdrawals.
- * Abstracts away Umbra's ZK proving and UTXO mixer complexity.
+ * Resolve Umbra program id. Override with `UMBRA_PROGRAM_ID`; else map cluster.
+ */
+export function resolveUmbraProgramId(): PublicKey {
+  const raw = process.env.UMBRA_PROGRAM_ID?.trim();
+  if (raw) return new PublicKey(raw);
+  const cluster =
+    process.env.UMBRA_CLUSTER ?? process.env.NEXT_PUBLIC_SOLANA_CLUSTER;
+  if (cluster === "mainnet-beta" || cluster === "mainnet") {
+    return UMBRA_PROGRAM_ID_MAINNET;
+  }
+  return UMBRA_PROGRAM_ID_DEVNET;
+}
+
+export function darkbookClusterToUmbraCluster(): UmbraCluster {
+  const cluster =
+    process.env.UMBRA_CLUSTER?.trim() ??
+    process.env.NEXT_PUBLIC_SOLANA_CLUSTER?.trim();
+  if (cluster === "mainnet-beta" || cluster === "mainnet") return "mainnet";
+  return "devnet";
+}
+
+export function defaultUmbraIndexerUrl(cluster: UmbraCluster): string {
+  if (cluster === "mainnet") {
+    return (
+      process.env.UMBRA_INDEXER_MAINNET_URL?.trim() ||
+      UMBRA_INDEXER_MAINNET_DEFAULT
+    );
+  }
+  return (
+    process.env.UMBRA_INDEXER_DEVNET_URL?.trim() || UMBRA_INDEXER_DEVNET_DEFAULT
+  );
+}
+
+export function defaultUmbraRelayerUrl(cluster: UmbraCluster): string {
+  if (cluster === "mainnet") {
+    return (
+      process.env.UMBRA_RELAYER_MAINNET_URL?.trim() ||
+      UMBRA_RELAYER_MAINNET_DEFAULT
+    );
+  }
+  return (
+    process.env.UMBRA_RELAYER_DEVNET_URL?.trim() || UMBRA_RELAYER_DEVNET_DEFAULT
+  );
+}
+
+/** Derive `wss://` RPC URL from `https://` JSON-RPC URL when subscriptions URL is omitted. */
+export function solanaWsUrlFromHttp(rpcUrl: string): string {
+  try {
+    const u = new URL(rpcUrl);
+    u.protocol = u.protocol === "https:" ? "wss:" : "ws:";
+    return u.toString();
+  } catch {
+    return rpcUrl.replace(/^https:/i, "wss:").replace(/^http:/i, "ws:");
+  }
+}
+
+export type ConnectDarkbookUmbraClientParams = Pick<
+  GetUmbraClientArgs,
+  "signer" | "rpcUrl" | "rpcSubscriptionsUrl" | "deferMasterSeedSignature"
+> & {
+  /** Defaults from env / mainnet-beta mapping. */
+  cluster?: UmbraCluster;
+  indexerApiEndpoint?: string;
+};
+
+/**
+ * Build an Umbra client aligned with DarkBook cluster defaults and indexer.
+ */
+export async function connectDarkbookUmbraClient(
+  params: ConnectDarkbookUmbraClientParams,
+): Promise<IUmbraClient> {
+  const cluster = params.cluster ?? darkbookClusterToUmbraCluster();
+  const indexer =
+    params.indexerApiEndpoint ?? defaultUmbraIndexerUrl(cluster);
+  return getUmbraClient({
+    signer: params.signer,
+    network: cluster,
+    rpcUrl: params.rpcUrl,
+    rpcSubscriptionsUrl: params.rpcSubscriptionsUrl,
+    indexerApiEndpoint: indexer,
+    deferMasterSeedSignature: params.deferMasterSeedSignature,
+  });
+}
+
+/**
+ * Idempotent Umbra registration (confidential + anonymous). Safe to call more than once;
+ * prefer gating in UI to avoid extra fees.
+ */
+export async function ensureUmbraRegistered(
+  client: IUmbraClient,
+): Promise<readonly TransactionSignature[]> {
+  const register = getUserRegistrationFunction({ client });
+  return register({ confidential: true, anonymous: true });
+}
+
+/**
+ * Shield SPL from the signer's public ATA into their Umbra encrypted balance (direct deposit).
+ * `mintBase58` must be supported on the chosen cluster; amount is raw token base units.
+ */
+type UmbraMintAddress = Parameters<
+  ReturnType<typeof getPublicBalanceToEncryptedBalanceDirectDepositorFunction>
+>[1];
+
+export async function shieldPublicAtaToEncryptedBalance(opts: {
+  client: IUmbraClient;
+  /** SPL mint base58 (must match token Umbra supports on this cluster). */
+  mintBase58: string;
+  amountBaseUnits: bigint;
+}): Promise<{ queueSignature: string; callbackSignature: string }> {
+  const deposit = getPublicBalanceToEncryptedBalanceDirectDepositorFunction({
+    client: opts.client,
+  });
+  const amount = opts.amountBaseUnits as U64;
+  const mint = opts.mintBase58 as unknown as UmbraMintAddress;
+  return deposit(opts.client.signer.address, mint, amount) as Promise<{
+    queueSignature: string;
+    callbackSignature: string;
+  }>;
+}
+
+export type ClosePositionShieldedResult = {
+  closeSignature: TransactionSignature;
+  umbraRegistration?: readonly TransactionSignature[];
+  umbraDeposit?: { queueSignature: string; callbackSignature: string };
+};
+
+export type LiquidatePositionShieldedResult = ClosePositionShieldedResult;
+
+/**
+ * Umbra helpers for DarkBook flows: chain health check plus optional post-close shield.
  */
 export class UmbraShieldedClient {
-  /** Umbra program ID on mainnet/devnet. Set via environment. */
-  static readonly PROGRAM_ID = new PublicKey(
-    process.env.UMBRA_PROGRAM_ID || "UmbraPrivacy111111111111111111111111111111"
-  );
+  static programId(): PublicKey {
+    return resolveUmbraProgramId();
+  }
 
   readonly connection: Connection;
   readonly wallet: Wallet;
@@ -47,157 +201,98 @@ export class UmbraShieldedClient {
   }
 
   /**
-   * Close a DarkBook position with shielded withdrawal.
-   *
-   * Flow:
-   * 1. DarkBook: closePosition instruction transfers PnL to Umbra intermediary ATA
-   * 2. Umbra: DepositFromATA (converts public ATA balance to encrypted ETA)
-   * 3. Umbra: CreateUTXO (deposits ETA into Unified Mixer Pool anonymously)
-   * 4. Trader: BurnToETA (claims UTXO from mixer, lands in their encrypted account)
-   * 5. Trader: WithdrawFromETA (converts encrypted balance back to public, if desired)
-   *
-   * @param darkbookClient - DarkBook SDK client (for position fetch + closePosition call)
-   * @param positionPdaKey - Position PDA to close
-   * @param oracleUpdate - Pyth oracle attestation
-   * @param mint - SPL token mint (USDC)
-   * @param umbraIntermediaryKey - Umbra intermediary account (escrow for anon handoff)
-   * @returns Transaction signature of DarkBook closePosition ix
+   * Close a DarkBook position; optionally shield a chosen USDC amount into Umbra afterward.
+   * Shielding assumes the close has credited the signer's public ATA (same wallet as `IUmbraClient`).
    */
   async closePositionShielded(opts: {
-    darkbookClient: any;
+    darkbookClient: {
+      closePosition(
+        positionPdaKey: PublicKey,
+        priceUpdateAccount: PublicKey,
+      ): Promise<TransactionSignature>;
+    };
     positionPdaKey: PublicKey;
-    oracleUpdate: Uint8Array;
+    /** Pyth `PriceUpdateV2` (or compatible) account the program reads for mark-at-close. */
+    priceUpdateAccount: PublicKey;
     mint: PublicKey;
-    umbraIntermediaryKey: PublicKey;
-  }): Promise<TransactionSignature> {
-    const {
-      darkbookClient,
-      positionPdaKey,
-      oracleUpdate,
-      mint,
-      umbraIntermediaryKey,
-    } = opts;
-
-    // For Phase 1: direct SPL transfer to Umbra intermediary instead of trader.
-    // Later: wire actual Umbra DepositFromATA + UTXO creation via CPI.
-    const txSig = await darkbookClient.closePosition(
-      positionPdaKey,
-      oracleUpdate,
-      mint
+    shieldPayoutWithUmbra?: {
+      client: IUmbraClient;
+      amountBaseUnits: bigint;
+    };
+  }): Promise<ClosePositionShieldedResult> {
+    const closeSignature = await opts.darkbookClient.closePosition(
+      opts.positionPdaKey,
+      opts.priceUpdateAccount,
     );
+    const out: ClosePositionShieldedResult = { closeSignature };
+    if (!opts.shieldPayoutWithUmbra) return out;
 
-    // TODO: Hook Umbra shielding workflow here once program CPI available.
-    // this.depositAndMixAsync(mint, positionPdaKey, umbraIntermediaryKey);
-    // Trader will scan Merkle tree for their UTXO and claim via Umbra UI.
-
-    return txSig;
+    out.umbraRegistration = await ensureUmbraRegistered(
+      opts.shieldPayoutWithUmbra.client,
+    );
+    out.umbraDeposit = await shieldPublicAtaToEncryptedBalance({
+      client: opts.shieldPayoutWithUmbra.client,
+      mintBase58: opts.mint.toBase58(),
+      amountBaseUnits: opts.shieldPayoutWithUmbra.amountBaseUnits,
+    });
+    return out;
   }
 
   /**
-   * Liquidate a position with shielded bounty payout.
-   *
-   * Similar to closePositionShielded, but bounty goes to liquidator via Umbra.
-   *
-   * @param darkbookClient - DarkBook SDK client
-   * @param positionPdaKey - Position PDA to liquidate
-   * @param oracleUpdate - Pyth oracle attestation
-   * @param mint - SPL token mint
-   * @param umbraIntermediaryKey - Umbra intermediary for anon bounty transfer
-   * @returns Transaction signature
+   * Liquidate a DarkBook position; optional Umbra shield of liquidator payout (same pattern as close).
    */
   async liquidatePositionShielded(opts: {
-    darkbookClient: any;
+    darkbookClient: {
+      liquidatePosition(
+        positionPdaKey: PublicKey,
+        priceUpdateAccount: PublicKey,
+        mint: PublicKey,
+      ): Promise<TransactionSignature>;
+    };
     positionPdaKey: PublicKey;
-    oracleUpdate: Uint8Array;
+    priceUpdateAccount: PublicKey;
     mint: PublicKey;
-    umbraIntermediaryKey: PublicKey;
-  }): Promise<TransactionSignature> {
-    const {
-      darkbookClient,
-      positionPdaKey,
-      oracleUpdate,
-      mint,
-      umbraIntermediaryKey,
-    } = opts;
-
-    const txSig = await darkbookClient.liquidatePosition(
-      positionPdaKey,
-      oracleUpdate,
-      mint
+    shieldPayoutWithUmbra?: {
+      client: IUmbraClient;
+      amountBaseUnits: bigint;
+    };
+  }): Promise<LiquidatePositionShieldedResult> {
+    const closeSignature = await opts.darkbookClient.liquidatePosition(
+      opts.positionPdaKey,
+      opts.priceUpdateAccount,
+      opts.mint,
     );
+    const out: LiquidatePositionShieldedResult = { closeSignature };
+    if (!opts.shieldPayoutWithUmbra) return out;
 
-    // TODO: In full integration, bounty routed through Umbra mixer.
-    // Liquidator scans for their UTXO and claims.
-
-    return txSig;
+    out.umbraRegistration = await ensureUmbraRegistered(
+      opts.shieldPayoutWithUmbra.client,
+    );
+    out.umbraDeposit = await shieldPublicAtaToEncryptedBalance({
+      client: opts.shieldPayoutWithUmbra.client,
+      mintBase58: opts.mint.toBase58(),
+      amountBaseUnits: opts.shieldPayoutWithUmbra.amountBaseUnits,
+    });
+    return out;
   }
 
-  /**
-   * Internal: deposit SPL from public ATA into Umbra's encrypted account.
-   * Called after DarkBook transfer to Umbra intermediary.
-   *
-   * Real implementation requires:
-   * - Umbra client initialized with user's X25519 keys
-   * - DepositFromATA instruction CPI from DarkBook program
-   * - Prover for ZK amount-hiding proof
-   *
-   * For Phase 1: documented as placeholder pending Umbra mainnet program.
-   */
-  private async depositAndMixAsync(
-    mint: PublicKey,
-    positionKey: PublicKey,
-    _umbraIntermediaryKey: PublicKey
-  ): Promise<void> {
-    // PHASE 1: Stub. Real implementation:
-    // 1. Fetch Umbra client config (program ID, mixer PDA, etc.)
-    // 2. Build DepositFromATA instruction (public -> encrypted)
-    // 3. Build CreateUTXO instruction (encrypted -> mixer)
-    // 4. Submit both in single tx
-    // 5. Log UTXO index for trader to scan
-
-    console.log(
-      "[umbra] Phase 1: PnL for position",
-      positionKey.toString(),
-      "mint",
-      mint.toString(),
-      "pending Umbra program integration"
-    );
-  }
-
-  /**
-   * Verify Umbra configuration (program IDs, PDAs).
-   * Call once on app init to fail loudly if Umbra unreachable.
-   */
   async verifyUmbraSetup(): Promise<void> {
-    try {
-      const programInfo = await this.connection.getAccountInfo(
-        UmbraShieldedClient.PROGRAM_ID
-      );
-      if (!programInfo) {
-        throw new Error(
-          `Umbra program ${UmbraShieldedClient.PROGRAM_ID.toString()} not found on chain`
-        );
-      }
-      if (!programInfo.executable) {
-        throw new Error("Umbra program is not executable");
-      }
-      console.log("[umbra] Setup verified. Program is live.");
-    } catch (err) {
-      console.error("[umbra] Setup failed:", err);
-      throw err;
+    const pid = resolveUmbraProgramId();
+    const programInfo = await this.connection.getAccountInfo(pid);
+    if (!programInfo) {
+      throw new Error(`Umbra program ${pid.toBase58()} not found on chain`);
+    }
+    if (!programInfo.executable) {
+      throw new Error("Umbra program is not executable");
     }
   }
 }
 
-/**
- * Export a singleton instance for convenience.
- * Caller should initialize with actual connection + wallet.
- */
 let _instance: UmbraShieldedClient | null = null;
 
 export function initUmbraShielded(
   connection: Connection,
-  wallet: Wallet
+  wallet: Wallet,
 ): UmbraShieldedClient {
   _instance = new UmbraShieldedClient(connection, wallet);
   return _instance;
@@ -206,8 +301,14 @@ export function initUmbraShielded(
 export function getUmbraShielded(): UmbraShieldedClient {
   if (!_instance) {
     throw new Error(
-      "UmbraShieldedClient not initialized. Call initUmbraShielded() first."
+      "UmbraShieldedClient not initialized. Call initUmbraShielded() first.",
     );
   }
   return _instance;
 }
+
+export {
+  createInMemorySigner,
+  createSignerFromPrivateKeyBytes,
+  createSignerFromWalletAccount,
+};

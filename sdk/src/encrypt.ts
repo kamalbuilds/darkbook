@@ -358,10 +358,7 @@ export async function requestEncryptThresholdDecryption(
   if (!_config.enabled) {
     throw new Error("Encrypt FHE not enabled in config");
   }
-  // When Encrypt mainnet launches, this will construct a CPI to:
-  // - Encrypt program ID from config.encryptProgramId
-  // - Account: encrypted_data (PDA derived from ciphertext)
-  // - Instruction: request_threshold_decrypt(ciphertext, threshold_participants)
-  // For now, return the intent.
   return "threshold_decrypt";
 }
+
+

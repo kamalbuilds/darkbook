@@ -122,13 +122,6 @@ export interface PythLazerStreamOptions {
   url?: string;
 }
 
-export interface PythLazerStreamOptions {
-  token: string;
-  feedIds: string[];
-  rateMs?: number;
-  url?: string;
-}
-
 /**
  * Connects to Pyth Lazer WebSocket stream and delivers real-time price updates.
  * Pyth Lazer provides sub-millisecond signed oracle prices via WebSocket.

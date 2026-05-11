@@ -57,7 +57,7 @@ export interface Fill {
 
 /** On-chain Position account. */
 export interface Position {
-  trader: PublicKey;
+  owner: PublicKey;
   market: PublicKey;
   side: Side;
   sizeLots: bigint;

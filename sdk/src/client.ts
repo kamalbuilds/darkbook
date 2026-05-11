@@ -2,7 +2,8 @@
  * DarkbookClient — typed Anchor wrapper for all DarkBook on-chain instructions.
  *
  * Base-layer instructions (initializeMarket, deposit, withdraw, placeOrder,
- * cancelOrder, claimFill, markPosition, liquidatePosition, closePosition)
+ * cancelOrder, claimFill, markPosition, liquidatePosition, closePosition,
+ * closePositionAndWithdraw, updateFunding, accrueFundingPosition)
  * are sent via `connection`.
  *
  * ER instructions (matchOrders, commitBook, commitAndUndelegateBook) are
@@ -14,7 +15,7 @@ import {
   Connection,
   PublicKey,
   SystemProgram,
-  SYSVAR_INSTRUCTIONS_PUBKEY,
+  SYSVAR_CLOCK_PUBKEY,
   TransactionSignature,
 } from "@solana/web3.js";
 import { AnchorProvider, BN, Program, Wallet } from "@coral-xyz/anchor";
@@ -36,7 +37,8 @@ import {
   SizeBand,
 } from "./types.js";
 import { bookPda, marketPda, positionPda, userPda, vaultPda } from "./pdas.js";
-import { generateOrderPayload, lotsToBand } from "./encryption.js";
+import { computeCommitment, generateOrderPayload, lotsToBand } from "./encryption.js";
+import { encryptOrderBlob, type EncryptedOrderBlob, type EncryptFheConfig } from "./encrypt.js";
 import { fetchPythPrice, SOL_USD_FEED_ID } from "./pyth.js";
 import { ER_VALIDATOR_DEVNET } from "./constants.js";
 
@@ -322,6 +324,81 @@ export class DarkbookClient {
     return { sig, orderId, payload };
   }
 
+  /**
+   * Places a dark order using the Stage 1 Encrypt FHE-compatible encryption layer.
+   *
+   * Instead of sha256(salt‖size‖leverage‖trader), the on-chain commitment is
+   * sha256(encrypted_blob) — the encrypted blob itself is stored off-chain.
+   * The settler decrypts with the ephemeral private key at claim_fill time.
+   *
+   * This is compatible with future Encrypt.xyz FHE threshold decryption:
+   * when Encrypt mainnet launches, the ephemeral key is replaced by a
+   * threshold decryption request via Encrypt CPI.
+   *
+   * @param settlerPublicKey - x25519 public key of the settler (32 bytes)
+   * @returns signature, orderId, and the encrypted blob (store for later reveal)
+   */
+  async placeEncryptedOrder(
+    market: PublicKey,
+    side: Side,
+    priceTicks: bigint,
+    sizeBand: SizeBand,
+    leverageBps: number,
+    sizeLots: bigint,
+    settlerPublicKey: Uint8Array,
+  ): Promise<{ sig: TransactionSignature; orderId: bigint; encryptedBlob: EncryptedOrderBlob }> {
+    const [userAccount] = userPda(this.programId, market, this.wallet.publicKey);
+    const [orderBook] = bookPda(this.programId, market);
+
+    // Generate salt for compatibility with cancel_order (salt still needed as plaintext proof)
+    const salt = globalThis.crypto.getRandomValues(new Uint8Array(32));
+
+    // Encrypt the full order using Stage 1 encrypt layer
+    const encryptedBlob = await encryptOrderBlob(
+      salt,
+      sizeLots,
+      leverageBps,
+      side,
+      priceTicks,
+      settlerPublicKey,
+    );
+
+    // On-chain commitment = sha256(encrypted blob), not sha256(plaintext)
+    const commitment = encryptedBlob.commitment;
+
+    const sideArg = side === Side.Long ? { long: {} } : { short: {} };
+    const bandArg = (() => {
+      switch (sizeBand) {
+        case SizeBand.Small: return { small: {} };
+        case SizeBand.Medium: return { medium: {} };
+        case SizeBand.Large: return { large: {} };
+        case SizeBand.Whale: return { whale: {} };
+      }
+    })();
+
+    const sig = await this.m
+      .placeOrder(
+        sideArg,
+        new BN(priceTicks.toString()),
+        bandArg,
+        leverageBps,
+        Array.from(commitment),
+      )
+      .accounts({
+        trader: this.wallet.publicKey,
+        market,
+        userAccount,
+        orderBook,
+        systemProgram: SystemProgram.programId,
+      })
+      .rpc();
+
+    const book = await this.acct["orderBook"].fetch(orderBook);
+    const orderId = BigInt(book.nextOrderId.toString()) - 1n;
+
+    return { sig, orderId, encryptedBlob };
+  }
+
   async cancelOrder(
     market: PublicKey,
     orderId: bigint,
@@ -354,7 +431,6 @@ export class DarkbookClient {
     return this.em
       .matchOrders()
       .accounts({
-        cranker: this.wallet.publicKey,
         market,
         orderBook,
       })
@@ -364,16 +440,19 @@ export class DarkbookClient {
   /** Trigger a manual commit of the OrderBook state from ER to mainnet. */
   async commitBook(market: PublicKey): Promise<TransactionSignature> {
     const [orderBook] = bookPda(this.programId, market);
-    const MAGIC_CONTEXT = new PublicKey("MagicContext111111111111111111111111111111");
-    const MAGIC_PROGRAM = new PublicKey("MagicProgram1111111111111111111111111111111");
+    const m = await this.acct["market"].fetch(market);
+    const admin = m.admin as PublicKey;
+    const magicContext = new PublicKey("MagicContext1111111111111111111111111111111");
+    const magicProgram = new PublicKey("Magic11111111111111111111111111111111111111");
     return this.em
       .commitBook()
       .accounts({
         payer: this.wallet.publicKey,
-        market,
         orderBook,
-        magicContext: MAGIC_CONTEXT,
-        magicProgram: MAGIC_PROGRAM,
+        market,
+        admin,
+        magicContext,
+        magicProgram,
       })
       .rpc();
   }
@@ -381,16 +460,19 @@ export class DarkbookClient {
   /** Commit OrderBook state and return PDA ownership to mainnet. */
   async commitAndUndelegateBook(market: PublicKey): Promise<TransactionSignature> {
     const [orderBook] = bookPda(this.programId, market);
-    const MAGIC_CONTEXT = new PublicKey("MagicContext111111111111111111111111111111");
-    const MAGIC_PROGRAM = new PublicKey("MagicProgram1111111111111111111111111111111");
+    const m = await this.acct["market"].fetch(market);
+    const admin = m.admin as PublicKey;
+    const magicContext = new PublicKey("MagicContext1111111111111111111111111111111");
+    const magicProgram = new PublicKey("Magic11111111111111111111111111111111111111");
     return this.em
       .commitAndUndelegateBook()
       .accounts({
         payer: this.wallet.publicKey,
-        market,
         orderBook,
-        magicContext: MAGIC_CONTEXT,
-        magicProgram: MAGIC_PROGRAM,
+        market,
+        admin,
+        magicContext,
+        magicProgram,
       })
       .rpc();
   }
@@ -413,7 +495,6 @@ export class DarkbookClient {
     maker: PublicKey,
     makerPayload: OrderPayload,
     makerPosIdx: number,
-    oracleUpdate: Uint8Array,
   ): Promise<TransactionSignature> {
     const [orderBook] = bookPda(this.programId, market);
     const [takerUserAccount] = userPda(this.programId, market, taker);
@@ -421,26 +502,33 @@ export class DarkbookClient {
     const [takerPosition] = positionPda(this.programId, market, taker, takerPosIdx);
     const [makerPosition] = positionPda(this.programId, market, maker, makerPosIdx);
 
+    const takerCommitment = Array.from(
+      computeCommitment(takerPayload.salt, takerPayload.sizeLots, takerPayload.leverageBps, taker),
+    );
+    const makerCommitment = Array.from(
+      computeCommitment(makerPayload.salt, makerPayload.sizeLots, makerPayload.leverageBps, maker),
+    );
+
     return this.m
       .claimFill(
         new BN(fillId.toString()),
         Array.from(takerPayload.salt),
         new BN(takerPayload.sizeLots.toString()),
         takerPayload.leverageBps,
+        takerCommitment,
         Array.from(makerPayload.salt),
         new BN(makerPayload.sizeLots.toString()),
         makerPayload.leverageBps,
-        Buffer.from(oracleUpdate),
+        makerCommitment,
       )
       .accounts({
         settler: this.wallet.publicKey,
         market,
         orderBook,
-        takerUserAccount,
-        makerUserAccount,
+        takerUser: takerUserAccount,
+        makerUser: makerUserAccount,
         takerPosition,
         makerPosition,
-        instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
         systemProgram: SystemProgram.programId,
       })
       .rpc();
@@ -454,7 +542,7 @@ export class DarkbookClient {
    */
   async markPosition(
     positionPdaKey: PublicKey,
-    oracleUpdate: Uint8Array,
+    priceUpdateAccount: PublicKey,
   ): Promise<MarkResult> {
     // Fetch position and market to compute PnL.
     const pos = await this.acct["position"].fetch(positionPdaKey);
@@ -478,12 +566,11 @@ export class DarkbookClient {
 
     // Submit on-chain mark (no state change unless liquidatable; non-blocking).
     void this.m
-      .markPosition(Buffer.from(oracleUpdate))
+      .markPosition()
       .accounts({
-        caller: this.wallet.publicKey,
         market: marketKey,
         position: positionPdaKey,
-        instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
+        priceUpdate: priceUpdateAccount,
       })
       .rpc()
       .catch(() => {
@@ -495,12 +582,12 @@ export class DarkbookClient {
 
   async liquidatePosition(
     positionPdaKey: PublicKey,
-    oracleUpdate: Uint8Array,
+    priceUpdateAccount: PublicKey,
     mint: PublicKey,
   ): Promise<TransactionSignature> {
     const pos = await this.acct["position"].fetch(positionPdaKey);
     const marketKey: PublicKey = pos.market;
-    const posOwner: PublicKey = pos.trader;
+    const posOwner: PublicKey = pos.owner;
     const [userAccount] = userPda(this.programId, marketKey, posOwner);
     const [vault] = vaultPda(this.programId, marketKey);
     const vaultTokenAccount = getAssociatedTokenAddressSync(mint, vault, true);
@@ -509,16 +596,16 @@ export class DarkbookClient {
     );
 
     return this.m
-      .liquidatePosition(Buffer.from(oracleUpdate))
+      .liquidatePosition()
       .accounts({
-        liquidator: this.wallet.publicKey,
         market: marketKey,
         position: positionPdaKey,
         userAccount,
+        priceUpdate: priceUpdateAccount,
         vault,
         vaultTokenAccount,
         liquidatorTokenAccount,
-        instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
+        liquidator: this.wallet.publicKey,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
       .rpc();
@@ -526,27 +613,59 @@ export class DarkbookClient {
 
   async closePosition(
     positionPdaKey: PublicKey,
-    oracleUpdate: Uint8Array,
-    mint: PublicKey,
+    priceUpdateAccount: PublicKey,
   ): Promise<TransactionSignature> {
     const pos = await this.acct["position"].fetch(positionPdaKey);
     const marketKey: PublicKey = pos.market;
-    const [userAccount] = userPda(this.programId, marketKey, this.wallet.publicKey);
-    const [vault] = vaultPda(this.programId, marketKey);
-    const vaultTokenAccount = getAssociatedTokenAddressSync(mint, vault, true);
-    const traderTokenAccount = getAssociatedTokenAddressSync(mint, this.wallet.publicKey);
+    const owner: PublicKey = pos.owner;
+    const [userAccount] = userPda(this.programId, marketKey, owner);
 
     return this.m
-      .closePosition(Buffer.from(oracleUpdate))
+      .closePosition()
       .accounts({
-        trader: this.wallet.publicKey,
         market: marketKey,
         position: positionPdaKey,
         userAccount,
+        priceUpdate: priceUpdateAccount,
+        owner,
+      })
+      .rpc();
+  }
+
+  /**
+   * Close position and transfer up to `payoutAmount` USDC from the market vault to the owner's ATA.
+   * Payout is capped on-chain by unlocked collateral after settlement.
+   */
+  async closePositionAndWithdraw(
+    positionPdaKey: PublicKey,
+    priceUpdateAccount: PublicKey,
+    mint: PublicKey,
+    payoutAmount: BN | bigint,
+  ): Promise<TransactionSignature> {
+    const pos = await this.acct["position"].fetch(positionPdaKey);
+    const marketKey: PublicKey = pos.market;
+    const owner: PublicKey = pos.owner;
+    const [userAccount] = userPda(this.programId, marketKey, owner);
+    const [vault] = vaultPda(this.programId, marketKey);
+    const vaultTokenAccount = getAssociatedTokenAddressSync(mint, vault, true);
+    const ownerTokenAccount = getAssociatedTokenAddressSync(mint, owner);
+
+    const payoutBn = typeof payoutAmount === "bigint"
+      ? new BN(payoutAmount.toString())
+      : payoutAmount;
+
+    return this.m
+      .closePositionAndWithdraw(payoutBn)
+      .accounts({
+        market: marketKey,
+        position: positionPdaKey,
+        userAccount,
+        priceUpdate: priceUpdateAccount,
+        owner,
         vault,
         vaultTokenAccount,
-        traderTokenAccount,
-        instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
+        ownerTokenAccount,
+        mint,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
       .rpc();
@@ -626,7 +745,7 @@ export class DarkbookClient {
         const raw = await this.acct["position"].fetch(pdaKey);
         const status = parsePositionStatus(raw.status as Record<string, unknown>);
         positions.push({
-          trader: raw.trader as PublicKey,
+          owner: raw.owner as PublicKey,
           market: raw.market as PublicKey,
           side: "long" in (raw.side as Record<string, unknown>) ? Side.Long : Side.Short,
           sizeLots: BigInt((raw.sizeLots as { toString(): string }).toString()),
@@ -668,14 +787,14 @@ export class DarkbookClient {
 
   async updateFunding(
     market: PublicKey,
-    oracleUpdate: Uint8Array,
+    priceUpdateAccount: PublicKey,
   ): Promise<TransactionSignature> {
     return this.m
-      .updateFunding(Buffer.from(oracleUpdate))
+      .updateFunding()
       .accounts({
-        cranker: this.wallet.publicKey,
         market,
-        instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
+        priceUpdate: priceUpdateAccount,
+        clock: SYSVAR_CLOCK_PUBKEY,
       })
       .rpc();
   }
@@ -687,12 +806,108 @@ export class DarkbookClient {
   ): Promise<TransactionSignature> {
     const [userAccount] = userPda(this.programId, market, positionOwner);
     return this.m
-      .accrueFunding()
+      .accrueFundingPosition()
       .accounts({
-        cranker: this.wallet.publicKey,
         market,
         position: positionPdaKey,
         userAccount,
+      })
+      .rpc();
+  }
+
+  // ─── Ika dWallet Bridge ────────────────────────────────────────────────────
+
+  /** Ika dWallet program ID (devnet pre-alpha). */
+  static IKA_PROGRAM_ID = new PublicKey("Fg6PaFpoGXkYsidMpWTxq8cQqU5cPqQkz6xcKozxZxHz");
+
+  /** CPI authority PDA for DarkBook → Ika. */
+  static cpiAuthorityPda(): [PublicKey, number] {
+    return PublicKey.findProgramAddressSync(
+      [Buffer.from("__ika_cpi_authority")],
+      new PublicKey("3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf"),
+    );
+  }
+
+  /** DWalletConfig PDA (one per user per market). */
+  dwalletConfigPda(market: PublicKey, owner: PublicKey): [PublicKey, number] {
+    return PublicKey.findProgramAddressSync(
+      [Buffer.from("ika-dwallet"), market.toBuffer(), owner.toBuffer()],
+      this.programId,
+    );
+  }
+
+  /**
+   * Link an Ika dWallet to a DarkBook user account.
+   * Transfers the dWallet's authority to DarkBook's CPI authority PDA.
+   *
+   * @param dwallet - The Ika dWallet account (created via Ika program)
+   * @param market - The DarkBook market
+   */
+  async registerDWallet(
+    dwallet: PublicKey,
+    market: PublicKey,
+  ): Promise<TransactionSignature> {
+    const [config] = this.dwalletConfigPda(market, this.wallet.publicKey);
+    const [userAccount] = userPda(this.programId, market, this.wallet.publicKey);
+    const [cpiAuthority] = DarkbookClient.cpiAuthorityPda();
+
+    return this.m
+      .registerDwallet()
+      .accounts({
+        config,
+        dwallet,
+        market,
+        userAccount,
+        owner: this.wallet.publicKey,
+        payer: this.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+        dwalletProgram: DarkbookClient.IKA_PROGRAM_ID,
+        cpiAuthority,
+        darkbookProgram: this.programId,
+      })
+      .rpc();
+  }
+
+  /**
+   * Approve a withdrawal message for Ika signing (cross-chain).
+   * Called after close_position to authorize the Ika network to sign
+   * a payout transaction on the target chain.
+   *
+   * @param dwallet - The dWallet linked to the position owner
+   * @param coordinator - DWalletCoordinator PDA (Ika program)
+   * @param messageDigest - 32-byte message digest to sign
+   * @param userPubkey - User's public key for the target chain (32 bytes)
+   * @param signatureScheme - Signature scheme (see Ika docs for values)
+   */
+  async approveDWalletWithdrawal(
+    dwallet: PublicKey,
+    coordinator: PublicKey,
+    messageDigest: Uint8Array,
+    userPubkey: Uint8Array,
+    signatureScheme: number,
+  ): Promise<TransactionSignature> {
+    const [cpiAuthority] = DarkbookClient.cpiAuthorityPda();
+    const msgSeed = Buffer.from("ika-msg");
+    const [messageApproval] = PublicKey.findProgramAddressSync(
+      [msgSeed, dwallet.toBuffer(), Buffer.from(messageDigest)],
+      DarkbookClient.IKA_PROGRAM_ID,
+    );
+
+    return this.m
+      .approveDwalletWithdrawal(
+        Array.from(messageDigest),
+        Array.from(userPubkey),
+        signatureScheme,
+      )
+      .accounts({
+        dwallet,
+        coordinator,
+        messageApproval,
+        dwalletProgram: DarkbookClient.IKA_PROGRAM_ID,
+        cpiAuthority,
+        darkbookProgram: this.programId,
+        payer: this.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
       })
       .rpc();
   }
