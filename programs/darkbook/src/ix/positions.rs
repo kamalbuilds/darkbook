@@ -8,7 +8,7 @@ use crate::ix::funding::accrue_funding_internal;
 use crate::pyth::read_pyth_price;
 use crate::state::{CollateralVault, Market, Position, PositionStatus, Side, UserAccount};
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
 /// Read-only mark price fetch — logs unrealized PnL. No state change.
 pub fn mark_position(ctx: Context<MarkPosition>) -> Result<()> {
@@ -319,6 +319,134 @@ pub fn close_position(ctx: Context<ClosePosition>) -> Result<()> {
     Ok(())
 }
 
+/// Same settlement as [`close_position`], then optionally moves USDC from the vault to the
+/// owner's ATA in the same transaction (atomic on-chain payout). Umbra encrypted deposit is
+/// not included: it requires Arcium client proofs and cannot be CPI'd from this program.
+pub fn close_position_and_withdraw(ctx: Context<ClosePositionAndWithdraw>, payout_amount: u64) -> Result<()> {
+    require!(!ctx.accounts.market.paused, DarkbookError::MarketPaused);
+    let pos = &ctx.accounts.position;
+    require!(
+        pos.status == PositionStatus::Open,
+        DarkbookError::PositionNotOpen
+    );
+    require!(
+        pos.owner == ctx.accounts.owner.key(),
+        DarkbookError::Unauthorized
+    );
+
+    let clock = Clock::get()?;
+    let mark_price = get_oracle_price(
+        &ctx.accounts.price_update,
+        &ctx.accounts.market,
+        clock.unix_timestamp,
+    )?;
+    let pnl = compute_pnl(pos, mark_price)?;
+
+    {
+        let market = &mut ctx.accounts.market;
+        match ctx.accounts.position.side {
+            Side::Long => {
+                market.total_long_size = market
+                    .total_long_size
+                    .checked_sub(ctx.accounts.position.size_lots)
+                    .ok_or(DarkbookError::Overflow)?;
+            }
+            Side::Short => {
+                market.total_short_size = market
+                    .total_short_size
+                    .checked_sub(ctx.accounts.position.size_lots)
+                    .ok_or(DarkbookError::Overflow)?;
+            }
+        }
+    }
+
+    let pos_collateral = ctx.accounts.position.collateral_locked;
+    let user = &mut ctx.accounts.user_account;
+    user.locked_amount = user
+        .locked_amount
+        .checked_sub(pos_collateral)
+        .ok_or(DarkbookError::Overflow)?;
+    if pnl >= 0 {
+        let profit = pnl as u64;
+        require!(
+            ctx.accounts.market.realized_loss_pool >= profit,
+            DarkbookError::InsufficientCollateral
+        );
+        ctx.accounts.market.realized_loss_pool = ctx
+            .accounts
+            .market
+            .realized_loss_pool
+            .checked_sub(profit)
+            .ok_or(DarkbookError::Overflow)?;
+        user.deposited_amount = user
+            .deposited_amount
+            .checked_add(profit)
+            .ok_or(DarkbookError::Overflow)?;
+    } else {
+        let loss = (-pnl) as u64;
+        user.deposited_amount = user
+            .deposited_amount
+            .checked_sub(loss)
+            .ok_or(DarkbookError::Overflow)?;
+        ctx.accounts.market.realized_loss_pool = ctx
+            .accounts
+            .market
+            .realized_loss_pool
+            .checked_add(loss)
+            .ok_or(DarkbookError::Overflow)?;
+    }
+    user.realized_pnl = user
+        .realized_pnl
+        .checked_add(pnl)
+        .ok_or(DarkbookError::Overflow)?;
+
+    let pos = &mut ctx.accounts.position;
+    pos.status = PositionStatus::Closed;
+    pos.collateral_locked = 0;
+
+    emit!(PositionClosed {
+        position: pos.key(),
+        owner: pos.owner,
+        market: ctx.accounts.market.key(),
+        exit_price_ticks: mark_price,
+        pnl,
+        status: PositionStatus::Closed,
+        slot: clock.slot,
+    });
+
+    if payout_amount > 0 {
+        let unlocked = ctx.accounts.user_account.unlocked_amount();
+        require!(
+            payout_amount <= unlocked,
+            DarkbookError::WithdrawTooLarge
+        );
+
+        let market_key = ctx.accounts.market.key();
+        let vault_bump = ctx.accounts.vault.bump;
+        let seeds = &[VAULT_SEED, market_key.as_ref(), &[vault_bump]];
+        let signer = &[&seeds[..]];
+
+        let cpi_ctx = CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(),
+            Transfer {
+                from: ctx.accounts.vault_token_account.to_account_info(),
+                to: ctx.accounts.owner_token_account.to_account_info(),
+                authority: ctx.accounts.vault.to_account_info(),
+            },
+            signer,
+        );
+        token::transfer(cpi_ctx, payout_amount)?;
+
+        let user_acct = &mut ctx.accounts.user_account;
+        user_acct.deposited_amount = user_acct
+            .deposited_amount
+            .checked_sub(payout_amount)
+            .ok_or(DarkbookError::Overflow)?;
+    }
+
+    Ok(())
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /// Fetch Pyth oracle price and convert to price_ticks (USDC micro-units per lot).
@@ -356,24 +484,26 @@ pub fn get_oracle_price(
 }
 
 /// Compute unrealized PnL for a position at given mark price (signed, USDC micro-units).
+///
+/// Uses `i128` for the price diff so losing positions (mark below entry for longs, above for
+/// shorts) do not trip `i64::checked_sub` underflow, which previously surfaced as `Overflow`.
 pub fn compute_pnl(pos: &Position, mark_price_ticks: u64) -> Result<i64> {
-    let entry = i64::try_from(pos.entry_price_ticks).map_err(|_| DarkbookError::Overflow)?;
-    let mark = i64::try_from(mark_price_ticks).map_err(|_| DarkbookError::Overflow)?;
-    let size = i64::try_from(pos.size_lots).map_err(|_| DarkbookError::Overflow)?;
+    let entry = pos.entry_price_ticks as i128;
+    let mark = mark_price_ticks as i128;
+    let size = pos.size_lots as i128;
 
-    let pnl = match pos.side {
+    let diff_ticks = match pos.side {
         Side::Long => mark
             .checked_sub(entry)
-            .ok_or(DarkbookError::Overflow)?
-            .checked_mul(size)
             .ok_or(DarkbookError::Overflow)?,
         Side::Short => entry
             .checked_sub(mark)
-            .ok_or(DarkbookError::Overflow)?
-            .checked_mul(size)
             .ok_or(DarkbookError::Overflow)?,
     };
-    Ok(pnl)
+    let pnl = diff_ticks
+        .checked_mul(size)
+        .ok_or(DarkbookError::Overflow)?;
+    i64::try_from(pnl).map_err(|_| DarkbookError::Overflow.into())
 }
 
 fn apply_funding_delta(
@@ -549,4 +679,56 @@ pub struct ClosePosition<'info> {
     pub price_update: AccountInfo<'info>,
 
     pub owner: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct ClosePositionAndWithdraw<'info> {
+    #[account(mut)]
+    pub market: Account<'info, Market>,
+
+    #[account(
+        mut,
+        seeds = [POS_SEED, market.key().as_ref(), position.owner.as_ref(), &position.position_idx.to_le_bytes()],
+        bump = position.bump,
+        has_one = market,
+    )]
+    pub position: Account<'info, Position>,
+
+    #[account(
+        mut,
+        seeds = [USER_SEED, market.key().as_ref(), owner.key().as_ref()],
+        bump = user_account.bump,
+        has_one = owner,
+        has_one = market,
+    )]
+    pub user_account: Account<'info, UserAccount>,
+
+    /// CHECK: Pyth PriceUpdateV2 account — verified in handler
+    pub price_update: AccountInfo<'info>,
+
+    pub owner: Signer<'info>,
+
+    #[account(
+        seeds = [VAULT_SEED, market.key().as_ref()],
+        bump = vault.bump,
+        constraint = vault.mint == mint.key(),
+    )]
+    pub vault: Account<'info, CollateralVault>,
+
+    #[account(
+        mut,
+        token::mint = mint,
+        token::authority = vault,
+    )]
+    pub vault_token_account: Account<'info, TokenAccount>,
+
+    #[account(
+        mut,
+        token::mint = mint,
+        token::authority = owner,
+    )]
+    pub owner_token_account: Account<'info, TokenAccount>,
+
+    pub mint: Account<'info, Mint>,
+    pub token_program: Program<'info, Token>,
 }

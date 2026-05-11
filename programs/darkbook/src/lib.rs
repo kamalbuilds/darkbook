@@ -13,7 +13,7 @@ pub mod state;
 use ix::*;
 use state::*;
 
-declare_id!("Doj2qb3JjcApCGtngWQePVtDAkPTT8nRCDWF5Auk3LVw");
+declare_id!("3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf");
 
 #[ephemeral]
 #[program]
@@ -40,6 +40,14 @@ pub mod darkbook {
             maker_rebate_bps,
             funding_interval_secs,
         )
+    }
+
+    pub fn extend_order_book(ctx: Context<ExtendOrderBook>, chunk_index: u32) -> Result<()> {
+        admin::extend_order_book(ctx, chunk_index)
+    }
+
+    pub fn finalize_order_book_init(ctx: Context<FinalizeOrderBookInit>) -> Result<()> {
+        admin::finalize_order_book_init(ctx)
     }
 
     pub fn set_market_paused(ctx: Context<AdminMarket>, paused: bool) -> Result<()> {
@@ -148,9 +156,31 @@ pub mod darkbook {
         positions::close_position(ctx)
     }
 
+    pub fn close_position_and_withdraw(
+        ctx: Context<ClosePositionAndWithdraw>,
+        payout_amount: u64,
+    ) -> Result<()> {
+        positions::close_position_and_withdraw(ctx, payout_amount)
+    }
+
     // ── Funding ───────────────────────────────────────────────────────────────
 
     pub fn update_funding(ctx: Context<UpdateFunding>) -> Result<()> {
         funding::update_funding(ctx)
+    }
+
+    // ── Ika dWallet Bridge ─────────────────────────────────────────────────────
+
+    pub fn register_dwallet(ctx: Context<RegisterDWallet>) -> Result<()> {
+        ix::ika::register_dwallet(ctx)
+    }
+
+    pub fn approve_dwallet_withdrawal(
+        ctx: Context<ApproveDWalletWithdrawal>,
+        message_digest: [u8; 32],
+        user_pubkey: [u8; 32],
+        signature_scheme: u16,
+    ) -> Result<()> {
+        ix::ika::approve_dwallet_withdrawal(ctx, message_digest, user_pubkey, signature_scheme)
     }
 }

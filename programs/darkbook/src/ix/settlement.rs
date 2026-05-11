@@ -237,6 +237,7 @@ pub fn compute_collateral(size_lots: u64, price_ticks: u64, leverage_bps: u16) -
     maker_commitment: [u8; 32]
 )]
 pub struct ClaimFill<'info> {
+    #[account(mut)]
     pub market: Account<'info, Market>,
 
     #[account(

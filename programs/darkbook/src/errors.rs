@@ -48,4 +48,10 @@ pub enum DarkbookError {
     AlreadyDelegated,
     #[msg("Counterparty profit pool is empty")]
     InsufficientPool,
+    #[msg("Order book PDA is already initialized")]
+    OrderBookAccountNotEmpty,
+    #[msg("Order book data is not full size yet")]
+    OrderBookInitIncomplete,
+    #[msg("Order book already finalized")]
+    OrderBookAlreadyFinalized,
 }

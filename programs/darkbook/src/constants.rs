@@ -7,8 +7,10 @@ pub const POS_SEED: &[u8] = b"pos";
 pub const USDC_DECIMALS: u32 = 6;
 /// 200x max leverage (20000 bps = 200x)
 pub const MAX_LEVERAGE_BPS: u16 = 20_000;
-/// Position is liquidatable when collateral_ratio < 1.2 (12000 bps out of 10000)
-pub const LIQUIDATION_THRESHOLD_BPS: u32 = 12_000;
+/// Position is liquidatable when `(remaining_after_pnl / collateral_locked) * 10_000`
+/// falls strictly below this threshold. Must be at most 10_000 so a flat position
+/// (ratio 10_000) is not liquidatable; 12_000 would incorrectly liquidate every open position.
+pub const LIQUIDATION_THRESHOLD_BPS: u32 = 8_000;
 /// Liquidator reward: 5% of remaining collateral
 pub const LIQUIDATION_BOUNTY_BPS: u32 = 500;
 /// Max fills stored in OrderBook at once
