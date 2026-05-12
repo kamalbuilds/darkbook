@@ -184,3 +184,30 @@ pub struct FinalizeOrderBookInit<'info> {
     #[account(mut, seeds = [BOOK_SEED, market.key().as_ref()], bump)]
     pub order_book: UncheckedAccount<'info>,
 }
+
+/// Devnet-only: admin force-match without ER delegation check.
+pub fn crank_match(ctx: Context<CrankMatch>) -> Result<()> {
+    require!(!ctx.accounts.market.paused, DarkbookError::MarketPaused);
+    let clock = Clock::get()?;
+    let mut book = ctx.accounts.order_book.load_mut()?;
+    // Skip is_delegated check — admin-only devnet crank
+    let filled = crate::matching_engine::match_step(&mut *book, clock.slot)?;
+    if filled > 0 {
+        book.last_match_slot = clock.slot;
+    }
+    msg!("crank_match: {} fills", filled);
+    Ok(())
+}
+
+#[derive(Accounts)]
+pub struct CrankMatch<'info> {
+    #[account(has_one = admin)]
+    pub market: Account<'info, Market>,
+    pub admin: Signer<'info>,
+    #[account(
+        mut,
+        seeds = [BOOK_SEED, market.key().as_ref()],
+        bump
+    )]
+    pub order_book: AccountLoader<'info, OrderBook>,
+}

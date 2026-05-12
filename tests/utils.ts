@@ -51,8 +51,13 @@ const PRICE_BUCKET_SIZE = 8 + 8 + 4 * ORDER_SIZE;
 // Fill::SIZE = 8 + 8 + 8 + 32 + 32 + 8 + 1 + 1 + 6 + 8 = 112 bytes
 const FILL_SIZE = 8 + 8 + 8 + 32 + 32 + 8 + 1 + 1 + 6 + 8;
 
-// OrderBook header = 8 (disc) + 32 (market) + 8*8 (metadata fields) + 16 (pad) = 120
-const BOOK_HEADER_SIZE = 8 + 32 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16;
+// OrderBook header = 8 (disc) + 32 (market) + 8 u64 metadata + 16 (is_delegated + _pad) = 120
+const BOOK_HEADER_SIZE = 8 + 32 + 8 * 8 + 16;
+
+/** Byte offset of `OrderBook::is_delegated` in raw account `data` (matches `state.rs` + Anchor disc). */
+export const ORDERBOOK_IS_DELEGATED_ACCOUNT_OFFSET = 8 + 32 + 8 * 8;
+
+const ORDER_BOOK_BUCKET_COUNT = 256;
 
 // ─── Raw account deserializers ────────────────────────────────────────────────
 
@@ -90,10 +95,12 @@ export interface DeserializedOrderBook {
   nextOrderId: bigint;
   nextFillId: bigint;
   lastMatchSlot: bigint;
+  lastCommitSlot: bigint;
   bidCount: number;
   askCount: number;
   fillCount: number;
   fillHead: number;
+  isDelegated: number;
   bids: RawPriceBucket[];
   asks: RawPriceBucket[];
   fills: RawFill[];
@@ -159,6 +166,17 @@ function readFill(buf: Buffer, offset: number): RawFill {
  * Deserialize raw OrderBook account data (after 8-byte Anchor discriminator).
  * Used by tests to inspect the zero-copy OrderBook without going through the IDL.
  */
+/** Latest fill in the ring buffer that is not yet claimed (for tests after `match_orders`). */
+export function findLatestOpenFill(book: DeserializedOrderBook): RawFill | null {
+  let best: RawFill | null = null;
+  for (const f of book.fills) {
+    if (f.claimed) continue;
+    if (f.fillId === 0n) continue;
+    if (!best || f.fillId > best.fillId) best = f;
+  }
+  return best;
+}
+
 export function deserializeOrderBook(data: Buffer): DeserializedOrderBook {
   let offset = 8; // skip discriminator
 
@@ -171,6 +189,8 @@ export function deserializeOrderBook(data: Buffer): DeserializedOrderBook {
   offset += 8;
   const lastMatchSlot = data.readBigUInt64LE(offset);
   offset += 8;
+  const lastCommitSlot = data.readBigUInt64LE(offset);
+  offset += 8;
   const bidCount = Number(data.readBigUInt64LE(offset));
   offset += 8;
   const askCount = Number(data.readBigUInt64LE(offset));
@@ -180,19 +200,19 @@ export function deserializeOrderBook(data: Buffer): DeserializedOrderBook {
   const fillHead = Number(data.readBigUInt64LE(offset));
   offset += 8;
 
-  // _pad [16]
-  offset += 16;
+  const isDelegated = data.readUInt8(offset);
+  offset += 1;
+  // _pad [15]
+  offset += 15;
 
-  // 64 bid buckets
   const bids: RawPriceBucket[] = [];
-  for (let i = 0; i < 64; i++) {
+  for (let i = 0; i < ORDER_BOOK_BUCKET_COUNT; i++) {
     bids.push(readPriceBucket(data, offset));
     offset += PRICE_BUCKET_SIZE;
   }
 
-  // 64 ask buckets
   const asks: RawPriceBucket[] = [];
-  for (let i = 0; i < 64; i++) {
+  for (let i = 0; i < ORDER_BOOK_BUCKET_COUNT; i++) {
     asks.push(readPriceBucket(data, offset));
     offset += PRICE_BUCKET_SIZE;
   }
@@ -209,10 +229,12 @@ export function deserializeOrderBook(data: Buffer): DeserializedOrderBook {
     nextOrderId,
     nextFillId,
     lastMatchSlot,
+    lastCommitSlot,
     bidCount,
     askCount,
     fillCount,
     fillHead,
+    isDelegated,
     bids,
     asks,
     fills,

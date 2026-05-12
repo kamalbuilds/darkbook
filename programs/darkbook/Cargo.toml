@@ -26,5 +26,8 @@ ephemeral-rollups-sdk = { version = "0.11.1", features = ["anchor", "disable-rea
 sha2 = "0.10"
 bytemuck = { version = "1", features = ["derive"] }
 
+# Encrypt FHE (pre-alpha) — manual CPI, no crate dep to avoid Anchor 1.0 conflict
+# encrypt-anchor = { git = "https://github.com/dwallet-labs/encrypt-pre-alpha" }
+
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

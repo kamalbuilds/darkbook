@@ -149,7 +149,8 @@ interface BookAccount {
 async function fetchAndBroadcastBook(market: PublicKey): Promise<void> {
   const [bookKey] = bookPda(PROGRAM_ID, market);
   try {
-    const book = (await program.account.orderBook.fetch(bookKey)) as BookAccount;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const book = (await (program.account as any).orderBook.fetch(bookKey)) as BookAccount;
     broadcast({
       type: "book",
       market: market.toBase58(),

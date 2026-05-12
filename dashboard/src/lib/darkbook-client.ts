@@ -18,7 +18,7 @@ import {
 import { AnchorProvider, BN, Program, type Idl } from "@coral-xyz/anchor";
 import { sha256 } from "@noble/hashes/sha2";
 import idl from "./darkbook-idl.json";
-import type { OrderBookLevel, Position, Fill, MarketInfo, Side, SizeBand } from "./darkbook-types";
+import type { OrderBookLevel, Position, Fill, MarketInfo, Side, SizeBand, PositionStatus } from "./darkbook-types";
 import { pythUsdFeedIdForMarket } from "./market-assets";
 
 // RPC selection priority: explicit env > Helius > Quicknode > public devnet.
@@ -58,8 +58,9 @@ export function getConnection(): Connection {
  * seeds = [b"market", asset_id_bytes]
  */
 export function deriveMarketPda(assetId: string): PublicKey {
+  const hash = sha256(new TextEncoder().encode(assetId));
   const [pda] = PublicKey.findProgramAddressSync(
-    [Buffer.from("market"), Buffer.from(assetId, "utf8")],
+    [Buffer.from("market"), hash.slice(0, 8)],
     PROGRAM_ID
   );
   return pda;
@@ -94,27 +95,122 @@ export function deriveUserAccountPda(market: PublicKey, owner: PublicKey): Publi
  * seeds = [b"pos", market, owner, idx_le]
  */
 export function derivePositionPda(market: PublicKey, owner: PublicKey, idx: number): PublicKey {
-  const idxBuf = Buffer.alloc(8);
-  idxBuf.writeBigUInt64LE(BigInt(idx));
+  const idxBuf = new Uint8Array(8);
+  const view = new DataView(idxBuf.buffer);
+  view.setBigUint64(0, BigInt(idx), true);
   const [pda] = PublicKey.findProgramAddressSync(
-    [Buffer.from("pos"), market.toBuffer(), owner.toBuffer(), idxBuf],
+    [Buffer.from("pos"), market.toBuffer(), owner.toBuffer(), Buffer.from(idxBuf)],
     PROGRAM_ID
   );
   return pda;
 }
 
+/** Read-only Anchor Program instance (no wallet needed for fetches). */
+function getReadOnlyProgram(): Program {
+  const conn = getConnection();
+  const provider = new AnchorProvider(
+    conn,
+    { publicKey: PublicKey.default, signTransaction: undefined as never, signAllTransactions: undefined as never },
+    AnchorProvider.defaultOptions(),
+  );
+  return new Program(idl as Idl, provider);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyAccountNs = { fetch: (addr: PublicKey) => Promise<any>; all: (filters?: any[]) => Promise<any[]> };
+function positionNs(): AnyAccountNs { return (getReadOnlyProgram().account as any).position; }
+function marketNs(): AnyAccountNs { return (getReadOnlyProgram().account as any).market; }
+
+/** Decode a deserialized Position account into the dashboard Position type. */
+function decodePosition(pubkey: PublicKey, a: Record<string, unknown>): Position {
+  const status = a.status as Record<string, unknown>;
+  const statusStr: PositionStatus = status.open !== undefined ? "Open" : status.closed !== undefined ? "Closed" : "Liquidated";
+  const side = (a.side as Record<string, unknown>).long !== undefined ? "Long" : "Short";
+  return {
+    pubkey: pubkey.toBase58(),
+    owner: (a.owner as PublicKey).toBase58(),
+    market: (a.market as PublicKey).toBase58(),
+    side: side as Side,
+    size_lots: Number(a.sizeLots),
+    entry_price_ticks: Number(a.entryPriceTicks),
+    collateral_locked: Number(a.collateralLocked),
+    opened_ts: Number(a.openedTs),
+    last_funding_index: Number(a.lastFundingIndex),
+    status: statusStr,
+    leverage: Number(a.leverageBps),
+  };
+}
+
+// --- OrderBook raw layout constants (repr(C), bytemuck) ---
+// Order: 96 bytes. PriceBucket: 16 header + 4*96 = 400 bytes.
+const ORDER_SIZE = 96;
+const BUCKET_HEADER = 16; // price_ticks(8) + count(8)
+const ORDERS_PER_BUCKET = 4;
+const BUCKET_SIZE = BUCKET_HEADER + ORDERS_PER_BUCKET * ORDER_SIZE;
+const LEVELS_PER_SIDE = 256;
+// OrderBook header: 32(market) + 7*8(counters) + 1(is_delegated) + 15(pad) = 104
+// OrderBook header: disc(8) + market(32) + 8*u64(64) + is_delegated(1) + pad(15) = 120
+const BOOK_HEADER = 8 + 32 + 8 * 8 + 1 + 15;
+const BIDS_OFFSET = BOOK_HEADER;
+const ASKS_OFFSET = BIDS_OFFSET + LEVELS_PER_SIDE * BUCKET_SIZE;
+const FILLS_OFFSET = ASKS_OFFSET + LEVELS_PER_SIDE * BUCKET_SIZE;
+const FILL_SIZE = 112;
+const FILL_QUEUE_CAP = 256;
+
+const SIZE_BAND_MAP: SizeBand[] = ["Small", "Medium", "Large", "Whale"];
+
+/** Browser-safe u64 LE read from any Uint8Array/Buffer. */
+function readU64LE(buf: Uint8Array, off: number): number {
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  return Number(dv.getBigUint64(off, true));
+}
+
+function parseBuckets(data: Uint8Array, offset: number, count: number): OrderBookLevel[] {
+  const levels: OrderBookLevel[] = [];
+  for (let i = 0; i < LEVELS_PER_SIDE && levels.length < count; i++) {
+    const bOff = offset + i * BUCKET_SIZE;
+    const priceTicks = readU64LE(data, bOff);
+    const bucketCount = readU64LE(data, bOff + 8);
+    if (priceTicks === 0 || bucketCount === 0) continue;
+    for (let j = 0; j < ORDERS_PER_BUCKET; j++) {
+      const oOff = bOff + BUCKET_HEADER + j * ORDER_SIZE;
+      const orderId = readU64LE(data, oOff);
+      if (orderId === 0) continue;
+      const side: Side = data[oOff + 40] === 0 ? "Long" : "Short";
+      const sizeBand = SIZE_BAND_MAP[data[oOff + 41]] ?? "Small";
+      levels.push({
+        price_ticks: readU64LE(data, oOff + 48),
+        size_band: sizeBand,
+        side,
+        order_count: 1,
+      });
+    }
+  }
+  return levels;
+}
+
 /**
- * Fetch order book levels from the ER broadcaster WebSocket or RPC fallback.
- * Returns an empty array if the program is not yet deployed.
+ * Fetch order book levels from the on-chain OrderBook account.
  */
 export async function fetchOrderBook(market: PublicKey): Promise<OrderBookLevel[]> {
-  const conn = getConnection();
-  const bookPda = deriveOrderBookPda(market);
-  const info = await conn.getAccountInfo(bookPda);
-  if (!info || !info.data) return [];
-  // The program isn't deployed yet, so we can't deserialize the account.
-  // Return empty until the IDL is available.
-  return [];
+  try {
+    const conn = getConnection();
+    const bookPda = deriveOrderBookPda(market);
+    const info = await conn.getAccountInfo(bookPda);
+    if (!info || !info.data || info.data.length < BOOK_HEADER) return [];
+
+    const data = info.data as Uint8Array;
+    // bid_count is at offset 8(disc) + 32(market) + 4*8(skip first 4 counters) = 72
+    const bidCount = readU64LE(data, 8 + 32 + 4 * 8);
+    const askCount = readU64LE(data, 8 + 32 + 5 * 8);
+
+    const bids = parseBuckets(data, BIDS_OFFSET, bidCount);
+    const asks = parseBuckets(data, ASKS_OFFSET, askCount);
+    return [...bids, ...asks];
+  } catch (error) {
+    console.error("[fetchOrderBook] error:", error);
+    return [];
+  }
 }
 
 /**
@@ -126,38 +222,15 @@ export async function fetchClosedPositions(
   owner: PublicKey
 ): Promise<Position[]> {
   try {
-    const conn = getConnection();
-
-    // Position discriminator from IDL (170, 188, 143, 228, 122, 64, 247, 208)
-    const positionDiscriminator = Buffer.from([170, 188, 143, 228, 122, 64, 247, 208]);
-
-    // Market filter: position.market field is at offset 32 (after discriminator 8 + owner pubkey 32)
-    const marketFilter = {
-      memcmp: {
-        offset: 8 + 32, // discriminator + owner
-        bytes: market.toBase58(),
-      },
-    };
-
-    // Owner filter: position.owner is at offset 8 (after discriminator)
-    const ownerFilter = {
-      memcmp: {
-        offset: 8,
-        bytes: owner.toBase58(),
-      },
-    };
-
-    const positions = await conn.getProgramAccounts(PROGRAM_ID, {
-      filters: [
-        { memcmp: { offset: 0, bytes: positionDiscriminator.toString("base64") } },
-        marketFilter,
-        ownerFilter,
-      ],
-    });
-
-    // For now, return empty since program isn't deployed
-    // When deployed, deserialize each account and filter by status
-    return [];
+    const accounts = await positionNs().all([
+      { memcmp: { offset: 8, bytes: owner.toBase58() } },
+      { memcmp: { offset: 8 + 32, bytes: market.toBase58() } },
+    ]);
+    return accounts
+      .filter((a: { account: { status: { closed?: object; liquidated?: object } } }) =>
+        a.account.status.closed !== undefined || a.account.status.liquidated !== undefined
+      )
+      .map((a: { publicKey: PublicKey; account: Record<string, unknown> }) => decodePosition(a.publicKey, a.account));
   } catch (error) {
     console.error("[fetchClosedPositions] error:", error);
     return [];
@@ -166,33 +239,17 @@ export async function fetchClosedPositions(
 
 /**
  * Fetch all closed positions across all owners for leaderboard aggregation.
- * Uses getProgramAccounts with Position discriminator + status filter.
  */
 export async function fetchAllClosedPositions(market: PublicKey): Promise<Position[]> {
   try {
-    const conn = getConnection();
-
-    // Position discriminator from IDL
-    const positionDiscriminator = Buffer.from([170, 188, 143, 228, 122, 64, 247, 208]);
-
-    // Market filter: position.market is at offset 40 (8 disc + 32 owner)
-    const marketFilter = {
-      memcmp: {
-        offset: 8 + 32,
-        bytes: market.toBase58(),
-      },
-    };
-
-    const positions = await conn.getProgramAccounts(PROGRAM_ID, {
-      filters: [
-        { memcmp: { offset: 0, bytes: positionDiscriminator.toString("base64") } },
-        marketFilter,
-      ],
-    });
-
-    // For now, return empty since program isn't deployed
-    // When deployed: deserialize, filter by status=Closed|Liquidated, aggregate by owner
-    return [];
+    const accounts = await positionNs().all([
+      { memcmp: { offset: 8 + 32, bytes: market.toBase58() } },
+    ]);
+    return accounts
+      .filter((a: { account: { status: { closed?: object; liquidated?: object } } }) =>
+        a.account.status.closed !== undefined || a.account.status.liquidated !== undefined
+      )
+      .map((a: { publicKey: PublicKey; account: Record<string, unknown> }) => decodePosition(a.publicKey, a.account));
   } catch (error) {
     console.error("[fetchAllClosedPositions] error:", error);
     return [];
@@ -208,15 +265,71 @@ export async function fetchPositions(
   owner: PublicKey,
   limit = 20
 ): Promise<Position[]> {
-  // Program not deployed yet — return empty to show loading state
-  return [];
+  try {
+    const ns = positionNs();
+    const results: Position[] = [];
+    for (let i = 0; i < limit; i++) {
+      const pda = derivePositionPda(market, owner, i);
+      try {
+        const acc = await ns.fetch(pda);
+        if (acc) results.push(decodePosition(pda, acc as Record<string, unknown>));
+      } catch {
+        break; // account doesn't exist, stop scanning
+      }
+    }
+    return results;
+  } catch (error) {
+    console.error("[fetchPositions] error:", error);
+    return [];
+  }
 }
 
 /**
- * Fetch recent fills from the FillRecord accounts (mainnet mirror).
+ * Fetch recent fills from the OrderBook fills ring buffer.
  */
 export async function fetchRecentFills(market: PublicKey, limit = 20): Promise<Fill[]> {
-  return [];
+  try {
+    const conn = getConnection();
+    const bookPda = deriveOrderBookPda(market);
+    const info = await conn.getAccountInfo(bookPda);
+    if (!info || !info.data || info.data.length < FILLS_OFFSET) return [];
+
+    const data = info.data as Uint8Array;
+    const fillCount = readU64LE(data, 8 + 32 + 6 * 8);
+    const fillHead = readU64LE(data, 8 + 32 + 7 * 8);
+    if (fillCount === 0) return [];
+
+    const fills: Fill[] = [];
+    const n = Math.min(fillCount, limit, FILL_QUEUE_CAP);
+    for (let i = 0; i < n; i++) {
+      // Read backwards from head
+      const idx = (fillHead - 1 - i + FILL_QUEUE_CAP) % FILL_QUEUE_CAP;
+      const fOff = FILLS_OFFSET + idx * FILL_SIZE;
+      const fillId = readU64LE(data, fOff);
+      if (fillId === 0) continue;
+      const priceTicks = readU64LE(data, fOff + 40 + 32); // after fill_id(8)+taker_order_id(8)+maker_order_id(8)+taker(32)+maker(32) = offset 88... 
+      // repr(C) layout: fill_id(8), taker_order_id(8), maker_order_id(8), taker(32), maker(32), price_ticks(8), size_band(1), claimed(1), _pad(6), matched_slot(8)
+      const priceOff = fOff + 8 + 8 + 8 + 32 + 32; // = fOff + 88
+      const price = readU64LE(data, priceOff);
+      const sizeBand = SIZE_BAND_MAP[data[priceOff + 8]] ?? "Small";
+      const matchedSlot = readU64LE(data, priceOff + 8 + 1 + 1 + 6);
+      fills.push({
+        fill_id: fillId.toString(),
+        taker_order_id: readU64LE(data, fOff + 8).toString(),
+        maker_order_id: readU64LE(data, fOff + 16).toString(),
+        taker: new PublicKey(data.slice(fOff + 24, fOff + 56)).toBase58(),
+        maker: new PublicKey(data.slice(fOff + 56, fOff + 88)).toBase58(),
+        price_ticks: price,
+        size_band: sizeBand,
+        matched_slot: matchedSlot,
+        claimed: data[priceOff + 9] === 1,
+      });
+    }
+    return fills;
+  } catch (error) {
+    console.error("[fetchRecentFills] error:", error);
+    return [];
+  }
 }
 
 /**
@@ -224,15 +337,24 @@ export async function fetchRecentFills(market: PublicKey, limit = 20): Promise<F
  */
 export async function fetchMarketInfo(assetId: string): Promise<MarketInfo | null> {
   try {
-    const conn = getConnection();
     const marketPda = deriveMarketPda(assetId);
-    const info = await conn.getAccountInfo(marketPda);
-
-    if (!info || !info.data) return null;
-
-    // Market discriminator from IDL (219, 190, 213, 55, 0, 227, 198, 154)
-    // For now, return null since program isn't deployed
-    return null;
+    const acc = await marketNs().fetch(marketPda);
+    if (!acc) return null;
+    const a = acc as Record<string, unknown>;
+    return {
+      asset_id: assetId,
+      oracle_feed_id: Buffer.from(a.oracleFeedId as number[]).toString("hex"),
+      funding_interval_secs: Number(a.fundingIntervalSecs),
+      max_leverage_bps: Number(a.maxLeverageBps),
+      taker_fee_bps: Number(a.takerFeeBps),
+      maker_rebate_bps: Number(a.makerRebateBps),
+      total_long_size: Number(a.totalLongSize),
+      total_short_size: Number(a.totalShortSize),
+      last_funding_ts: Number(a.lastFundingTs),
+      mark_price: null,
+      index_price: null,
+      paused: a.paused as boolean,
+    };
   } catch (error) {
     console.error("[fetchMarketInfo] error:", error);
     return null;
@@ -413,6 +535,23 @@ export async function buildPlaceOrderTx(opts: {
   const userAccount = deriveUserAccountPda(opts.market, opts.trader);
   const orderBook = deriveOrderBookPda(opts.market);
 
+  // Auto-initialize user account if it doesn't exist yet
+  const userInfo = await opts.connection.getAccountInfo(userAccount);
+  let initIx: unknown | null = null;
+  if (!userInfo) {
+    initIx = await (program.methods as unknown as {
+      initializeUser: () => { accounts: (a: Record<string, PublicKey>) => { instruction: () => Promise<unknown> } };
+    })
+      .initializeUser()
+      .accounts({
+        owner: opts.trader,
+        market: opts.market,
+        userAccount,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction();
+  }
+
   // Anchor enum variants serialize as `{ variant: {} }`.
   const sideArg = opts.side === "Long" ? { long: {} } : { short: {} };
   const bandArg = (() => {
@@ -451,6 +590,7 @@ export async function buildPlaceOrderTx(opts: {
     blockhash: blockhash.blockhash,
     lastValidBlockHeight: blockhash.lastValidBlockHeight,
   });
+  if (initIx) tx.add(initIx as never);
   tx.add(ix as never);
   return { tx, blockhash };
 }

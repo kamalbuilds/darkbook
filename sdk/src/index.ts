@@ -5,7 +5,6 @@ export * from "./encryption.js";
 export * from "./encrypt.js";
 export * from "./pyth.js";
 export * from "./client.js";
-export * from "./ika.js";
 export * from "./umbra.js";
 export * from "./cloak.js";
 

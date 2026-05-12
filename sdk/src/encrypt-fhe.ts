@@ -4,12 +4,17 @@
  * Uses @encrypt.xyz/pre-alpha-solana-client v0.1.1
  * Communicates with the Encrypt threshold network via gRPC.
  *
+ * Encrypt Program ID (devnet): 4ebfzWdKnrnGseuQpezXdG8yCdHqwQ1SSBHD3bWArND8
+ * Encrypt gRPC: https://pre-alpha-dev-1.encrypt.ika-network.net:443
+ *
  * Pre-alpha disclaimer: data is plaintext on-chain. Real FHE encryption
  * will be available at mainnet. This integration is forward-compatible.
  *
  * IMPORTANT: Do NOT import this from browser code. The Encrypt SDK uses
  * @grpc/grpc-js which is Node.js only. Import from @darkbook/sdk/encrypt-fhe
  * directly in Node.js services.
+ *
+ * Ref: https://docs.encrypt.xyz/
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,10 +38,13 @@ async function loadEncryptModule(): Promise<void> {
   }
 }
 
+/** Encrypt program ID on Solana devnet. */
+export const ENCRYPT_PROGRAM_ID = "4ebfzWdKnrnGseuQpezXdG8yCdHqwQ1SSBHD3bWArND8";
+
 const ENCRYPT_DEFAULT_GRPC_URL =
   typeof process !== "undefined" && process.env.ENCRYPT_GRPC_URL
     ? process.env.ENCRYPT_GRPC_URL
-    : "http://localhost:50051";
+    : "https://pre-alpha-dev-1.encrypt.ika-network.net:443";
 
 export async function createEncryptFheInput(
   orderBytes: Uint8Array,

@@ -13,7 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const MARKETS = [
-  { id: "SOL", label: "SOL-PERP" },
+  { id: "SOLUSD", label: "SOL-PERP" },
   { id: "BTC", label: "BTC-PERP" },
   { id: "ETH", label: "ETH-PERP" },
 ];

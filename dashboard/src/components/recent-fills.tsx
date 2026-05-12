@@ -54,8 +54,24 @@ function FillRow({ fillId, takerPubkey, price, band, slot, connection }: any) {
 }
 
 export function RecentFills() {
-  const { fills } = useDarkbookStore();
+  const { fills, selectedMarket, setFills } = useDarkbookStore();
   const { connection } = useConnection();
+
+  useEffect(() => {
+    let cancelled = false;
+    async function poll() {
+      if (cancelled) return;
+      try {
+        const { fetchRecentFills, deriveMarketPda } = await import("@/lib/darkbook-client");
+        const marketPda = deriveMarketPda(selectedMarket);
+        const fetched = await fetchRecentFills(marketPda);
+        if (!cancelled && fetched.length > 0) setFills(fetched);
+      } catch {}
+      if (!cancelled) setTimeout(poll, 3000);
+    }
+    poll();
+    return () => { cancelled = true; };
+  }, [selectedMarket, setFills]);
 
   return (
     <div className="flex flex-col h-full">

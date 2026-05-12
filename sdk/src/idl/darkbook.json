@@ -62,6 +62,127 @@
       "args": []
     },
     {
+      "name": "approve_dwallet_withdrawal",
+      "discriminator": [
+        43,
+        113,
+        71,
+        182,
+        198,
+        143,
+        155,
+        137
+      ],
+      "accounts": [
+        {
+          "name": "dwallet"
+        },
+        {
+          "name": "coordinator"
+        },
+        {
+          "name": "message_approval",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  107,
+                  97,
+                  45,
+                  109,
+                  115,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "dwallet"
+              },
+              {
+                "kind": "arg",
+                "path": "message_digest"
+              }
+            ]
+          }
+        },
+        {
+          "name": "dwallet_program",
+          "address": "Fg6PaFpoGXkYsidMpWTxq8cQqU5cPqQkz6xcKozxZxHz"
+        },
+        {
+          "name": "cpi_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  105,
+                  107,
+                  97,
+                  95,
+                  99,
+                  112,
+                  105,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "darkbook_program",
+          "address": "3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf"
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "message_digest",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "user_pubkey",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "signature_scheme",
+          "type": "u16"
+        }
+      ]
+    },
+    {
       "name": "cancel_order",
       "discriminator": [
         95,
@@ -716,6 +837,53 @@
           "name": "magic_context",
           "writable": true,
           "address": "MagicContext1111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "crank_match",
+      "discriminator": [
+        147,
+        147,
+        113,
+        6,
+        4,
+        79,
+        241,
+        52
+      ],
+      "accounts": [
+        {
+          "name": "market"
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "market"
+          ]
+        },
+        {
+          "name": "order_book",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  111,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              }
+            ]
+          }
         }
       ],
       "args": []
@@ -1632,6 +1800,136 @@
       ]
     },
     {
+      "name": "register_dwallet",
+      "discriminator": [
+        186,
+        119,
+        139,
+        52,
+        93,
+        184,
+        231,
+        1
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  107,
+                  97,
+                  45,
+                  100,
+                  119,
+                  97,
+                  108,
+                  108,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "dwallet"
+        },
+        {
+          "name": "market"
+        },
+        {
+          "name": "user_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "dwallet_program",
+          "address": "Fg6PaFpoGXkYsidMpWTxq8cQqU5cPqQkz6xcKozxZxHz"
+        },
+        {
+          "name": "cpi_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  105,
+                  107,
+                  97,
+                  95,
+                  99,
+                  112,
+                  105,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "darkbook_program",
+          "address": "3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "set_market_paused",
       "discriminator": [
         233,
@@ -1799,6 +2097,19 @@
         9,
         159,
         145
+      ]
+    },
+    {
+      "name": "DWalletConfig",
+      "discriminator": [
+        85,
+        20,
+        89,
+        158,
+        139,
+        232,
+        63,
+        144
       ]
     },
     {
@@ -2100,6 +2411,26 @@
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DWalletConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dwallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "type": "pubkey"
           }
         ]
       }

@@ -1,3 +1,7 @@
+import { createHash } from "node:crypto";
+
+import "./bankrun-partial-sign-fix";
+
 /**
  * setup.ts — Common test helpers for DarkBook bankrun tests.
  *
@@ -6,13 +10,16 @@
  */
 import * as anchor from "@coral-xyz/anchor";
 import { Program, BN } from "@coral-xyz/anchor";
-import {
-  Keypair,
-  PublicKey,
-  SystemProgram,
-  Transaction,
+import type {
+  Commitment,
   Connection,
+  RpcResponseAndContext,
+  SendOptions,
+  SignatureResult,
+  Signer,
+  TransactionSignature,
 } from "@solana/web3.js";
+import { Keypair, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import {
   createMint,
   createAccount,
@@ -23,9 +30,70 @@ import {
 import { BanksClient, ProgramTestContext } from "solana-bankrun";
 import { BankrunProvider } from "anchor-bankrun";
 import type { Darkbook } from "../target/types/darkbook";
+import { ORDERBOOK_IS_DELEGATED_ACCOUNT_OFFSET } from "./utils";
 
 export const USDC_DECIMALS = 6;
 export const USDC_MULTIPLIER = 10 ** USDC_DECIMALS;
+
+// ─── Bankrun + @solana/spl-token bridge ─────────────────────────────────────
+
+/**
+ * `BankrunProvider.connection` lacks `sendTransaction` / `confirmTransaction` that
+ * `@solana/spl-token` helpers expect. This proxy forwards sends to `provider.sendAndConfirm`
+ * and treats confirmation as immediate success (bankrun applies the tx in-process).
+ */
+export function splTokenConnectionFromBankrun(context: ProgramTestContext): Connection {
+  const provider = new BankrunProvider(context);
+  const inner = provider.connection as object;
+
+  return new Proxy(inner as Connection, {
+    get(_target, prop, receiver) {
+      if (prop === "sendTransaction") {
+        return async (
+          transaction: Transaction,
+          signers: Signer[],
+          options?: SendOptions
+        ): Promise<TransactionSignature> => {
+          return (await provider.sendAndConfirm(
+            transaction,
+            signers,
+            options
+          )) as TransactionSignature;
+        };
+      }
+      if (prop === "confirmTransaction") {
+        return async (
+          _strategy:
+            | string
+            | {
+                signature: string;
+                blockhash: string;
+                lastValidBlockHeight: number;
+                abortSignal?: AbortSignal;
+              }
+            | {
+                signature: string;
+                minContextSlot: number;
+                nonceAccountPubkey: PublicKey;
+                nonceValue: string;
+                abortSignal?: AbortSignal;
+              },
+          _commitment?: Commitment
+        ): Promise<RpcResponseAndContext<SignatureResult>> => {
+          return {
+            context: { slot: Number(await context.banksClient.getSlot()) },
+            value: { err: null },
+          };
+        };
+      }
+      const value = Reflect.get(inner, prop, receiver);
+      if (typeof value === "function") {
+        return (value as (...args: unknown[]) => unknown).bind(inner);
+      }
+      return value;
+    },
+  });
+}
 
 // ─── Keypairs ─────────────────────────────────────────────────────────────────
 
@@ -115,16 +183,9 @@ export async function setupUsdcMint(
   payer: Keypair
 ): Promise<{ mint: PublicKey; mintAuthority: Keypair }> {
   const mintAuthority = Keypair.generate();
-
-  // Use bankrun's internal client via a Connection wrapper
-  const connection = new Connection("http://127.0.0.1:8899");
-  // In bankrun we bypass the network — use the context's banks client directly
-  // via anchor BankrunProvider which wraps it.
-  const provider = new BankrunProvider(context);
-  // @ts-ignore — access internal connection for spl-token helpers
+  const connection = splTokenConnectionFromBankrun(context);
   const mintPubkey = await createMint(
-    // @ts-ignore
-    provider.connection as Connection,
+    connection,
     payer,
     mintAuthority.publicKey,
     null,
@@ -167,9 +228,8 @@ export function createMockPriceUpdateData(params: {
   // Pyth PriceUpdateV2 discriminator (anchor account discriminator for this type)
   // Derived as sha256("account:PriceUpdateV2")[0..8]
   // This is from the pyth-solana-receiver program IDL.
-  const discriminator = Buffer.from([
-    0x34, 0xa2, 0x98, 0x4e, 0x7f, 0x20, 0x3b, 0x01,
-  ]);
+  // Must match `programs/darkbook/src/pyth.rs` PRICE_UPDATE_V2_DISCRIMINATOR
+  const discriminator = Buffer.from([196, 23, 216, 5, 242, 233, 122, 184]);
 
   // write_authority (32 bytes) — can be any pubkey for testing
   const writeAuthority = Buffer.alloc(32, 0);
@@ -226,11 +286,10 @@ export function programWithBankrun(
 
 // ─── Asset ID helper ──────────────────────────────────────────────────────────
 
-/** Convert a string market name to an 8-byte asset ID. */
+/** Deterministic 8-byte market asset_id from an arbitrary label (full string hashed). */
 export function assetIdFromString(s: string): number[] {
-  const buf = Buffer.alloc(8, 0);
-  Buffer.from(s).copy(buf, 0, 0, Math.min(s.length, 8));
-  return Array.from(buf);
+  const digest = createHash("sha256").update(s, "utf8").digest();
+  return Array.from(digest.subarray(0, 8));
 }
 
 /** SOL/USD devnet feed id (from ARCHITECTURE.md) as Buffer. */
@@ -239,4 +298,28 @@ export function solUsdFeedId(): Buffer {
     "ef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d",
     "hex"
   );
+}
+
+/**
+ * Bankrun cannot run MagicBlock `delegate_book` CPI. `match_orders` still
+ * requires `OrderBook::is_delegated == 1`. Patch the account in-process so
+ * matching tests mirror post-delegation ER state.
+ */
+export async function bankrunMarkOrderBookDelegated(
+  context: ProgramTestContext,
+  programId: PublicKey,
+  bookPda: PublicKey
+): Promise<void> {
+  const acct = await context.banksClient.getAccount(bookPda);
+  if (!acct) {
+    throw new Error(`bankrunMarkOrderBookDelegated: no account ${bookPda.toBase58()}`);
+  }
+  const data = Buffer.from(acct.data);
+  data[ORDERBOOK_IS_DELEGATED_ACCOUNT_OFFSET] = 1;
+  context.setAccount(bookPda, {
+    lamports: acct.lamports,
+    data,
+    owner: programId,
+    executable: acct.executable,
+  });
 }

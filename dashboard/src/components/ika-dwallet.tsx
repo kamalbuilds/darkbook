@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { deriveMarketPda, PROGRAM_ID } from "@/lib/darkbook-client";
 
 /** Ika dWallet program ID (Solana devnet pre-alpha). */
 const IKA_PROGRAM_ID = new PublicKey("Fg6PaFpoGXkYsidMpWTxq8cQqU5cPqQkz6xcKozxZxHz");
@@ -100,10 +101,7 @@ export function IkaDWalletPanel() {
   const [cpiAuth] = cpiAuthorityPda();
   const configPda = publicKey && dwalletAddress
     ? dwalletConfigPda(
-        PublicKey.findProgramAddressSync(
-          [Buffer.from("market"), Buffer.from(marketId, "utf8")],
-          DARKBOOK_PROGRAM_ID,
-        )[0],
+        deriveMarketPda(marketId),
         publicKey
       )[0]
     : null;

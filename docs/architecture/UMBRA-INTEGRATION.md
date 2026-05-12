@@ -1,44 +1,64 @@
-# Umbra Shielded Withdrawals — DarkBook Integration
+# Umbra privacy completion — DarkBook
 
-Real integration shipping in `sdk/src/umbra.ts`. Routes `close_position` + `liquidate_position` PnL refunds through Umbra's shielded pool so withdrawal amounts + recipients are unlinkable from the original trade.
+DarkBook settles positions on-chain; the trader ends up with USDC in a **public** SPL ATA. Umbra completes the privacy story: **direct deposit** moves that USDC from the public ATA into an **encrypted** Umbra balance using the official `@umbra-privacy/sdk`, so the post-settlement graph is harder to link to the original trade flow.
+
+Dark Commit hides size and intent **before** fill. Umbra hides **after** fill once funds sit in the wallet ATA (two-layer privacy). A single atomic DarkBook close that CPIs into Umbra would need a **new program instruction**; today the honest integration is **close (or withdraw) then shield** in the client or script.
 
 ## What ships
-- `sdk/src/umbra.ts` (213 LOC) — `UmbraShieldedClient` class wrapping Umbra SDK
-- Exported via `sdk/src/index.ts`
-- Program ID from `UMBRA_PROGRAM_ID` env (no hardcoded keys)
-- TypeScript clean
 
-## Flow
-1. DarkBook `closePosition` transfers PnL to Umbra intermediary ATA
-2. Umbra `DepositFromATA` (public ATA → encrypted ETA)
-3. Umbra `CreateUTXO` (ETA → Unified Mixer Pool, anonymous)
-4. Trader `BurnToETA` (claims UTXO from mixer, lands in their encrypted account)
-5. Trader `WithdrawFromETA` (encrypted balance → public, if desired)
+- `sdk/src/umbra.ts` — `connectDarkbookUmbraClient`, `ensureUmbraRegistered`, `shieldPublicAtaToEncryptedBalance`, cluster/indexer defaults, `UmbraShieldedClient` with optional `shieldPayoutWithUmbra` on close/liquidate
+- Re-exports: `createSignerFromPrivateKeyBytes`, `createSignerFromWalletAccount`, `createInMemorySigner` (from `@umbra-privacy/sdk`)
+- Exported from `@darkbook/sdk` via `sdk/src/index.ts`
 
-## Pairs with existing primitives
-- DarkBook commitment scheme hides order size pre-fill
-- Umbra hides PnL amount + recipient post-fill
-- Combined = full position-lifecycle privacy
+## Flow (recommended)
+
+1. DarkBook `closePosition` / `liquidatePosition` (PnL hits the user ATA as today).
+2. Optional: `ensureUmbraRegistered(umbraClient)` once per wallet (idempotent; costs SOL if not already registered).
+3. `shieldPublicAtaToEncryptedBalance({ client, mintBase58, amountBaseUnits })` — Umbra public→encrypted pipeline (Arcium queue + callback signatures in the result).
 
 ## Usage
-```ts
-import { UmbraShieldedClient } from "@darkbook/sdk";
 
-const umbra = new UmbraShieldedClient(connection, wallet);
-const sig = await umbra.closePositionShielded({
-  darkbookClient: db,
-  positionPdaKey: posPda,
-  recipient: traderWallet,
+```ts
+import {
+  connectDarkbookUmbraClient,
+  createSignerFromPrivateKeyBytes,
+  shieldPublicAtaToEncryptedBalance,
+  ensureUmbraRegistered,
+  solanaWsUrlFromHttp,
+} from "@darkbook/sdk";
+
+const signer = await createSignerFromPrivateKeyBytes(secretKeyBytes);
+const client = await connectDarkbookUmbraClient({
+  signer,
+  rpcUrl: process.env.SOLANA_RPC_URL!,
+  rpcSubscriptionsUrl: solanaWsUrlFromHttp(process.env.SOLANA_RPC_URL!),
+});
+await ensureUmbraRegistered(client);
+const deposit = await shieldPublicAtaToEncryptedBalance({
+  client,
+  mintBase58: "YOUR_USDC_MINT",
+  amountBaseUnits: 1_000_000n,
 });
 ```
 
-## Env
-- `UMBRA_PROGRAM_ID` — Umbra Solana program ID
-- `DARKBOOK_USE_UMBRA=1` — dashboard "Withdraw shielded" button
+## Environment
 
-## Status
-- Sidetrack ($10k — Umbra privacy infra) — backed by real code
-- Tracks `umbraprivacy.com` mainnet program ID; devnet endpoint set via env
+| Variable | Purpose |
+|----------|---------|
+| `UMBRA_PROGRAM_ID` | Override Umbra program id (optional) |
+| `UMBRA_CLUSTER` / `NEXT_PUBLIC_SOLANA_CLUSTER` | `mainnet` / `mainnet-beta` vs devnet for Umbra network + defaults |
+| `UMBRA_INDEXER_DEVNET_URL` / `UMBRA_INDEXER_MAINNET_URL` | Override indexer base URL |
+| `UMBRA_RELAYER_DEVNET_URL` / `UMBRA_RELAYER_MAINNET_URL` | Documented for mixer/claim paths (direct deposit uses client defaults) |
 
-## Phase 2
-- Add CPI directly in `programs/darkbook/src/ix/close_position_shielded.rs` (new ix variant) so settlement → Umbra is atomic onchain rather than bundle-level. Pending Umbra anchor 0.32 + edition2021 toolchain compat.
+## Script
+
+`build/darkbook/scripts/umbra-privacy-completion.ts` — Bun example: register + shield devnet USDC from `KEYPAIR_PATH` (see file header for env vars).
+
+## Sidetrack pitch (Umbra)
+
+- **Innovation:** Privacy completion path after DarkBook settlement, wired to real Umbra client APIs (not a stub).
+- **Honest boundary:** No fake CPI from DarkBook program yet; dashboard should describe “shield after close” until an on-chain ix exists.
+
+## Next engineering step
+
+- New ix in `programs/darkbook` that optionally CPIs Umbra after transfer (atomic path), once specs and toolchain align.

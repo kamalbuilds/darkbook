@@ -179,13 +179,14 @@ export class DarkbookClient {
     return this.m
       .depositCollateral(new BN(amountLamports.toString()))
       .accounts({
-        owner: this.wallet.publicKey,
-        market,
         userAccount,
+        market,
         vault,
         vaultTokenAccount,
-        ownerTokenAccount,
+        userTokenAccount: ownerTokenAccount,
+        owner: this.wallet.publicKey,
         tokenProgram: TOKEN_PROGRAM_ID,
+        mint,
       })
       .rpc();
   }
@@ -203,13 +204,14 @@ export class DarkbookClient {
     return this.m
       .withdrawCollateral(new BN(amountLamports.toString()))
       .accounts({
-        owner: this.wallet.publicKey,
-        market,
         userAccount,
+        market,
         vault,
         vaultTokenAccount,
-        ownerTokenAccount,
+        userTokenAccount: ownerTokenAccount,
+        owner: this.wallet.publicKey,
         tokenProgram: TOKEN_PROGRAM_ID,
+        mint,
       })
       .rpc();
   }

@@ -15,17 +15,15 @@ import {
   Connection,
   Keypair,
   PublicKey,
-  SYSVAR_INSTRUCTIONS_PUBKEY,
+  SYSVAR_CLOCK_PUBKEY,
+  Transaction,
+  VersionedTransaction,
 } from "@solana/web3.js";
 import { AnchorProvider, Program, BN, type Wallet } from "@coral-xyz/anchor";
 import { Buffer } from "node:buffer";
 import { createRequire } from "node:module";
 
-import {
-  fetchPythPrice,
-  userPda,
-  SOL_USD_FEED_ID,
-} from "@darkbook/sdk";
+import { userPda } from "@darkbook/sdk";
 
 const require = createRequire(import.meta.url);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,7 +39,11 @@ const RPC_URL = process.env.RPC_URL ?? "https://api.devnet.solana.com";
 const PROGRAM_ID = new PublicKey(
   process.env.PROGRAM_ID ?? "9i4Gpnt8GgrwxqwXdEyjFBsfNChis8z9jmyAbMpFVLcS",
 );
-const PYTH_FEED_ID = process.env.PYTH_FEED_ID ?? SOL_USD_FEED_ID;
+/** Pyth pull receiver `PriceUpdateV2` account used by `update_funding` (same account your indexer or crank posts to). */
+const PYTH_PRICE_UPDATE_RAW = process.env.PYTH_PRICE_UPDATE_PUBKEY ?? "";
+const PYTH_PRICE_UPDATE = PYTH_PRICE_UPDATE_RAW
+  ? new PublicKey(PYTH_PRICE_UPDATE_RAW.trim())
+  : null;
 
 // Markets to process — comma-separated pubkeys
 const MARKETS_RAW = process.env.MARKET_PUBKEYS ?? "";
@@ -69,11 +71,21 @@ const conn = new Connection(RPC_URL, "confirmed");
 const anchorWallet: Wallet = {
   publicKey: crankerKeypair.publicKey,
   signTransaction: async (tx) => {
-    tx.partialSign(crankerKeypair);
+    if (tx instanceof Transaction) {
+      tx.partialSign(crankerKeypair);
+      return tx;
+    }
+    if (tx instanceof VersionedTransaction) {
+      tx.sign([crankerKeypair]);
+      return tx;
+    }
     return tx;
   },
   signAllTransactions: async (txs) => {
-    for (const tx of txs) tx.partialSign(crankerKeypair);
+    for (const tx of txs) {
+      if (tx instanceof Transaction) tx.partialSign(crankerKeypair);
+      else if (tx instanceof VersionedTransaction) tx.sign([crankerKeypair]);
+    }
     return txs;
   },
   payer: crankerKeypair,
@@ -85,7 +97,7 @@ const program = new Program<any>(DarkbookIdl, provider);
 // ─── Position type ────────────────────────────────────────────────────────────
 
 interface PositionAccount {
-  trader: PublicKey;
+  owner: PublicKey;
   market: PublicKey;
   side: { long?: Record<string, never>; short?: Record<string, never> };
   sizeLots: BN;
@@ -106,24 +118,23 @@ async function runFundingCycle(): Promise<void> {
     return;
   }
 
-  // Fetch oracle once (reuse for all markets in this cycle)
-  log.info("Fetching Pyth price update");
-  const px = await fetchPythPrice(PYTH_FEED_ID);
-  const oracleUpdate = Buffer.from(px.updateData);
-  log.info({ price: px.price.toString(), publishTime: px.publishTime }, "Oracle price");
+  if (!PYTH_PRICE_UPDATE) {
+    log.error("PYTH_PRICE_UPDATE_PUBKEY is not set — cannot run update_funding");
+    return;
+  }
 
   for (const market of markets) {
     log.info({ market: market.toBase58() }, "Running update_funding");
 
     try {
-      const sig = await program.methods
-        .updateFunding(oracleUpdate)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sig = await (program.methods as any)
+        .updateFunding()
         .accounts({
-          cranker: crankerKeypair.publicKey,
           market,
-          instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
+          priceUpdate: PYTH_PRICE_UPDATE,
+          clock: SYSVAR_CLOCK_PUBKEY,
         })
-        .signers([crankerKeypair])
         .rpc();
       log.info({ market: market.toBase58(), sig }, "update_funding submitted");
     } catch (err) {
@@ -135,7 +146,8 @@ async function runFundingCycle(): Promise<void> {
     let positions: Array<{ publicKey: PublicKey; account: PositionAccount }>;
     try {
       const STATUS_OFFSET = 113; // discriminator(8)+trader(32)+market(32)+side(1)+...
-      positions = (await program.account.position.all([
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      positions = (await (program.account as any).position.all([
         {
           memcmp: {
             offset: STATUS_OFFSET,
@@ -159,17 +171,16 @@ async function runFundingCycle(): Promise<void> {
       const batch = marketPositions.slice(i, i + BATCH_SIZE);
       await Promise.allSettled(
         batch.map(async ({ publicKey: posPk, account: pos }) => {
-          const [userAccount] = userPda(PROGRAM_ID, market, pos.trader);
+          const [userAccount] = userPda(PROGRAM_ID, market, pos.owner);
           try {
-            const sig = await program.methods
-              .accrueFunding()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const sig = await (program.methods as any)
+              .accrueFundingPosition()
               .accounts({
-                cranker: crankerKeypair.publicKey,
                 market,
                 position: posPk,
                 userAccount,
               })
-              .signers([crankerKeypair])
               .rpc();
             log.debug({ position: posPk.toBase58(), sig }, "accrue_funding submitted");
           } catch (err) {

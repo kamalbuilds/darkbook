@@ -14,21 +14,15 @@ import {
   Connection,
   Keypair,
   PublicKey,
-  SYSVAR_INSTRUCTIONS_PUBKEY,
+  Transaction,
+  VersionedTransaction,
 } from "@solana/web3.js";
 import { AnchorProvider, Program, BN, type Wallet } from "@coral-xyz/anchor";
 import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { Buffer } from "node:buffer";
 import { createRequire } from "node:module";
 
-import {
-  PythLazerStream,
-  fetchPythPrice,
-  userPda,
-  vaultPda,
-  SOL_USD_FEED_ID,
-  type LazerPriceUpdate,
-} from "@darkbook/sdk";
+import { PythLazerStream, fetchPythPrice, SOL_USD_FEED_ID, userPda, vaultPda } from "@darkbook/sdk";
 
 const require = createRequire(import.meta.url);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,14 +38,18 @@ const RPC_URL = process.env.RPC_URL ?? "https://api.devnet.solana.com";
 const PROGRAM_ID = new PublicKey(
   process.env.PROGRAM_ID ?? "9i4Gpnt8GgrwxqwXdEyjFBsfNChis8z9jmyAbMpFVLcS",
 );
-const PYTH_FEED_ID = process.env.PYTH_FEED_ID ?? SOL_USD_FEED_ID;
 const PYTH_LAZER_TOKEN = process.env.PYTH_LAZER_TOKEN ?? "";
+const PYTH_FEED_ID = process.env.SOL_USD_FEED_HEX ?? SOL_USD_FEED_ID;
+const PYTH_PRICE_UPDATE_RAW = process.env.PYTH_PRICE_UPDATE_PUBKEY ?? "";
+const PYTH_PRICE_UPDATE = PYTH_PRICE_UPDATE_RAW
+  ? new PublicKey(PYTH_PRICE_UPDATE_RAW.trim())
+  : null;
 const USDC_MINT = new PublicKey(
   process.env.USDC_MINT ?? "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
 );
 
 /** Liquidation threshold: 1.2 → 120% collateral ratio = 12_000 bps */
-const LIQUIDATION_THRESHOLD_BPS = 12_000n;
+const LIQUIDATION_THRESHOLD_BPS = 8_000n;
 
 // Liquidator keypair
 const liquidatorSecretRaw = process.env.LIQUIDATOR_SECRET_KEY;
@@ -70,11 +68,21 @@ const conn = new Connection(RPC_URL, "confirmed");
 const anchorWallet: Wallet = {
   publicKey: liquidatorKeypair.publicKey,
   signTransaction: async (tx) => {
-    tx.partialSign(liquidatorKeypair);
+    if (tx instanceof Transaction) {
+      tx.partialSign(liquidatorKeypair);
+      return tx;
+    }
+    if (tx instanceof VersionedTransaction) {
+      tx.sign([liquidatorKeypair]);
+      return tx;
+    }
     return tx;
   },
   signAllTransactions: async (txs) => {
-    for (const tx of txs) tx.partialSign(liquidatorKeypair);
+    for (const tx of txs) {
+      if (tx instanceof Transaction) tx.partialSign(liquidatorKeypair);
+      else if (tx instanceof VersionedTransaction) tx.sign([liquidatorKeypair]);
+    }
     return txs;
   },
   payer: liquidatorKeypair,
@@ -86,7 +94,7 @@ const program = new Program<any>(DarkbookIdl, provider);
 // ─── Position account shape ───────────────────────────────────────────────────
 
 interface PositionAccount {
-  trader: PublicKey;
+  owner: PublicKey;
   market: PublicKey;
   side: { long?: Record<string, never>; short?: Record<string, never> };
   sizeLots: BN;
@@ -144,13 +152,19 @@ function computeMarkRisk(pos: PositionAccount, markPrice: bigint): {
 }
 
 async function checkAndLiquidate(markPrice: bigint): Promise<void> {
+  if (!PYTH_PRICE_UPDATE) {
+    log.error("PYTH_PRICE_UPDATE_PUBKEY not set — cannot submit liquidations");
+    return;
+  }
+
   let positions: Array<{ publicKey: PublicKey; account: PositionAccount }>;
   try {
-    // Filter: Position discriminator (8 bytes) + trader(32) + market(32) + side(1) +
+    // Filter: Position discriminator (8 bytes) + owner(32) + market(32) + side(1) +
     // sizeLots(8) + entryPriceTicks(8) + collateralLocked(8) + openedTs(8) +
     // lastFundingIndex(8) + status at offset 113 == 0 (Open)
     const STATUS_OFFSET = 113;
-    positions = await program.account.position.all([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    positions = await (program.account as any).position.all([
       {
         memcmp: {
           offset: STATUS_OFFSET,
@@ -177,16 +191,7 @@ async function checkAndLiquidate(markPrice: bigint): Promise<void> {
 
     log.info({ position: posKey, collateralRatioBps: collateralRatioBps.toString() }, "Liquidating position");
 
-    let oracleUpdate: Uint8Array;
-    try {
-      const px = await fetchPythPrice(PYTH_FEED_ID);
-      oracleUpdate = px.updateData;
-    } catch (err) {
-      log.error({ err }, "Pyth fetch failed for liquidation");
-      continue;
-    }
-
-    const [userAccount] = userPda(PROGRAM_ID, pos.market, pos.trader);
+    const [userAccount] = userPda(PROGRAM_ID, pos.market, pos.owner);
     const [vaultKey] = vaultPda(PROGRAM_ID, pos.market);
     const vaultTokenAccount = getAssociatedTokenAddressSync(USDC_MINT, vaultKey, true);
     const liquidatorTokenAccount = getAssociatedTokenAddressSync(
@@ -195,17 +200,18 @@ async function checkAndLiquidate(markPrice: bigint): Promise<void> {
     );
 
     try {
-      const sig = await program.methods
-        .liquidatePosition(Buffer.from(oracleUpdate))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sig = await (program.methods as any)
+        .liquidatePosition()
         .accounts({
-          liquidator: liquidatorKeypair.publicKey,
           market: pos.market,
           position: posPk,
           userAccount,
+          priceUpdate: PYTH_PRICE_UPDATE,
           vault: vaultKey,
           vaultTokenAccount,
           liquidatorTokenAccount,
-          instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
+          liquidator: liquidatorKeypair.publicKey,
           tokenProgram: TOKEN_PROGRAM_ID,
         })
         .signers([liquidatorKeypair])
@@ -220,38 +226,58 @@ async function checkAndLiquidate(markPrice: bigint): Promise<void> {
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
+/** Scale Lazer integer price to same units as `fetchPythPrice().price` (micro-USDC ticks). */
+function scaleLazerPriceToMark(price: bigint, exponent: number): bigint {
+  const scalePow = 6 + exponent;
+  if (scalePow >= 0) {
+    const scale = BigInt(10 ** Math.min(scalePow, 38));
+    return price * scale;
+  }
+  const scale = BigInt(10 ** Math.min(-scalePow, 38));
+  return price / scale;
+}
+
+function startHermesPoll(): void {
+  log.warn(
+    "Hermes REST poll (2s interval). Set PYTH_LAZER_TOKEN for sub-ms Lazer feeds (see docs/architecture/PYTH-LAZER-INTEGRATION.md).",
+  );
+  const poll = async (): Promise<void> => {
+    try {
+      const px = await fetchPythPrice(PYTH_FEED_ID);
+      await checkAndLiquidate(px.price);
+    } catch (err) {
+      log.error({ err }, "Poll iteration error");
+    }
+    setTimeout(() => void poll(), 2_000);
+  };
+  void poll();
+}
+
 async function main(): Promise<void> {
   log.info("Liquidation watcher starting");
 
-  // Prefer real Pyth Lazer WS; fall back to polling Hermes REST every 2s
-  if (PYTH_LAZER_TOKEN) {
-    log.info("Using Pyth Lazer WS stream");
-    const stream = new PythLazerStream({
-      token: PYTH_LAZER_TOKEN,
-      feedIds: [PYTH_FEED_ID],
-      rateMs: 1000,
-    });
-
-    stream.on("price", (update: LazerPriceUpdate) => {
-      void checkAndLiquidate(update.price).catch((e: unknown) =>
-        log.error({ err: e }, "checkAndLiquidate error"),
-      );
-    });
-
-    stream.on("error", (err: Error) => log.error({ err }, "Lazer stream error"));
-    stream.connect();
+  const token = PYTH_LAZER_TOKEN.trim();
+  if (token) {
+    log.info("Starting Pyth Lazer WebSocket via sdk PythLazerStream");
+    try {
+      const stream = new PythLazerStream({
+        token,
+        feedIds: [PYTH_FEED_ID],
+      });
+      stream.onPrice((_feed, price, exponent, _publishTime) => {
+        const mark = scaleLazerPriceToMark(price, exponent);
+        void checkAndLiquidate(mark).catch((e: unknown) =>
+          log.error({ err: e }, "checkAndLiquidate error"),
+        );
+      });
+      await stream.start();
+      log.info("Pyth Lazer stream connected");
+    } catch (err) {
+      log.error({ err }, "Pyth Lazer unavailable, falling back to Hermes");
+      startHermesPoll();
+    }
   } else {
-    log.warn("PYTH_LAZER_TOKEN not set — falling back to Hermes REST poll (2s interval)");
-    const poll = async (): Promise<void> => {
-      try {
-        const px = await fetchPythPrice(PYTH_FEED_ID);
-        await checkAndLiquidate(px.price);
-      } catch (err) {
-        log.error({ err }, "Poll iteration error");
-      }
-      setTimeout(() => void poll(), 2_000);
-    };
-    void poll();
+    startHermesPoll();
   }
 
   const shutdown = (): void => {

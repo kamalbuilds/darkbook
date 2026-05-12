@@ -14,8 +14,9 @@ import {
   Connection,
   Keypair,
   PublicKey,
-  SYSVAR_INSTRUCTIONS_PUBKEY,
   SystemProgram,
+  Transaction,
+  VersionedTransaction,
 } from "@solana/web3.js";
 import { AnchorProvider, Program, BN, type Wallet } from "@coral-xyz/anchor";
 import WebSocket from "ws";
@@ -25,14 +26,22 @@ import { ed25519 } from "@noble/curves/ed25519";
 
 import {
   bookPda,
-  fetchPythPrice,
+  computeCommitment,
   positionPda,
   userPda,
-  SOL_USD_FEED_ID,
   MAGICBLOCK_DEVNET_WS_US,
   MAGICBLOCK_DEVNET_RPC_US,
 } from "@darkbook/sdk";
 import { submitJitoBundle } from "./jito-bundle.js";
+
+// Encrypt FHE (dynamic import — gRPC is Node.js only, not bundled for browser)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _encryptFhe: any = null;
+async function loadEncryptFhe() {
+  if (_encryptFhe) return _encryptFhe;
+  _encryptFhe = await import("@darkbook/sdk/encrypt-fhe");
+  return _encryptFhe;
+}
 
 // Load IDL — at runtime, @darkbook/sdk/src/idl/darkbook.json is the source of truth
 const require = createRequire(import.meta.url);
@@ -51,8 +60,6 @@ const PORT = Number(process.env.SETTLER_PORT ?? 8081);
 const PROGRAM_ID = new PublicKey(
   process.env.PROGRAM_ID ?? "9i4Gpnt8GgrwxqwXdEyjFBsfNChis8z9jmyAbMpFVLcS",
 );
-const PYTH_FEED_ID = process.env.PYTH_FEED_ID ?? SOL_USD_FEED_ID;
-
 // Settler keypair — JSON array of u8 values
 const settlerSecretRaw = process.env.SETTLER_SECRET_KEY;
 if (!settlerSecretRaw) {
@@ -85,11 +92,21 @@ const conn = new Connection(RPC_URL, "confirmed");
 const anchorWallet: Wallet = {
   publicKey: settlerKeypair.publicKey,
   signTransaction: async (tx) => {
-    tx.partialSign(settlerKeypair);
+    if (tx instanceof Transaction) {
+      tx.partialSign(settlerKeypair);
+      return tx;
+    }
+    if (tx instanceof VersionedTransaction) {
+      tx.sign([settlerKeypair]);
+      return tx;
+    }
     return tx;
   },
   signAllTransactions: async (txs) => {
-    for (const tx of txs) tx.partialSign(settlerKeypair);
+    for (const tx of txs) {
+      if (tx instanceof Transaction) tx.partialSign(settlerKeypair);
+      else if (tx instanceof VersionedTransaction) tx.sign([settlerKeypair]);
+    }
     return txs;
   },
   payer: settlerKeypair,
@@ -158,8 +175,47 @@ app.post("/plaintext/delegated", async (c) => {
 });
 
 app.get("/health", (c) =>
-  c.json({ ok: true, stored: plaintextStore.size, claimed: claimedFills.size }),
+  c.json({ ok: true, stored: plaintextStore.size, encrypted: encryptedStore.size, claimed: claimedFills.size }),
 );
+
+// ─── Encrypt FHE store ───────────────────────────────────────────────────────
+
+interface StoredEncryptedOrder {
+  orderId: string;
+  encryptedBlob: number[];   // AES-GCM ciphertext (ephemeral_pub + ciphertext+tag)
+  ephemeralPrivateKey: number[]; // x25519 ephemeral private key (Stage 1 fallback)
+  fheCiphertextIds: string[]; // Encrypt FHE ciphertext identifiers (Stage 2)
+  owner: string;
+  storedAt: number;
+}
+
+const encryptedStore = new Map<string, StoredEncryptedOrder>();
+
+app.post("/encrypt-order", async (c) => {
+  let body: {
+    orderId: string;
+    encryptedBlob: number[];
+    ephemeralPrivateKey: number[];
+    fheCiphertextIds: string[];
+    owner: string;
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  encryptedStore.set(body.orderId, {
+    orderId: body.orderId,
+    encryptedBlob: body.encryptedBlob,
+    ephemeralPrivateKey: body.ephemeralPrivateKey,
+    fheCiphertextIds: body.fheCiphertextIds ?? [],
+    owner: body.owner,
+    storedAt: Date.now(),
+  });
+  log.info({ orderId: body.orderId, owner: body.owner, fhe: body.fheCiphertextIds.length > 0 }, "Encrypted order stored");
+  return c.json({ ok: true });
+});
 
 // ─── Fill processor ──────────────────────────────────────────────────────────
 
@@ -179,7 +235,10 @@ async function processFills(market: PublicKey): Promise<void> {
 
   let fills: FillAccount[];
   try {
-    const book = await program.account.orderBook.fetch(bookKey) as { fills: FillAccount[] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const book = (await (program.account as any).orderBook.fetch(bookKey)) as {
+      fills: FillAccount[];
+    };
     fills = book.fills;
   } catch (err) {
     log.error({ err, market: market.toBase58() }, "Failed to fetch OrderBook");
@@ -194,17 +253,123 @@ async function processFills(market: PublicKey): Promise<void> {
     const takerPt = plaintextStore.get(fill.takerOrderId.toString());
     const makerPt = plaintextStore.get(fill.makerOrderId.toString());
 
+    // Try Encrypt FHE encrypted orders (Stage 2) if plaintexts missing
     if (!takerPt || !makerPt) {
-      log.warn({ fillId: fillIdStr, hasTaker: !!takerPt, hasMaker: !!makerPt }, "Missing plaintexts");
-      continue;
-    }
+      const takerEnc = encryptedStore.get(fill.takerOrderId.toString());
+      const makerEnc = encryptedStore.get(fill.makerOrderId.toString());
 
-    let oracleUpdate: Uint8Array;
-    try {
-      const px = await fetchPythPrice(PYTH_FEED_ID);
-      oracleUpdate = px.updateData;
-    } catch (err) {
-      log.error({ err }, "Pyth fetch failed");
+      if (takerEnc && makerEnc) {
+        // Attempt Encrypt FHE threshold decryption
+        try {
+          const fhe = await loadEncryptFhe();
+          const settlerPrivKey = settlerKeypair.secretKey.slice(0, 32);
+
+          // Decrypt taker order via Encrypt FHE (Stage 2) or fallback to Stage 1 ephemeral key
+          let takerSalt: Uint8Array, takerSize: bigint, takerLev: number;
+          let makerSalt: Uint8Array, makerSize: bigint, makerLev: number;
+
+          if (takerEnc.fheCiphertextIds.length > 0) {
+            const ctId = Uint8Array.from(takerEnc.fheCiphertextIds.map((s: string) => parseInt(s, 10)));
+            const decrypted = await fhe.readEncryptCiphertext(
+              ctId, new Uint8Array(0), 0n, settlerPrivKey,
+              process.env.ENCRYPT_GRPC_URL,
+            );
+            // Parse decrypted order: salt(32) + sizeLots(8) + levyBps(2) + side(1) + priceTicks(8)
+            takerSalt = decrypted.value.slice(0, 32);
+            takerSize = new DataView(decrypted.value.buffer, decrypted.value.byteOffset + 32, 8).getBigUint64(0, true);
+            takerLev = new DataView(decrypted.value.buffer, decrypted.value.byteOffset + 40, 2).getUint16(0, true);
+            log.info({ orderId: fill.takerOrderId.toString() }, "Taker decrypted via Encrypt FHE");
+          } else {
+            // Stage 1 fallback: decrypt with ephemeral key
+            const { decryptOrderBlob } = await import("@darkbook/sdk");
+            const decrypted = await decryptOrderBlob(
+              Uint8Array.from(takerEnc.encryptedBlob),
+              Uint8Array.from(takerEnc.ephemeralPrivateKey),
+              settlerKeypair.publicKey.toBytes(),
+            );
+            takerSalt = decrypted.salt;
+            takerSize = decrypted.sizeLots;
+            takerLev = decrypted.leverageBps;
+          }
+
+          if (makerEnc.fheCiphertextIds.length > 0) {
+            const ctId = Uint8Array.from(makerEnc.fheCiphertextIds.map((s: string) => parseInt(s, 10)));
+            const decrypted = await fhe.readEncryptCiphertext(
+              ctId, new Uint8Array(0), 0n, settlerPrivKey,
+              process.env.ENCRYPT_GRPC_URL,
+            );
+            makerSalt = decrypted.value.slice(0, 32);
+            makerSize = new DataView(decrypted.value.buffer, decrypted.value.byteOffset + 32, 8).getBigUint64(0, true);
+            makerLev = new DataView(decrypted.value.buffer, decrypted.value.byteOffset + 40, 2).getUint16(0, true);
+            log.info({ orderId: fill.makerOrderId.toString() }, "Maker decrypted via Encrypt FHE");
+          } else {
+            const { decryptOrderBlob } = await import("@darkbook/sdk");
+            const decrypted = await decryptOrderBlob(
+              Uint8Array.from(makerEnc.encryptedBlob),
+              Uint8Array.from(makerEnc.ephemeralPrivateKey),
+              settlerKeypair.publicKey.toBytes(),
+            );
+            makerSalt = decrypted.salt;
+            makerSize = decrypted.sizeLots;
+            makerLev = decrypted.leverageBps;
+          }
+
+          // Store as plaintext for claim_fill
+          const takerOwner = new PublicKey(takerEnc.owner);
+          const makerOwner = new PublicKey(makerEnc.owner);
+          const takerCommitment = Array.from(computeCommitment(takerSalt, takerSize, takerLev, takerOwner));
+          const makerCommitment = Array.from(computeCommitment(makerSalt, makerSize, makerLev, makerOwner));
+
+          const [takerUserAccount] = userPda(PROGRAM_ID, market, takerOwner);
+          const [makerUserAccount] = userPda(PROGRAM_ID, market, makerOwner);
+          const [takerPosition] = positionPda(PROGRAM_ID, market, takerOwner, 0);
+          const [makerPosition] = positionPda(PROGRAM_ID, market, makerOwner, 0);
+
+          const claimFillIx = await (program.methods as any)
+            .claimFill(
+              fill.fillId,
+              Array.from(takerSalt),
+              new BN(takerSize.toString()),
+              takerLev,
+              takerCommitment,
+              Array.from(makerSalt),
+              new BN(makerSize.toString()),
+              makerLev,
+              makerCommitment,
+            )
+            .accounts({
+              settler: settlerKeypair.publicKey,
+              market,
+              orderBook: bookKey,
+              takerUser: takerUserAccount,
+              makerUser: makerUserAccount,
+              takerPosition,
+              makerPosition,
+              systemProgram: SystemProgram.programId,
+            })
+            .instruction();
+
+          const { blockhash, lastValidBlockHeight } = await conn.getLatestBlockhash();
+          const { TransactionMessage, VersionedTransaction: Vtx } = await import("@solana/web3.js");
+          const messageV0 = new TransactionMessage({
+            payerKey: settlerKeypair.publicKey,
+            recentBlockhash: blockhash,
+            instructions: [claimFillIx],
+          }).compileToV0Message();
+          const claimTx = new Vtx(messageV0);
+          claimTx.sign([settlerKeypair]);
+
+          const sig = await submitJitoBundle(conn, [claimTx], settlerKeypair);
+          log.info({ fillId: fillIdStr, sig, fhe: true }, "claim_fill via Encrypt FHE");
+          claimedFills.add(fillIdStr);
+          continue;
+        } catch (err) {
+          log.warn({ err, fillId: fillIdStr }, "Encrypt FHE decryption failed, will retry on next ER update");
+          continue;
+        }
+      }
+
+      log.warn({ fillId: fillIdStr, hasTaker: !!takerPt, hasMaker: !!makerPt, hasTakerEnc: !!encryptedStore.get(fill.takerOrderId.toString()), hasMakerEnc: !!encryptedStore.get(fill.makerOrderId.toString()) }, "Missing order data");
       continue;
     }
 
@@ -215,28 +380,38 @@ async function processFills(market: PublicKey): Promise<void> {
     const [takerPosition] = positionPda(PROGRAM_ID, market, taker, 0);
     const [makerPosition] = positionPda(PROGRAM_ID, market, maker, 0);
 
+    const takerSalt = Uint8Array.from(takerPt.salt);
+    const makerSalt = Uint8Array.from(makerPt.salt);
+    const takerCommitment = Array.from(
+      computeCommitment(takerSalt, BigInt(takerPt.sizeLots), takerPt.leverageBps, taker),
+    );
+    const makerCommitment = Array.from(
+      computeCommitment(makerSalt, BigInt(makerPt.sizeLots), makerPt.leverageBps, maker),
+    );
+
     try {
       // Build the claim_fill instruction
-      const claimFillIx = await program.methods
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const claimFillIx = await (program.methods as any)
         .claimFill(
           fill.fillId,
-          takerPt.salt,
+          Array.from(takerSalt),
           new BN(takerPt.sizeLots),
           takerPt.leverageBps,
-          makerPt.salt,
+          takerCommitment,
+          Array.from(makerSalt),
           new BN(makerPt.sizeLots),
           makerPt.leverageBps,
-          Buffer.from(oracleUpdate),
+          makerCommitment,
         )
         .accounts({
           settler: settlerKeypair.publicKey,
           market,
           orderBook: bookKey,
-          takerUserAccount,
-          makerUserAccount,
+          takerUser: takerUserAccount,
+          makerUser: makerUserAccount,
           takerPosition,
           makerPosition,
-          instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
           systemProgram: SystemProgram.programId,
         })
         .instruction();

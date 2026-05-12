@@ -1,7 +1,10 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: {
+    index: "src/index.ts",
+    "encrypt-fhe": "src/encrypt-fhe.ts",
+  },
   format: ["cjs", "esm"],
   dts: true,
   clean: true,
@@ -14,6 +17,8 @@ export default defineConfig({
     "@solana/spl-token",
     "@magicblock-labs/ephemeral-rollups-sdk",
     "@umbra-privacy/sdk",
+    "@encrypt.xyz/pre-alpha-solana-client",
+    "@grpc/grpc-js",
     "bn.js",
     "ws",
   ],

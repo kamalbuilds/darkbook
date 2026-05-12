@@ -1,13 +1,40 @@
 //! Ika dWallet bridge for DarkBook.
 //!
 //! Integrates Ika's Solana pre-alpha dWallet program into DarkBook's
-//! settlement flow via manual CPI (no Anchor SDK dependency).
+//! settlement flow via manual CPI.
 //!
 //! Flow:
-//! 1. Trader creates a dWallet via Ika program
+//! 1. Trader creates a dWallet via Ika program (DKG → Active state)
 //! 2. Trader calls `register_dwallet` to transfer authority to DarkBook
 //! 3. On `close_position`, optionally `approve_dwallet_withdrawal` for
 //!    cross-chain payout via Ika 2PC-MPC signing
+//! 4. Ika network detects MessageApproval PDA → produces signature
+//! 5. Anyone reads the 128-byte signature from MessageApproval account
+//!
+//! Signature schemes (u16 LE):
+//!   0 = Ed25519 (Solana, Sui)
+//!   1 = Secp256k1 (Bitcoin, Ethereum)  
+//!   2 = Secp256r1
+//!   3 = EddsaSha512 (Curve25519)
+//!   4 = EcdsaSecp256k1Sha256
+//!   5 = EcdsaSecp256k1Keccak256
+//!   6 = EcdsaSecp256r1Sha256
+//!
+//! MessageApproval layout:
+//!   offset 0:   dwallet (32 bytes)
+//!   offset 32:  approver (32 bytes)
+//!   offset 64:  message_digest (32 bytes)
+//!   offset 96:  message_metadata_digest (32 bytes)
+//!   offset 128: user_pubkey (32 bytes)
+//!   offset 160: signature_scheme (2 bytes)
+//!   offset 162: epoch (8 bytes)
+//!   offset 170: status (1 byte) — 0=Pending, 1=Signed
+//!   offset 171: signature_len (2 bytes)
+//!   offset 173: signature (128 bytes)
+//!
+//! Presigns: Precomputed partial signatures for faster signing.
+//!   Request via `Presign` (global) or `PresignForDWallet` instructions.
+//!   See: https://solana-pre-alpha.ika.xyz/
 //!
 //! Ref: https://solana-pre-alpha.ika.xyz/
 
@@ -22,6 +49,24 @@ const IX_APPROVE_MESSAGE: u8 = 8;
 const IX_TRANSFER_OWNERSHIP: u8 = 24;
 const IKA_PROGRAM_ID: Pubkey = pubkey!("Fg6PaFpoGXkYsidMpWTxq8cQqU5cPqQkz6xcKozxZxHz");
 const DARKBOOK_ID: Pubkey = pubkey!("3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf");
+
+/// Ika signature schemes (u16 LE).
+/// 0=Ed25519(Solana), 1=Secp256k1(BTC/ETH), 2=Secp256r1
+pub mod sig_scheme {
+    pub const ED25519: u16 = 0;
+    pub const SECP256K1: u16 = 1;
+    pub const SECP256R1: u16 = 2;
+}
+
+/// MessageApproval status.
+pub mod msg_status {
+    pub const PENDING: u8 = 0;
+    pub const SIGNED: u8 = 1;
+}
+
+/// MessageApproval signature field offset = 173, max 128 bytes.
+pub const MSG_APPROVAL_SIGNATURE_OFFSET: usize = 173;
+pub const MSG_APPROVAL_SIGNATURE_MAX_LEN: usize = 128;
 
 // ── Instructions ──
 

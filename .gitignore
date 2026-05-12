@@ -9,6 +9,10 @@ test-ledger
 # Faucet authority keypair — contains private key, never commit
 .faucet-authority.json
 
+# Devnet deploy / upgrade authority (solana-keygen output)
+deploy-authority.json
+darkbook-e2e-deploy.json
+
 
 # Anchor / Solana
 target/
@@ -44,6 +48,7 @@ log-*.txt
 # Private — internal audit, idea research, application drafts, agent state
 # These contain critique receipts, sidetrack strategy notes, application
 # drafts, and brain-os memory. Public repo should not expose them.
+md-files-not-to-be-committed/
 findings/
 progress/
 .brain/
@@ -58,9 +63,13 @@ sdk/dist/
 services/*/dist/
 *.tsbuildinfo
 
+# Eitherway / Superteam browser exports (may contain JWTs)
+eitherway.json
+
 # Session cookies / auth — NEVER commit
 **/cookies.json
 **/*.cookies
+superteam-cookie.json
 .colosseum-cli/
 
 # Anchor build target — keypairs MUST never be public; .so + idl are
@@ -71,3 +80,8 @@ services/*/dist/
 
 LOOM-SCRIPT.md
 private
+grants
+
+scripts
+
+scripts/

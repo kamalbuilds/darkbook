@@ -1,0 +1,14 @@
+[
+  {
+    "domain": "eitherway.ai",
+    "expirationDate": 1793954278,
+    "hostOnly": true,
+    "httpOnly": false,
+    "name": "eitherway_cookie_consent",
+    "path": "/",
+    "sameSite": "lax",
+    "secure": false,
+    "session": false,
+    "value": "%7B%22analytics%22%3Afalse%7D"
+  }
+]

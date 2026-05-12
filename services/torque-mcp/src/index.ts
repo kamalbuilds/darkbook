@@ -155,7 +155,7 @@ async function getPositions(params: z.infer<typeof getPositionsSchema>) {
         owner: owner.toString(),
         positions: positions.map((p) => ({
           positionIdx: p.positionIdx,
-          trader: p.trader.toString(),
+          owner: p.owner.toString(),
           market: p.market.toString(),
           side: Object.keys(p.side)[0],
           sizeLots: p.sizeLots.toString(),

@@ -29,7 +29,7 @@ export function BirdeyeMarketIntel() {
       const o = await fetchTokenOverview(baseMint);
       if (cancelled) return;
       if (!o) {
-        setError("Birdeye overview unavailable (set NEXT_PUBLIC_BIRDEYE_API_KEY for full Data API access)");
+        setError("Birdeye overview unavailable");
         return;
       }
       setOverview(o);

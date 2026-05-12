@@ -5,9 +5,6 @@
 > The invention: **Dark Commit** the deferred-reveal invariant every confidential order must satisfy.  
 > `commitment = SHA-256(salt ‖ size ‖ leverage ‖ trader)` published at place; plaintext revealed only at settlement, atomically verified on-chain.
 
-Built for Frontier 2026 (deadline May 11, 2026).
-
-Repo: [https://github.com/aarav1656/darkbook](https://github.com/aarav1656/darkbook)
 
 ---
 
@@ -49,17 +46,17 @@ This is the institutional-perps thesis on Solana: traders who refuse to broadcas
                          │ 2. ER commits OrderBook state root
                          │    settler service watches ER for fills
                          ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  SOLANA MAINNET (Anchor settlement program)                     │
-│  ├── claim_fill: verifier reveals plaintext (both sides),       │
-│  │              checks sha256 == commitment, creates Position   │
-│  ├── Position { side, size_lots, entry_price, collateral }      │
-│  ├── mark_position: reads Pyth price feed, updates unrealized   │
-│  ├── update_funding + accrue_funding: 8h funding accrual        │
-│  ├── liquidate_position: (remaining_after_pnl / locked) × 10_000 │
+┌─────────────────────────────────────────────────────────────────----┐
+│  SOLANA MAINNET (Anchor settlement program)                         │
+│  ├── claim_fill: verifier reveals plaintext (both sides),           │
+│  │              checks sha256 == commitment, creates Position       │
+│  ├── Position { side, size_lots, entry_price, collateral }          │
+│  ├── mark_position: reads Pyth price feed, updates unrealized       │
+│  ├── update_funding + accrue_funding: 8h funding accrual            │
+│  ├── liquidate_position: (remaining_after_pnl / locked) × 10_000    │
 │  │    falls below 8_000 bps (80% maintenance); else NotLiquidatable │
-│  └── close_position: trader-initiated exit, PnL realized        │
-└────────────────────────┬────────────────────────────────────────┘
+│  └── close_position: trader-initiated exit, PnL realized            │
+└────────────────────────┬─────────────────────────────────────----───┘
                          │
 ┌────────────────────────▼────────────────────────────────────────┐
 │  OFF-CHAIN SERVICES (TypeScript / Bun)                          │

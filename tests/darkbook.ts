@@ -2,14 +2,17 @@
  * darkbook.ts — Comprehensive bankrun test suite for DarkBook.
  *
  * Tests use solana-bankrun (in-process validator) for fast execution.
- * MagicBlock ER delegation is NOT simulated — match_orders is called directly
- * in test mode (the delegation check is bypassed by constructing state manually).
+ * MagicBlock ER delegation is not CPI-simulated in bankrun. Before `match_orders`,
+ * tests call `bankrunMarkOrderBookDelegated` so `OrderBook::is_delegated` matches
+ * post-delegation production state.
  *
  * Pyth oracle is mocked via a fabricated PriceUpdateV2 account because
  * bankrun cannot pull live feeds from the network.
  *
  * Each describe block is fully independent: fresh keypairs, fresh market per test.
  */
+
+import "./bankrun-partial-sign-fix";
 
 import * as anchor from "@coral-xyz/anchor";
 const { BN } = anchor;
@@ -27,7 +30,12 @@ import {
   mintTo,
   getAccount,
 } from "@solana/spl-token";
-import { startAnchor, BanksClient, ProgramTestContext } from "solana-bankrun";
+import {
+  startAnchor,
+  BanksClient,
+  ProgramTestContext,
+  Clock,
+} from "solana-bankrun";
 import { BankrunProvider } from "anchor-bankrun";
 
 import {
@@ -39,6 +47,8 @@ import {
   assetIdFromString,
   solUsdFeedId,
   createMockPriceUpdateData,
+  splTokenConnectionFromBankrun,
+  bankrunMarkOrderBookDelegated,
   USDC_DECIMALS,
   USDC_MULTIPLIER,
 } from "./setup";
@@ -47,6 +57,7 @@ import {
   computeCommitment,
   randomSalt,
   deserializeOrderBook,
+  findLatestOpenFill,
   computeCollateral,
   computeCollateralEstimate,
   unrealizedPnl,
@@ -56,13 +67,39 @@ import {
 } from "./utils";
 
 // ─── Program ID (from Anchor.toml) ────────────────────────────────────────────
-const PROGRAM_ID = new PublicKey("9i4Gpnt8GgrwxqwXdEyjFBsfNChis8z9jmyAbMpFVLcS");
+const PROGRAM_ID = new PublicKey("3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf");
 
 // ─── Market parameters used across tests ─────────────────────────────────────
 const DEFAULT_MAX_LEVERAGE_BPS = 10000; // 100x
 const DEFAULT_TAKER_FEE_BPS = 5; // 0.05%
 const DEFAULT_MAKER_REBATE_BPS = 2; // 0.02%
 const DEFAULT_FUNDING_INTERVAL_SECS = 8 * 3600; // 8h
+
+/** Must match `OrderBook::LEN` in programs/darkbook/src/state.rs */
+const ORDER_BOOK_DATA_LEN = 233592;
+/** Solana `MAX_PERMITTED_DATA_INCREASE` per instruction for account growth */
+const ORDER_BOOK_REALLOC_CHUNK = 10240;
+
+/** IDL codec may return number, bigint, or BN for small integers. */
+function idlSmallInt(x: unknown): number {
+  if (typeof x === "number" && Number.isFinite(x)) return x;
+  if (typeof x === "bigint") return Number(x);
+  if (x != null && typeof (x as { toNumber?: () => number }).toNumber === "function") {
+    return (x as BN).toNumber();
+  }
+  return Number(x);
+}
+
+/** IDL u64-like fields as bigint for comparisons. */
+function idlToBigInt(x: unknown): bigint {
+  if (typeof x === "bigint") return x;
+  if (typeof x === "number") return BigInt(Math.trunc(x));
+  if (x != null && typeof (x as { toString?: () => string }).toString === "function") {
+    const s = (x as { toString: () => string }).toString();
+    if (/^-?\d+$/.test(s)) return BigInt(s);
+  }
+  return BigInt(String(x));
+}
 
 // ─── Helper: build a bankrun context + program ────────────────────────────────
 
@@ -105,8 +142,7 @@ async function initializeMarket(
   assetName: string = "SOL-USDC"
 ): Promise<MarketSetup> {
   const provider = new BankrunProvider(context);
-  // @ts-ignore
-  const conn = provider.connection;
+  const conn = splTokenConnectionFromBankrun(context);
 
   const admin = Keypair.generate();
   const mintAuthority = Keypair.generate();
@@ -119,7 +155,6 @@ async function initializeMarket(
   });
 
   const mint = await createMint(
-    // @ts-ignore
     conn,
     admin,
     mintAuthority.publicKey,
@@ -133,13 +168,15 @@ async function initializeMarket(
   const [vaultPDA] = deriveVaultPDA(PROGRAM_ID, marketPDA);
   const [bookPDA] = deriveBookPDA(PROGRAM_ID, marketPDA);
 
-  // Create vault token account (owned by vaultPDA)
+  // Create vault token account (owned by vaultPDA). Owner is a PDA, so pass an explicit
+  // mint account keypair; spl-token's no-keypair path uses ATA and requires an on-curve owner.
+  const vaultTokenKeypair = Keypair.generate();
   const vaultTokenAccount = await createAccount(
-    // @ts-ignore
     conn,
     admin,
     mint,
-    vaultPDA
+    vaultPDA,
+    vaultTokenKeypair
   );
 
   // Initialize oracle feed id (using SOL/USD devnet feed)
@@ -162,6 +199,26 @@ async function initializeMarket(
       admin: admin.publicKey,
       systemProgram: SystemProgram.programId,
     })
+    .signers([admin])
+    .rpc();
+
+  const extendAccounts = {
+    market: marketPDA,
+    orderBook: bookPDA,
+    admin: admin.publicKey,
+  };
+  const extendIxs = Math.ceil(ORDER_BOOK_DATA_LEN / ORDER_BOOK_REALLOC_CHUNK);
+  for (let i = 0; i < extendIxs; i++) {
+    await program.methods
+      .extendOrderBook(i)
+      .accounts(extendAccounts)
+      .signers([admin])
+      .rpc();
+  }
+
+  await program.methods
+    .finalizeOrderBookInit()
+    .accounts(extendAccounts)
     .signers([admin])
     .rpc();
 
@@ -191,9 +248,7 @@ async function setupUser(
   market: MarketSetup,
   depositUsdcHuman: number
 ): Promise<UserSetup> {
-  const provider = new BankrunProvider(context);
-  // @ts-ignore
-  const conn = provider.connection;
+  const conn = splTokenConnectionFromBankrun(context);
 
   const user = Keypair.generate();
   context.setAccount(user.publicKey, {
@@ -206,20 +261,13 @@ async function setupUser(
   const [userPDA] = deriveUserPDA(PROGRAM_ID, market.marketPDA, user.publicKey);
 
   // Create user token account
-  const tokenAccount = await createAccount(
-    // @ts-ignore
-    conn,
-    user,
-    market.mint,
-    user.publicKey
-  );
+  const tokenAccount = await createAccount(conn, user, market.mint, user.publicKey);
 
   // Mint USDC to user
   const depositAmount = BigInt(depositUsdcHuman) * BigInt(USDC_MULTIPLIER);
 
   if (depositAmount > BigInt(0)) {
     await mintTo(
-      // @ts-ignore
       conn,
       market.admin,
       market.mint,
@@ -260,6 +308,30 @@ async function setupUser(
   }
 
   return { keypair: user, userPDA, tokenAccount };
+}
+
+/** SPL token account owned by `liquidator`, funded for liquidation CPIs. */
+async function liquidatorUsdcAccount(
+  context: ProgramTestContext,
+  market: MarketSetup,
+  liquidator: Keypair
+): Promise<PublicKey> {
+  const conn = splTokenConnectionFromBankrun(context);
+  const ata = await createAccount(
+    conn,
+    market.admin,
+    market.mint,
+    liquidator.publicKey
+  );
+  await mintTo(
+    conn,
+    market.admin,
+    market.mint,
+    ata,
+    market.mintAuthority,
+    BigInt(50_000_000)
+  );
+  return ata;
 }
 
 // ─── Helper: place an order ────────────────────────────────────────────────────
@@ -350,16 +422,20 @@ async function setMockPythPrice(
    * We fabricate a PriceUpdateV2 account with the correct binary layout so
    * the on-chain program can deserialize it via pyth-solana-receiver-sdk.
    * The mock uses Pyth's standard exponent of -8.
+   *
+   * Publish time must track `Clock::unix_timestamp` from bankrun (not wall
+   * clock) so `read_pyth_price` max-age checks stay consistent after txs.
    */
   const pyth = Keypair.generate();
   const priceInt = BigInt(Math.round(priceUsd * 1e8));
-  const now = BigInt(Math.floor(Date.now() / 1000));
+  const clock = await context.banksClient.getClock();
+  const publishTime = clock.unixTimestamp;
 
   const data = createMockPriceUpdateData({
     feedId: solUsdFeedId(),
     price: priceInt,
     exponent: -8,
-    publishTime: now,
+    publishTime,
   });
 
   context.setAccount(pyth.publicKey, {
@@ -371,6 +447,29 @@ async function setMockPythPrice(
   });
 
   return pyth;
+}
+
+/** Re-write mock Pyth data after `setClock` so publish_time matches chain time. */
+async function refreshMockPythPrice(
+  context: ProgramTestContext,
+  pyth: Keypair,
+  priceUsd: number
+): Promise<void> {
+  const priceInt = BigInt(Math.round(priceUsd * 1e8));
+  const clock = await context.banksClient.getClock();
+  const data = createMockPriceUpdateData({
+    feedId: solUsdFeedId(),
+    price: priceInt,
+    exponent: -8,
+    publishTime: clock.unixTimestamp,
+  });
+  const prev = await context.banksClient.getAccount(pyth.publicKey);
+  context.setAccount(pyth.publicKey, {
+    lamports: prev?.lamports ?? LAMPORTS_PER_SOL,
+    data,
+    owner: new PublicKey("rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ"),
+    executable: false,
+  });
 }
 
 // ─── Helper: full match+settle cycle ──────────────────────────────────────────
@@ -385,6 +484,8 @@ interface MatchedPositions {
   sizeLots: bigint;
   priceTicks: bigint;
   leverageBps: number;
+  settler: Keypair;
+  fillId: bigint;
 }
 
 async function setupMatchedPositions(
@@ -433,6 +534,8 @@ async function setupMatchedPositions(
     leverageBps,
   });
 
+  await bankrunMarkOrderBookDelegated(context, PROGRAM_ID, market.bookPDA);
+
   await program.methods
     .matchOrders()
     .accounts({ market: market.marketPDA, orderBook: market.bookPDA })
@@ -440,8 +543,8 @@ async function setupMatchedPositions(
 
   const bi = await program.provider.connection.getAccountInfo(market.bookPDA);
   const bk = deserializeOrderBook(Buffer.from(bi!.data));
-  const fi = Number((bk.fillHead - bk.fillCount) % BigInt(256));
-  const fll = bk.fills[fi];
+  const fll = findLatestOpenFill(bk);
+  if (!fll) throw new Error("setupMatchedPositions: no open fill after match");
 
   const tuAcct = await program.account.userAccount.fetch(bob.userPDA);
   const muAcct = await program.account.userAccount.fetch(alice.userPDA);
@@ -494,6 +597,8 @@ async function setupMatchedPositions(
     sizeLots,
     priceTicks,
     leverageBps,
+    settler,
+    fillId: fll.fillId,
   };
 }
 
@@ -520,20 +625,11 @@ describe("1. Market initialization", () => {
       market.assetId,
       "asset_id mismatch"
     );
+    assert.equal(idlSmallInt(marketAcct.maxLeverageBps), DEFAULT_MAX_LEVERAGE_BPS);
+    assert.equal(idlSmallInt(marketAcct.takerFeeBps), DEFAULT_TAKER_FEE_BPS);
+    assert.equal(idlSmallInt(marketAcct.makerRebateBps), DEFAULT_MAKER_REBATE_BPS);
     assert.equal(
-      (marketAcct.maxLeverageBps as any).toNumber(),
-      DEFAULT_MAX_LEVERAGE_BPS
-    );
-    assert.equal(
-      (marketAcct.takerFeeBps as any).toNumber(),
-      DEFAULT_TAKER_FEE_BPS
-    );
-    assert.equal(
-      (marketAcct.makerRebateBps as any).toNumber(),
-      DEFAULT_MAKER_REBATE_BPS
-    );
-    assert.equal(
-      (marketAcct.fundingIntervalSecs as any).toNumber(),
+      idlSmallInt(marketAcct.fundingIntervalSecs),
       DEFAULT_FUNDING_INTERVAL_SECS
     );
     assert.equal(marketAcct.paused, false, "market should not be paused");
@@ -626,20 +722,18 @@ describe("2. User onboarding (initialize_user + deposit + withdraw)", () => {
 
     const userAcct = await program.account.userAccount.fetch(aliceUserPDA);
     assert.equal(userAcct.owner.toBase58(), alice.publicKey.toBase58());
-    assert.equal((userAcct.depositedAmount as BN).toNumber(), 0);
-    assert.equal((userAcct.lockedAmount as BN).toNumber(), 0);
+    assert.equal(idlToBigInt(userAcct.depositedAmount), 0n);
+    assert.equal(idlToBigInt(userAcct.lockedAmount), 0n);
   });
 
   it("Alice deposits 100 USDC — deposited_amount reflects correctly", async () => {
-    const provider = new BankrunProvider(ctx);
-    // @ts-ignore
-    const conn = provider.connection;
+    const conn = splTokenConnectionFromBankrun(ctx);
 
     const alice = await setupUser(ctx, program, market, 0);
     const depositAmt = usdcAmount(100);
 
     await mintTo(
-      conn as any,
+      conn,
       market.admin,
       market.mint,
       alice.tokenAccount,
@@ -763,22 +857,22 @@ describe("3. Order placement (commitment scheme)", () => {
     assert.ok(book.bidCount >= 1, "should have at least 1 bid");
   });
 
-  it("collateral is locked = size_band_ceiling × price / leverage", async () => {
+  it("place_order does not lock collateral; it only checks unlocked >= band ceiling estimate", async () => {
     const alice = await setupUser(ctx, program, market, 5000);
 
     const priceTicks = dollarsToPriceTicks(200);
     const leverageBps = 1000; // 10x
     const sizeLots = BigInt(10); // Small band ceiling = 10
 
-    const expectedLock = computeCollateralEstimate(
+    const requiredFree = computeCollateralEstimate(
       "Small",
       priceTicks,
       leverageBps
     );
 
-    const lockedBefore = (
-      await program.account.userAccount.fetch(alice.userPDA)
-    ).lockedAmount as BN;
+    const lockedBefore = idlToBigInt(
+      (await program.account.userAccount.fetch(alice.userPDA)).lockedAmount
+    );
 
     await placeOrder(ctx, program, market, alice, {
       side: "Short",
@@ -788,13 +882,19 @@ describe("3. Order placement (commitment scheme)", () => {
     });
 
     const userAcct = await program.account.userAccount.fetch(alice.userPDA);
-    const lockedAfter = userAcct.lockedAmount as BN;
-    const lockDelta = lockedAfter.sub(lockedBefore);
+    const lockedAfter = idlToBigInt(userAcct.lockedAmount);
+    const lockDelta = lockedAfter - lockedBefore;
 
     assert.equal(
       lockDelta.toString(),
-      expectedLock.toString(),
-      "locked collateral delta should match estimated collateral"
+      "0",
+      "on-chain place_order only enforces unlocked balance; collateral locks at claim_fill"
+    );
+    const unlocked =
+      idlToBigInt(userAcct.depositedAmount) - idlToBigInt(userAcct.lockedAmount);
+    assert.ok(
+      unlocked >= requiredFree,
+      "unlocked collateral should still cover the band ceiling used at placement"
     );
   });
 });
@@ -919,12 +1019,9 @@ describe("5. Matching (simulated ER — match_orders called directly)", () => {
   let market: MarketSetup;
 
   /**
-   * NOTE: In production, match_orders runs on MagicBlock ER after delegation.
-   * Bankrun cannot simulate MagicBlock ER's delegation mechanism.
-   * We call match_orders directly — the on-chain code uses AccountLoader
-   * which works on non-delegated accounts in test/localnet context.
-   * This is the correct test approach per the spec: "test mode skips
-   * delegation check".
+   * Production: `delegate_book` then ER runs `match_orders`. Bankrun skips the
+   * delegate CPI; `bankrunMarkOrderBookDelegated` sets `is_delegated` on the book
+   * account so the program's guard matches delegated ER state.
    */
 
   before(async () => {
@@ -952,6 +1049,7 @@ describe("5. Matching (simulated ER — match_orders called directly)", () => {
       leverageBps: 500,
     });
 
+    await bankrunMarkOrderBookDelegated(ctx, PROGRAM_ID, market.bookPDA);
     await program.methods
       .matchOrders()
       .accounts({ market: market.marketPDA, orderBook: market.bookPDA })
@@ -985,6 +1083,7 @@ describe("5. Matching (simulated ER — match_orders called directly)", () => {
       leverageBps: 500,
     });
 
+    await bankrunMarkOrderBookDelegated(ctx, PROGRAM_ID, market.bookPDA);
     await program.methods
       .matchOrders()
       .accounts({ market: market.marketPDA, orderBook: market.bookPDA })
@@ -994,8 +1093,8 @@ describe("5. Matching (simulated ER — match_orders called directly)", () => {
       market.bookPDA
     );
     const book = deserializeOrderBook(Buffer.from(bookInfo!.data));
-    const fillIdx = Number((book.fillHead - book.fillCount) % BigInt(256));
-    const fill = book.fills[fillIdx];
+    const fill = findLatestOpenFill(book);
+    if (!fill) throw new Error("no open fill");
 
     // Taker = bid (long = Bob), Maker = ask (short = Alice)
     assert.equal(fill.taker.toBase58(), bob.keypair.publicKey.toBase58(), "taker = Bob");
@@ -1029,6 +1128,7 @@ describe("5. Matching (simulated ER — match_orders called directly)", () => {
     );
     const fillCountBefore = bookBefore.fillCount;
 
+    await bankrunMarkOrderBookDelegated(ctx, PROGRAM_ID, market.bookPDA);
     await program.methods
       .matchOrders()
       .accounts({ market: market.marketPDA, orderBook: market.bookPDA })
@@ -1101,13 +1201,11 @@ describe("6. Settlement (claim_fill)", () => {
       market.bookPDA
     );
     const book = deserializeOrderBook(Buffer.from(bookInfo!.data));
-    // Find the fill that was just claimed (it was the last one appended before claim)
-    const fillIdx = Number((book.fillHead - BigInt(1)) % BigInt(256));
-    assert.equal(
-      book.fills[fillIdx].claimed,
-      true,
-      "fill should be marked claimed"
+    const claimedFill = book.fills.find(
+      (f) => f.fillId === positions.fillId
     );
+    assert.ok(claimedFill, "fill id should exist in ring");
+    assert.equal(claimedFill!.claimed, true, "fill should be marked claimed");
   });
 
   it("claim_fill with mismatched commitment fails with CommitmentMismatch", async () => {
@@ -1132,6 +1230,7 @@ describe("6. Settlement (claim_fill)", () => {
       side: "Long", priceTicks, sizeLots, leverageBps,
     });
 
+    await bankrunMarkOrderBookDelegated(ctx, PROGRAM_ID, market.bookPDA);
     await program.methods
       .matchOrders()
       .accounts({ market: market.marketPDA, orderBook: market.bookPDA })
@@ -1139,20 +1238,23 @@ describe("6. Settlement (claim_fill)", () => {
 
     const bi = await program.provider.connection.getAccountInfo(market.bookPDA);
     const bk = deserializeOrderBook(Buffer.from(bi!.data));
-    const fi = Number((bk.fillHead - bk.fillCount) % BigInt(256));
-    const fll = bk.fills[fi];
+    const fll = findLatestOpenFill(bk);
+    if (!fll) throw new Error("no open fill for claim_fill test");
 
     const tu = await program.account.userAccount.fetch(bob.userPDA);
     const mu = await program.account.userAccount.fetch(alice.userPDA);
     const [bPos] = derivePositionPDA(PROGRAM_ID, market.marketPDA, bob.keypair.publicKey, BigInt(tu.nextPositionIdx.toString()));
     const [aPos] = derivePositionPDA(PROGRAM_ID, market.marketPDA, alice.keypair.publicKey, BigInt(mu.nextPositionIdx.toString()));
 
+    const bobBadSalt = Buffer.from(bobOrder.salt);
+    bobBadSalt[31] ^= 0xff;
+
     await expectError(
       () => program.methods
         .claimFill(
           new BN(fll.fillId.toString()),
-          Array.from(bobOrder.salt),
-          new BN(BigInt(99).toString()), // wrong size
+          Array.from(bobBadSalt),
+          new BN(sizeLots.toString()),
           leverageBps,
           Array.from(bobOrder.commitment),
           Array.from(aliceOrder.salt),
@@ -1242,9 +1344,10 @@ describe("7. Mark price update", () => {
       leverageBps: 1000,
     });
 
-    // Stale oracle: publish_time = 120 seconds ago (> 60s max)
+    // Stale oracle: publish_time = 120 seconds before bankrun clock (> max_age)
     const staleOracle = Keypair.generate();
-    const staleTime = BigInt(Math.floor(Date.now() / 1000) - 120);
+    const chainClock = await ctx.banksClient.getClock();
+    const staleTime = chainClock.unixTimestamp - 120n;
     const staleData = createMockPriceUpdateData({
       feedId: solUsdFeedId(),
       price: BigInt(200_00000000),
@@ -1292,13 +1395,16 @@ describe("8. Funding accrual", () => {
 
     // Advance clock past funding interval
     const clock = await ctx.banksClient.getClock();
-    ctx.setClock({
-      slot: clock.slot + BigInt(1000),
-      epochStartTimestamp: clock.epochStartTimestamp,
-      epoch: clock.epoch,
-      leaderScheduleEpoch: clock.leaderScheduleEpoch,
-      unixTimestamp: clock.unixTimestamp + BigInt(DEFAULT_FUNDING_INTERVAL_SECS + 1),
-    });
+    ctx.setClock(
+      new Clock(
+        clock.slot + 1000n,
+        clock.epochStartTimestamp,
+        clock.epoch,
+        clock.leaderScheduleEpoch,
+        clock.unixTimestamp + BigInt(DEFAULT_FUNDING_INTERVAL_SECS + 1)
+      )
+    );
+    await refreshMockPythPrice(ctx, pythAcct, 200);
 
     const mktBefore = await program.account.market.fetch(market.marketPDA);
 
@@ -1329,13 +1435,16 @@ describe("8. Funding accrual", () => {
 
     // Advance clock
     const clock = await ctx.banksClient.getClock();
-    ctx.setClock({
-      slot: clock.slot + BigInt(1000),
-      epochStartTimestamp: clock.epochStartTimestamp,
-      epoch: clock.epoch,
-      leaderScheduleEpoch: clock.leaderScheduleEpoch,
-      unixTimestamp: clock.unixTimestamp + BigInt(DEFAULT_FUNDING_INTERVAL_SECS + 1),
-    });
+    ctx.setClock(
+      new Clock(
+        clock.slot + 1000n,
+        clock.epochStartTimestamp,
+        clock.epoch,
+        clock.leaderScheduleEpoch,
+        clock.unixTimestamp + BigInt(DEFAULT_FUNDING_INTERVAL_SECS + 1)
+      )
+    );
+    await refreshMockPythPrice(ctx, pythAcct, 200);
 
     await program.methods
       .updateFunding()
@@ -1351,7 +1460,7 @@ describe("8. Funding accrual", () => {
     );
 
     await program.methods
-      .accrueFunding()
+      .accrueFundingPosition()
       .accounts({
         market: market.marketPDA,
         position: positions.alicePos,
@@ -1402,16 +1511,15 @@ describe("8. Funding accrual", () => {
 describe("9. Liquidation", () => {
   let ctx: ProgramTestContext;
   let program: anchor.Program;
-  let market: MarketSetup;
 
   before(async () => {
     const setup = await setupContext();
     ctx = setup.context;
     program = setup.program;
-    market = await initializeMarket(ctx, program, "SOL-USD9a");
   });
 
   it("Alice (short) liquidated at $212 — position status = Liquidated", async () => {
+    const market = await initializeMarket(ctx, program, "SOL-USD9a");
     /**
      * Alice short 10 lots @ $200, 10x leverage.
      * collateral = 10 * 200 * 100 / 1000 = 200 USDC
@@ -1434,6 +1542,7 @@ describe("9. Liquidation", () => {
     });
 
     const pythAcct = await setMockPythPrice(ctx, market, 212);
+    const liqToken = await liquidatorUsdcAccount(ctx, market, liquidator);
 
     await program.methods
       .liquidatePosition()
@@ -1441,8 +1550,12 @@ describe("9. Liquidation", () => {
         market: market.marketPDA,
         position: positions.alicePos,
         userAccount: positions.alice.userPDA,
-        liquidator: liquidator.publicKey,
         priceUpdate: pythAcct.publicKey,
+        vault: market.vaultPDA,
+        vaultTokenAccount: market.vaultTokenAccount,
+        liquidatorTokenAccount: liqToken,
+        liquidator: liquidator.publicKey,
+        tokenProgram: TOKEN_PROGRAM_ID,
       })
       .signers([liquidator])
       .rpc();
@@ -1454,6 +1567,7 @@ describe("9. Liquidation", () => {
   });
 
   it("liquidate when price has not crossed threshold — fails with NotLiquidatable", async () => {
+    const market = await initializeMarket(ctx, program, "SOL-USD9b");
     const positions = await setupMatchedPositions(ctx, program, market, {
       priceUsd: 200,
       sizeLots: BigInt(10),
@@ -1470,6 +1584,7 @@ describe("9. Liquidation", () => {
 
     // Oracle at $200 — no loss, clearly not liquidatable
     const pythAcct = await setMockPythPrice(ctx, market, 200);
+    const liqToken = await liquidatorUsdcAccount(ctx, market, liquidator);
 
     await expectError(
       () =>
@@ -1479,8 +1594,12 @@ describe("9. Liquidation", () => {
             market: market.marketPDA,
             position: positions.alicePos,
             userAccount: positions.alice.userPDA,
-            liquidator: liquidator.publicKey,
             priceUpdate: pythAcct.publicKey,
+            vault: market.vaultPDA,
+            vaultTokenAccount: market.vaultTokenAccount,
+            liquidatorTokenAccount: liqToken,
+            liquidator: liquidator.publicKey,
+            tokenProgram: TOKEN_PROGRAM_ID,
           })
           .signers([liquidator])
           .rpc(),
@@ -1489,6 +1608,7 @@ describe("9. Liquidation", () => {
   });
 
   it("liquidate when market paused — fails with MarketPaused", async () => {
+    const market = await initializeMarket(ctx, program, "SOL-USD9c");
     const positions = await setupMatchedPositions(ctx, program, market, {
       priceUsd: 200,
       sizeLots: BigInt(10),
@@ -1509,6 +1629,7 @@ describe("9. Liquidation", () => {
       executable: false,
     });
     const pythAcct = await setMockPythPrice(ctx, market, 212);
+    const liqToken = await liquidatorUsdcAccount(ctx, market, liquidator);
 
     await expectError(
       () =>
@@ -1518,8 +1639,12 @@ describe("9. Liquidation", () => {
             market: market.marketPDA,
             position: positions.alicePos,
             userAccount: positions.alice.userPDA,
-            liquidator: liquidator.publicKey,
             priceUpdate: pythAcct.publicKey,
+            vault: market.vaultPDA,
+            vaultTokenAccount: market.vaultTokenAccount,
+            liquidatorTokenAccount: liqToken,
+            liquidator: liquidator.publicKey,
+            tokenProgram: TOKEN_PROGRAM_ID,
           })
           .signers([liquidator])
           .rpc(),
@@ -1540,20 +1665,20 @@ describe("9. Liquidation", () => {
 describe("10. Close position (voluntary)", () => {
   let ctx: ProgramTestContext;
   let program: anchor.Program;
-  let market: MarketSetup;
 
   before(async () => {
     const setup = await setupContext();
     ctx = setup.context;
     program = setup.program;
-    market = await initializeMarket(ctx, program, "SOL-USD10a");
   });
 
   it("Bob closes long at $205 — position status = Closed, realized_pnl >= 0", async () => {
     /**
      * Bob long 10 lots @ $200, 10x leverage.
      * Close at $205: realized PnL = (205-200) * 10 = +50 USDC
+     * Alice (short) closes first so her loss seeds `realized_loss_pool` for Bob's winning close.
      */
+    const market = await initializeMarket(ctx, program, "SOL-USD10a");
     const positions = await setupMatchedPositions(ctx, program, market, {
       priceUsd: 200,
       sizeLots: BigInt(10),
@@ -1561,6 +1686,18 @@ describe("10. Close position (voluntary)", () => {
     });
 
     const pythAcct = await setMockPythPrice(ctx, market, 205);
+
+    await program.methods
+      .closePosition()
+      .accounts({
+        market: market.marketPDA,
+        position: positions.alicePos,
+        userAccount: positions.alice.userPDA,
+        owner: positions.alice.keypair.publicKey,
+        priceUpdate: pythAcct.publicKey,
+      })
+      .signers([positions.alice.keypair])
+      .rpc();
 
     await program.methods
       .closePosition()
@@ -1587,6 +1724,7 @@ describe("10. Close position (voluntary)", () => {
   });
 
   it("non-owner cannot close position — fails with Unauthorized", async () => {
+    const market = await initializeMarket(ctx, program, "SOL-USD10b");
     const positions = await setupMatchedPositions(ctx, program, market, {
       priceUsd: 200,
       sizeLots: BigInt(10),
@@ -1594,13 +1732,9 @@ describe("10. Close position (voluntary)", () => {
     });
 
     const pythAcct = await setMockPythPrice(ctx, market, 205);
-    const stranger = Keypair.generate();
-    ctx.setAccount(stranger.publicKey, {
-      lamports: 5 * LAMPORTS_PER_SOL,
-      data: Buffer.alloc(0),
-      owner: SystemProgram.programId,
-      executable: false,
-    });
+    // ClosePosition seeds `user_account` from `owner`; use a real stranger user PDA + signer
+    // while still pointing at Bob's position so the program rejects after account checks.
+    const stranger = await setupUser(ctx, program, market, 100);
 
     await expectError(
       () =>
@@ -1609,11 +1743,11 @@ describe("10. Close position (voluntary)", () => {
           .accounts({
             market: market.marketPDA,
             position: positions.bobPos,
-            userAccount: positions.bob.userPDA,
-            owner: stranger.publicKey, // wrong owner
+            userAccount: stranger.userPDA,
+            owner: stranger.keypair.publicKey,
             priceUpdate: pythAcct.publicKey,
           })
-          .signers([stranger])
+          .signers([stranger.keypair])
           .rpc(),
       "Unauthorized"
     );
@@ -1736,11 +1870,9 @@ describe("11. Edge cases", () => {
       .signers([market.admin])
       .rpc();
 
-    const provider = new BankrunProvider(ctx);
-    // @ts-ignore
-    const conn = provider.connection;
+    const conn = splTokenConnectionFromBankrun(ctx);
     const depositAmt = usdcAmount(100);
-    await mintTo(conn as any, market.admin, market.mint, alice.tokenAccount, market.mintAuthority, depositAmt);
+    await mintTo(conn, market.admin, market.mint, alice.tokenAccount, market.mintAuthority, depositAmt);
 
     await expectError(
       () =>
@@ -1809,50 +1941,48 @@ describe("11. Edge cases", () => {
       leverageBps: 500,
     });
 
-    // The fill was already claimed by setupMatchedPositions
-    // Try to claim again with new accounts
-    const alice2 = await setupUser(ctx, program, market, 10000);
-    const bob2 = await setupUser(ctx, program, market, 10000);
-    const settler = Keypair.generate();
-    ctx.setAccount(settler.publicKey, {
-      lamports: 5 * LAMPORTS_PER_SOL,
-      data: Buffer.alloc(0),
-      owner: SystemProgram.programId,
-      executable: false,
-    });
-
-    // Place new orders to get fill id = 0 again (already claimed earlier)
-    // Use fill_id = 0 which was the first fill
-    const tu2 = await program.account.userAccount.fetch(bob2.userPDA);
-    const mu2 = await program.account.userAccount.fetch(alice2.userPDA);
-    const [b2] = derivePositionPDA(PROGRAM_ID, market.marketPDA, bob2.keypair.publicKey, BigInt(tu2.nextPositionIdx.toString()));
-    const [a2] = derivePositionPDA(PROGRAM_ID, market.marketPDA, alice2.keypair.publicKey, BigInt(mu2.nextPositionIdx.toString()));
+    // After the first claim, `next_position_idx` advanced; Anchor derives PDAs
+    // from that field, so the second attempt must use the *next* empty PDAs.
+    const tu = await program.account.userAccount.fetch(positions.bob.userPDA);
+    const mu = await program.account.userAccount.fetch(positions.alice.userPDA);
+    const [bobPosNext] = derivePositionPDA(
+      PROGRAM_ID,
+      market.marketPDA,
+      positions.bob.keypair.publicKey,
+      BigInt(tu.nextPositionIdx.toString())
+    );
+    const [alicePosNext] = derivePositionPDA(
+      PROGRAM_ID,
+      market.marketPDA,
+      positions.alice.keypair.publicKey,
+      BigInt(mu.nextPositionIdx.toString())
+    );
 
     await expectError(
       () =>
         program.methods
           .claimFill(
-            new BN(0), // fill_id = 0 (already claimed)
-            Array.from(randomSalt()),
-            new BN(10),
-            500,
-            Array.from(Buffer.alloc(32)),
-            Array.from(randomSalt()),
-            new BN(10),
-            500,
-            Array.from(Buffer.alloc(32))
+            new BN(positions.fillId.toString()),
+            Array.from(positions.bobOrder.salt),
+            new BN(positions.sizeLots.toString()),
+            positions.leverageBps,
+            Array.from(positions.bobOrder.commitment),
+            Array.from(positions.aliceOrder.salt),
+            new BN(positions.sizeLots.toString()),
+            positions.leverageBps,
+            Array.from(positions.aliceOrder.commitment)
           )
           .accounts({
             market: market.marketPDA,
             orderBook: market.bookPDA,
-            takerUser: bob2.userPDA,
-            takerPosition: b2,
-            makerUser: alice2.userPDA,
-            makerPosition: a2,
-            settler: settler.publicKey,
+            takerUser: positions.bob.userPDA,
+            takerPosition: bobPosNext,
+            makerUser: positions.alice.userPDA,
+            makerPosition: alicePosNext,
+            settler: positions.settler.publicKey,
             systemProgram: SystemProgram.programId,
           })
-          .signers([settler])
+          .signers([positions.settler])
           .rpc(),
       "FillNotFound"
     );

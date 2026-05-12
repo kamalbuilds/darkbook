@@ -10,7 +10,7 @@ Confidential Perpetuals. Institutional Speed. Solana.
 
 > Sub-50ms CLOB matching via MagicBlock Ephemeral Rollups. Order-size privacy via cryptographic commitments. Atomic settlement on Solana mainnet. The trading venue institutions have been waiting for.
 
-**Contact:** Kamal — kamalthedev7+letsbuild@gmail.com
+**Contact:** Aarav - anshuk3917@gmail.com
 **Stage:** Seed | $3M on $30M post-money cap
 **Date:** May 2026
 
@@ -95,7 +95,7 @@ A central limit order book for perpetual futures where order size and identity a
 **Key technical properties:**
 - Single Anchor program runs on both mainnet and ER (not two separate programs).
 - sha256 commitment scheme reveals order details only at fill settlement — no trusted oracle, no off-chain reveal service.
-- Permissionless liquidation: any crank calls `liquidate_position` if `collateral_ratio < 1.2`. No whitelist.
+- Permissionless liquidation: any crank calls `liquidate_position` when post-PnL remaining collateral as a fraction of `collateral_locked` is below 8_000 bps (80% maintenance). No whitelist.
 - Admin keys burned post-deploy. Settlement is immutable (Percolator pattern).
 - Jito atomic bundles at settlement: no MEV window on final settlement.
 
@@ -277,11 +277,11 @@ A single institutional MM with $200M/month throughput generates:
 
 ### One engineer shipped the full stack in 14 days. Now hiring the team to scale it.
 
-**Kamal — Founder**
+**Aarav — Founder**
 - 6+ years building production blockchain systems on Sui, Solana, and EVM.
 - Built DarkBook end-to-end solo: Anchor settlement program, MagicBlock ER integration, TypeScript SDK, Next.js dashboard, liquidation watcher.
 - Full-stack from Rust on-chain to TypeScript/React frontend. Comfortable owning protocol math, risk engine design, and product UX simultaneously.
-- Contact: kamalthedev7+letsbuild@gmail.com
+- Contact: https://t.me/aarav1656
 
 **Hiring (seed round enables):**
 - Senior Anchor/Rust engineer — matching engine hardening, cross-margin, portfolio margin

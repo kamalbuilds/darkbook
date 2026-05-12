@@ -136,7 +136,7 @@ async function fetchPositions(program: Program, walletStr: string): Promise<stri
 
     const ownerStr = owner.toBase58();
     const open = allPositions.filter(
-      (p) => p.account.trader.toBase58() === ownerStr && "open" in p.account.status,
+      (p) => p.account.owner.toBase58() === ownerStr && "open" in p.account.status,
     );
 
     if (open.length === 0) return `No open positions found for \`${walletStr.slice(0, 8)}\\.\\.\\.\``;

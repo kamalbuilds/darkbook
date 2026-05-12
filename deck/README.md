@@ -61,7 +61,7 @@ then use the browser's `Print → Save as PDF` (set background graphics ON, marg
 8. **Traction** — 14-day build, $55k stacked sidetracks, ER demo live
 9. **Differentiation** — 6-row vs Drift / Dexlab / Vertex / Hyperliquid
 10. **Roadmap** — Q3 mainnet → Q2 '27 TradFi license
-11. **Team** — kamalbuilds + open advisor slots
+11. **Team** — aarav1656 + open advisor slots
 12. **Ask** — Standout/Grand prize + Adevar audit + MagicBlock co-build + $250k pre-seed
 
 ## Theme tokens

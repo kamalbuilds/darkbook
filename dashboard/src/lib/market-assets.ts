@@ -17,6 +17,7 @@ export const WETH_MINT = "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs";
 /** Maps dashboard market id (SOL | BTC | ETH) to base mint for Birdeye token + OHLCV base/quote. */
 export const SPOT_BASE_MINT_BY_MARKET: Record<string, string> = {
   SOL: WSOL_MINT,
+  SOLUSD: WSOL_MINT,
   BTC: WBTC_MINT,
   ETH: WETH_MINT,
 };
@@ -42,6 +43,8 @@ export function pythUsdFeedIdForMarket(marketId: string): string {
       return PYTH_FEED_ID_BTC_USD;
     case "ETH":
       return PYTH_FEED_ID_ETH_USD;
+    case "SOL":
+    case "SOLUSD":
     default:
       return PYTH_FEED_ID_SOL_USD;
   }

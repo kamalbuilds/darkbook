@@ -3,6 +3,7 @@ use ephemeral_rollups_sdk::anchor::ephemeral;
 
 pub mod constants;
 pub mod encrypt_bridge;
+pub mod encrypt_cpi;
 pub mod errors;
 pub mod events;
 pub mod ix;
@@ -99,6 +100,10 @@ pub mod darkbook {
 
     pub fn match_orders(ctx: Context<MatchOrders>) -> Result<()> {
         matching::match_orders(ctx)
+    }
+
+    pub fn crank_match(ctx: Context<CrankMatch>) -> Result<()> {
+        admin::crank_match(ctx)
     }
 
     pub fn commit_book(ctx: Context<CommitBook>) -> Result<()> {

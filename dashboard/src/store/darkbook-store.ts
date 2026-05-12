@@ -39,7 +39,7 @@ export interface DarkbookState {
 }
 
 export const useDarkbookStore = create<DarkbookState>((set) => ({
-  selectedMarket: "SOL",
+  selectedMarket: "SOLUSD",
   markPrice: null,
   change24h: null,
   positions: [],
