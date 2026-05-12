@@ -14,10 +14,7 @@ DarkBook is a confidential central limit order book (CLOB) for perpetual futures
 
 This is the institutional-perps thesis on Solana: traders who refuse to broadcast position size to a public mempool now have a venue that matches Hyperliquid speed without the centralization tradeoff.
 
-- Demo: [https://github.com/aarav1656/darkbook](https://github.com/aarav1656/darkbook) (Loom recording, devnet dashboard, and program ID land here as deploy lands)
-- Source: [https://github.com/aarav1656/darkbook](https://github.com/aarav1656/darkbook)
 - Architecture: see [ARCHITECTURE.md](./ARCHITECTURE.md)
-- Sponsor integrations: see [SIDETRACKS-CANONICAL.md](./SIDETRACKS-CANONICAL.md)
 
 ---
 
@@ -118,7 +115,7 @@ sequenceDiagram
 ### Install dependencies
 
 ```bash
-git clone <github-repo-url>
+git clone https://github.com/kamalbuilds/darkbook
 cd darkbook
 bun install
 cd sdk && bun install && cd ..
