@@ -27,9 +27,10 @@ pub fn delegate_book(ctx: Context<DelegateBook>, _market: Pubkey) -> Result<()> 
     Ok(())
 }
 
-/// Place a dark order on the book.
+/// Place a size-committed order on the book.
 /// Commitment = sha256(salt || size_lots_le || leverage_bps_le || trader_pubkey)
-/// The contract only stores: side, price_ticks, size_band, leverage_bps, commitment.
+/// Public on Order account: trader, side, price_ticks, size_band, leverage_bps, commitment.
+/// Hidden until settlement: exact size_lots (+ salt). See docs/PRIVACY_MODEL.md.
 pub fn place_order(
     ctx: Context<PlaceOrder>,
     side: Side,

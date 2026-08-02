@@ -80,7 +80,7 @@ Capturing 1% of the $2T market = $20B notional/year. At 5bps weighted average fe
 ### DarkBook: Confidential CLOB Perps on Solana
 
 **What it is:**
-A central limit order book for perpetual futures where order size and identity are hidden during matching. Settlement is atomic on Solana mainnet. PnL is public. Order details are not.
+A central limit order book for perpetual futures where exact order size is commitment-hidden until settlement. Side, price, size band, leverage, and trader remain public. Settlement is atomic on Solana mainnet. PnL after fill is public.
 
 **The three-primitive stack that makes this possible:**
 

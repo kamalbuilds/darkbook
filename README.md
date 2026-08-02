@@ -1,20 +1,22 @@
 # DarkBook
 
-**The dark pool Hyperliquid can't copy. Sub-50ms private matching on Solana.**
+**Exact size hidden until settlement. Sub-50ms matching on MagicBlock. Atomic Solana settlement.**
 
-> The invention: **Dark Commit** the deferred-reveal invariant every confidential order must satisfy.  
-> `commitment = SHA-256(salt ‖ size ‖ leverage ‖ trader)` published at place; plaintext revealed only at settlement, atomically verified on-chain.
+> The invention: **Dark Commit** — the deferred-reveal invariant every size-private order must satisfy.  
+> `commitment = SHA-256(salt ‖ size_lots ‖ leverage_bps ‖ trader)` published at place; exact size revealed only at settlement and verified on-chain.
 
+Honest privacy model (what is public vs hidden): [docs/PRIVACY_MODEL.md](./docs/PRIVACY_MODEL.md)
 
 ---
 
 ## What it is
 
-DarkBook is a confidential central limit order book (CLOB) for perpetual futures on Solana. Orders are matched in a MagicBlock Ephemeral Rollup at sub-50ms latency. Order size and identity are hidden using the **Dark Commit** scheme a cryptographic commitment that binds traders to size + leverage + identity without revealing them until settlement. No ZK circuits, no centralized sequencer, no MEV exposure. Settlement is atomic on Solana mainnet via Jito bundles. PnL is public; order details are not.
+DarkBook is a **size-private** central limit order book (CLOB) for perpetual futures on Solana. Orders match on a MagicBlock Ephemeral Rollup at sub-50ms latency. Exact lot size is bound by a SHA-256 commitment and revealed only at settlement. Side, price, leverage, size band (Small/Med/Large/Whale), and trader pubkey remain public on the book account. Settlement is atomic on Solana mainnet. PnL after fill is public.
 
-This is the institutional-perps thesis on Solana: traders who refuse to broadcast position size to a public mempool now have a venue that matches Hyperliquid speed without the centralization tradeoff.
+This is a performance-privacy tradeoff for Solana perps: hide exact size from mempool snipers without ZK prover latency, accept residual trust in the ER validator and settler path.
 
 - Architecture: see [ARCHITECTURE.md](./ARCHITECTURE.md)
+- Privacy truth table: [docs/PRIVACY_MODEL.md](./docs/PRIVACY_MODEL.md)
 
 ---
 
@@ -28,8 +30,8 @@ This is the institutional-perps thesis on Solana: traders who refuse to broadcas
                          │ 1. place_order(side, price_ticks,
                          │    size_band, leverage_bps, commitment)
                          │    commitment = sha256(salt || size || lev || trader)
-                         │    Public: side, price, size_band (Small/Med/Large/Whale)
-                         │    Hidden: exact size, exact leverage, trader identity
+                         │    Public: side, price, size_band, leverage, trader
+                         │    Hidden until settlement: exact size_lots
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  MAGICBLOCK EPHEMERAL ROLLUP                                    │
@@ -64,15 +66,24 @@ This is the institutional-perps thesis on Solana: traders who refuse to broadcas
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Privacy Model
+### Privacy Model (honest)
 
-ZK ElGamal is disabled on devnet. DarkBook uses a commitment scheme instead:
+Full table: [docs/PRIVACY_MODEL.md](./docs/PRIVACY_MODEL.md). Short version:
 
-- Off-chain: trader encrypts `(size_lots, leverage_bps, salt)` with ECIES
-- On-chain order stores: `commitment = sha256(salt || size_lots_le || leverage_bps_le || trader_pubkey)`
-- Public on-chain: side (Long/Short), price_ticks, size_band (Small/Med/Large/Whale), market
-- At settlement: settler reveals plaintext, contract verifies sha256 matches commitment
-- Result: order books are fully visible to ER validators; order size is hidden from mempool observers and competing traders
+| Field | Pre-settlement public? | Notes |
+|-------|------------------------|-------|
+| side, price_ticks | yes | required for CLOB price-time matching |
+| size_band | yes | Small / Medium / Large / Whale ceiling |
+| leverage_bps | yes | stored on Order account and events |
+| trader pubkey | yes | stored on Order; needed for collateral / claim |
+| exact size_lots | **no** | only SHA-256 commitment until claim_fill |
+| salt | no | held by trader + settler channel |
+
+- Off-chain: trader can encrypt payload with ECIES for the settler channel
+- On-chain: `commitment = sha256(salt || size_lots_le || leverage_bps_le || trader_pubkey)`
+- At settlement: plaintext revealed, contract verifies commitment, Position opens
+- Residual trust: MagicBlock ER validator sees book accounts; settler sees plaintext sizes
+- Not claimed: full dark pool, identity hide, or "Hyperliquid cannot copy"
 
 ### Mermaid (collapsible view)
 

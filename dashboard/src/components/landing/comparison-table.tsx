@@ -20,12 +20,12 @@ const protocols: Protocol[] = [
   {
     name: "DarkBook",
     highlight: true,
-    privacy: "yes",
+    privacy: "partial",
     latency: "<50ms",
-    decentralization: "yes",
+    decentralization: "partial",
     maxLeverage: "20x",
     settlement: "Solana Mainnet",
-    mevResistant: "yes",
+    mevResistant: "partial",
   },
   {
     name: "Hyperliquid",

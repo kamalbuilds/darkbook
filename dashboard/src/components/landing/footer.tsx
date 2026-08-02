@@ -30,14 +30,14 @@ export function Footer() {
             </div>
             <div>
               <div className="font-mono font-bold text-zinc-100">DarkBook</div>
-              <div className="font-mono text-[11px] text-zinc-600">Private orders. Public PnL. Sub-50ms matching.</div>
+              <div className="font-mono text-[11px] text-zinc-600">Size private until settlement. Public PnL. Sub-50ms matching.</div>
             </div>
           </div>
 
           {/* Links */}
           <div className="flex items-center gap-6">
             <a
-              href="https://github.com"
+              href="https://github.com/kamalbuilds/darkbook"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors text-sm font-mono"
@@ -46,7 +46,7 @@ export function Footer() {
               GitHub
             </a>
             <a
-              href="https://twitter.com"
+              href="https://x.com/kamalbuilds"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors text-sm font-mono"

@@ -100,11 +100,11 @@ export function OrderBookTeaser() {
             ORDER BOOK
           </div>
           <h2 className="font-mono font-bold text-4xl md:text-5xl text-zinc-100 tracking-tight mb-4">
-            Private orders.{" "}
-            <span className="text-zinc-500">Hidden sizes.</span>
+            Exact size committed.{" "}
+            <span className="text-zinc-500">Band public.</span>
           </h2>
           <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-            Order sizes are encrypted — only the size band is visible. MEV bots see nothing actionable.
+            Book shows side, price, and size band. Exact lot size stays behind SHA-256 until settlement.
           </p>
         </motion.div>
 

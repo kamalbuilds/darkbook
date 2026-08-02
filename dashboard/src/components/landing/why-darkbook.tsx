@@ -8,10 +8,10 @@ const pillars = [
     icon: Shield,
     iconColor: "text-emerald-400",
     iconBg: "bg-emerald-400/10 border-emerald-400/20",
-    title: "Privacy-First Order Book",
+    title: "Size-Private Order Book",
     description:
-      "Order size and identity are encrypted off-chain with ECIES. Only a 32-byte commitment hash is stored on-chain. Your position size stays hidden until settlement — invisible to MEV bots and whale trackers.",
-    tags: ["ECIES Encryption", "Commitment Scheme", "MEV Resistant"],
+      "Exact size_lots are bound by a SHA-256 Dark Commit and revealed only at settlement. Side, price, leverage, size band, and trader remain public. Residual trust: ER validator and settler. No overclaim: this is size privacy, not a full dark pool.",
+    tags: ["Dark Commit", "Size Hidden", "Honest Model"],
   },
   {
     icon: Zap,
@@ -66,7 +66,7 @@ export function WhyDarkBook() {
             </span>
           </h2>
           <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-            Three properties that make DarkBook the only perps venue worth trading on Solana.
+            Three properties we actually ship: size commit privacy, ER matching speed, mainnet settlement.
           </p>
         </motion.div>
 

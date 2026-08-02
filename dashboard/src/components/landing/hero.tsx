@@ -31,7 +31,7 @@ export function Hero() {
           <a href="/positions" className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors">Positions</a>
           <a href="/leaderboard" className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors">Leaderboard</a>
           <a
-            href="https://github.com/aarav1656/darkbook"
+            href="https://github.com/kamalbuilds/darkbook"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
@@ -76,8 +76,8 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.35 }}
           className="text-zinc-400 text-lg md:text-xl max-w-2xl leading-relaxed mb-10 font-sans"
         >
-          Institutional perps on Solana, hidden from MEV.{" "}
-          <span className="text-zinc-300">Powered by MagicBlock Ephemeral Rollups.</span>
+          Exact size hidden until settlement. Side, price, and size band stay public.{" "}
+          <span className="text-zinc-300">MagicBlock ER matching under 50ms.</span>
         </motion.p>
 
         {/* CTAs */}
@@ -95,7 +95,7 @@ export function Hero() {
             <ArrowRight className="w-4 h-4" />
           </a>
           <a
-            href="https://github.com/aarav1656/darkbook"
+            href="https://github.com/kamalbuilds/darkbook"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900/60 px-6 py-3 text-sm font-mono text-zinc-300 hover:border-zinc-500 hover:text-zinc-100 transition-colors backdrop-blur-sm"
@@ -122,7 +122,7 @@ export function Hero() {
           {[
             { label: "Matching Latency", value: "<50ms", accent: "text-emerald-400" },
             { label: "Settlement", value: "On-chain", accent: "text-emerald-400/80" },
-            { label: "Privacy Model", value: "ECIES", accent: "text-zinc-300" },
+            { label: "Privacy Model", value: "Size commit", accent: "text-zinc-300" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className={`font-mono text-2xl font-bold ${stat.accent}`}>{stat.value}</div>
