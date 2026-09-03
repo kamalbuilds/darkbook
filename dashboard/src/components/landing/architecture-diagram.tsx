@@ -12,8 +12,8 @@ const nodes = [
 ];
 
 const edges = [
-  { from: "trader", to: "er", label: "Place Order (ECIES encrypted)", animated: true },
-  { from: "er", to: "settlement", label: "Match proof → Jito bundle", animated: true },
+  { from: "trader", to: "er", label: "Place Order (size commitment)", animated: true },
+  { from: "er", to: "settlement", label: "Fill → claim_fill (size revealed)", animated: true },
   { from: "pyth", to: "settlement", label: "Mark price feed", animated: false },
   { from: "settlement", to: "position", label: "Create PositionAccount", animated: true },
   { from: "pyth", to: "position", label: "Liquidation oracle", animated: false },
