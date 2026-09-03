@@ -77,9 +77,14 @@ DarkBook wedge that survives: **size-only commit-reveal on a Solana CLOB with ER
 3. Both team members apply individually (form rule).
 4. Regulatory note for India-facing pitch: perps are offshore for Indian retail (30% tax, 1% TDS). Pitch users as global MMs/funds, not Indian retail. Do not claim Indian retail demand.
 
+## Verified after writing
+
+- **MagicBlock ER mainnet is GA**: docs list mainnet validators us/eu/as/tee (`us.magicblock.app`, `MUS3hc9...`). 30-day mainnet plan is credible. Say it.
+- **darkbook-solana.vercel.app is STALE**: live HTML still says "Order size and identity are encrypted off-chain with ECIES... the only perps venue worth trading on Solana" (pre-autopsy overclaim). Repo copy is fixed (`0eceef9`, pushed to origin/master now). Ticker shows OFFLINE (ER WS not connected). Project is not in the `kamalishere` Vercel team, so redeploy must come from whichever account owns it. **Redeploy before judges click the link**, or point the form at the GitHub README + PRIVACY_MODEL.md and note the site is being redeployed.
+
 ## Blind spot
 
-Did not read Archer's mechanism docs (site empty) or confirm MagicBlock ER mainnet readiness in Sept 2026. If ER mainnet is not GA, the 30-day mainnet plan slips; say "capped devnet-to-mainnet" in the form.
+Did not read Archer's mechanism docs (site empty body). Did not click-test wallet flow on the dashboard (needs Phantom on devnet).
 
 ## Log
 
