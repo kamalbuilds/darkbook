@@ -62,7 +62,7 @@ DarkBook wedge that survives: **size-only commit-reveal on a Solana CLOB with ER
 
 ## Application angle (copy for the form)
 
-**Working on:** DarkBook, a size-private perps CLOB on Solana. Exact order size hidden via SHA-256 commitment until settlement; side, price, size band public. Matching on MagicBlock Ephemeral Rollup (<50ms), atomic settlement on Solana, Pyth Lazer marks, 8h funding, liquidations. Links: github.com/kamalbuilds/darkbook, darkbook-solana.vercel.app, devnet program `3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf`, docs/PRIVACY_MODEL.md.
+**Working on:** DarkBook, a size-private perps CLOB on Solana. Exact order size hidden via SHA-256 commitment until settlement; side, price, size band public. Matching on MagicBlock Ephemeral Rollup (<50ms), atomic settlement on Solana, Pyth Lazer marks, 8h funding, liquidations. Links: github.com/kamalbuilds/darkbook, darkbook-ascent.vercel.app, devnet program `3F99U2rZ2fob5NBgVTqQYqMq8whF4WUqiZXgeaYPE7yf`, docs/PRIVACY_MODEL.md.
 
 **Traction (honest):** Devnet live, e2e tests (bankrun), integrations built: MagicBlock ER, Pyth Lazer, Jito bundles, Helius, Encrypt/Ika bridges. Submitted to Colosseum Frontier 2026 (main + 3 sidetracks, did not place; published autopsy). Zero mainnet users. Blocker is not code, it is MM liquidity and a first cohort of size-sensitive traders.
 
@@ -80,7 +80,7 @@ DarkBook wedge that survives: **size-only commit-reveal on a Solana CLOB with ER
 ## Verified after writing
 
 - **MagicBlock ER mainnet is GA**: docs list mainnet validators us/eu/as/tee (`us.magicblock.app`, `MUS3hc9...`). 30-day mainnet plan is credible. Say it.
-- **darkbook-solana.vercel.app is STALE**: live HTML still says "Order size and identity are encrypted off-chain with ECIES... the only perps venue worth trading on Solana" (pre-autopsy overclaim). Repo copy is fixed (`0eceef9`, pushed to origin/master now). Ticker shows OFFLINE (ER WS not connected). Project is not in the `kamalishere` Vercel team, so redeploy must come from whichever account owns it. **Redeploy before judges click the link**, or point the form at the GitHub README + PRIVACY_MODEL.md and note the site is being redeployed.
+- **darkbook-solana.vercel.app is STALE**: live HTML still says "Order size and identity are encrypted off-chain with ECIES... the only perps venue worth trading on Solana" (pre-autopsy overclaim). Repo copy is fixed (`0eceef9`, pushed to origin/master now). Ticker shows OFFLINE (ER WS not connected). Old project is not in the `kamalishere` Vercel team. **Fixed by deploying a fresh copy: https://darkbook-ascent.vercel.app** (honest copy verified live, overclaim string count 0). Use this URL in the form. Also fixed dashboard build (`@wallet-standard/base` type import) and `dashboard/vercel.json` commands so any account can redeploy with root dir `dashboard`.
 
 ## Blind spot
 

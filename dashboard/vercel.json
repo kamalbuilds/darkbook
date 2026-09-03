@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd ../.. && bun install && cd dashboard && bun run build",
+  "buildCommand": "cd .. && bun run build:sdk && cd dashboard && bun run build",
   "outputDirectory": ".next",
-  "installCommand": "cd ../.. && bun install",
+  "installCommand": "cd .. && bun install",
   "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_RPC": "https://api.devnet.solana.com",

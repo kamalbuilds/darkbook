@@ -13,7 +13,6 @@ import {
   shieldPublicAtaToEncryptedBalance,
 } from "@darkbook/sdk";
 import type { IUmbraClient } from "@umbra-privacy/sdk/interfaces";
-import type { WalletAccount } from "@wallet-standard/base";
 
 let _umbraClient: IUmbraClient | null = null;
 
@@ -22,7 +21,7 @@ export function getUmbraClient(): IUmbraClient | null {
 }
 
 export async function initUmbraFromWallet(
-  walletAccount: WalletAccount,
+  walletAccount: Parameters<typeof createSignerFromWalletAccount>[0],
   rpcUrl: string,
 ): Promise<IUmbraClient | null> {
   if (_umbraClient) return _umbraClient;

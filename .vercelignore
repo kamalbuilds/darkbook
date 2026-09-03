@@ -1,0 +1,12 @@
+target
+node_modules
+.anchor
+test-ledger
+**/node_modules
+dashboard/.next
+programs
+migrations
+deck
+investor
+monitoring
+docs
