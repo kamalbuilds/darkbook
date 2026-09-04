@@ -1,0 +1,107 @@
+{
+ "key": "v1-c13",
+ "label": "Solana Privacy and Identity Management",
+ "summary": "This cluster focuses on enhancing security and anonymity on the Solana blockchain through decentralized identity verification, private DeFi protocols, and zero-knowledge data storage.",
+ "projectCount": 260,
+ "winnerCount": 15,
+ "representativeProjects": [
+  {
+   "slug": "solpass-1",
+   "name": "SolPass",
+   "oneLiner": "A decentralized password manager on Solana providing secure, private, and self-custodial credential storage.",
+   "isWinner": false
+  },
+  {
+   "slug": "zkyc",
+   "name": "Zkyc",
+   "oneLiner": "Privacy-preserving KYC platform using zero-knowledge proofs on Solana for secure, one-time identity verification.",
+   "isWinner": false
+  },
+  {
+   "slug": "veilvault",
+   "name": "VeilVault",
+   "oneLiner": "Privacy-first RWA fractionalization protocol using ZK-proofs for anonymous trading and selective disclosure.",
+   "isWinner": false
+  },
+  {
+   "slug": "encifher",
+   "name": "Encifher",
+   "oneLiner": "A privacy layer for Solana DeFi enabling encrypted on-chain actions and strategy execution without revealing alpha.",
+   "isWinner": true
+  },
+  {
+   "slug": "solana-id",
+   "name": "Solana ID",
+   "oneLiner": "Decentralized identity platform linking digital footprints to wallets for personalized rewards and seamless logins.",
+   "isWinner": false
+  }
+ ],
+ "topTags": {
+  "problemTags": [
+   {
+    "tag": "lack of financial privacy",
+    "count": 18
+   },
+   {
+    "tag": "sybil attacks",
+    "count": 13
+   },
+   {
+    "tag": "phishing attacks",
+    "count": 11
+   },
+   {
+    "tag": "identity theft",
+    "count": 10
+   },
+   {
+    "tag": "public transaction history",
+    "count": 10
+   }
+  ],
+  "primitives": [
+   {
+    "tag": "zk-proof",
+    "count": 66
+   },
+   {
+    "tag": "identity",
+    "count": 40
+   },
+   {
+    "tag": "wallet",
+    "count": 36
+   },
+   {
+    "tag": "encryption",
+    "count": 31
+   },
+   {
+    "tag": "token-gating",
+    "count": 25
+   }
+  ],
+  "techStack": [
+   {
+    "tag": "solana",
+    "count": 259
+   },
+   {
+    "tag": "rust",
+    "count": 132
+   },
+   {
+    "tag": "react",
+    "count": 96
+   },
+   {
+    "tag": "anchor",
+    "count": 56
+   },
+   {
+    "tag": "typescript",
+    "count": 51
+   }
+  ]
+ }
+}

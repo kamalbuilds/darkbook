@@ -1,0 +1,107 @@
+{
+ "key": "v1-c8",
+ "label": "Solana Yield and DeFi Optimization",
+ "summary": "This cluster focuses on simplifying decentralized finance through automated yield aggregation, lending platforms, and user-friendly savings tools primarily built on the Solana blockchain.",
+ "projectCount": 257,
+ "winnerCount": 29,
+ "representativeProjects": [
+  {
+   "slug": "solfi-lending-platform",
+   "name": "SolFi Lending Platform",
+   "oneLiner": "A user-friendly Solana lending platform featuring dynamic interest rates, real-time risk monitoring, and seedless onboar",
+   "isWinner": false
+  },
+  {
+   "slug": "hivefi",
+   "name": "HiveFI",
+   "oneLiner": "A DeFi platform providing simplified access to optimized yield-generating strategies.",
+   "isWinner": false
+  },
+  {
+   "slug": "carrot",
+   "name": "Carrot",
+   "oneLiner": "Automated yield aggregator using value-accruing liquid tokens to optimize DeFi returns directly in user wallets.",
+   "isWinner": true
+  },
+  {
+   "slug": "solnest",
+   "name": "SolNest ",
+   "oneLiner": "A simplified DeFi savings platform on Solana offering high yields and easy withdrawals.",
+   "isWinner": false
+  },
+  {
+   "slug": "sol-yieldhunter",
+   "name": "Sol YieldHunter",
+   "oneLiner": "Automated yield aggregator and optimizer for Solana DeFi protocols with risk-managed rebalancing.",
+   "isWinner": false
+  }
+ ],
+ "topTags": {
+  "problemTags": [
+   {
+    "tag": "fragmented liquidity",
+    "count": 29
+   },
+   {
+    "tag": "capital inefficiency",
+    "count": 25
+   },
+   {
+    "tag": "complex yield farming",
+    "count": 12
+   },
+   {
+    "tag": "high barrier to entry for defi",
+    "count": 9
+   },
+   {
+    "tag": "low capital efficiency",
+    "count": 8
+   }
+  ],
+  "primitives": [
+   {
+    "tag": "lending",
+    "count": 84
+   },
+   {
+    "tag": "staking",
+    "count": 78
+   },
+   {
+    "tag": "yield aggregator",
+    "count": 53
+   },
+   {
+    "tag": "stablecoin",
+    "count": 53
+   },
+   {
+    "tag": "stablecoins",
+    "count": 49
+   }
+  ],
+  "techStack": [
+   {
+    "tag": "solana",
+    "count": 257
+   },
+   {
+    "tag": "rust",
+    "count": 147
+   },
+   {
+    "tag": "anchor",
+    "count": 135
+   },
+   {
+    "tag": "react",
+    "count": 72
+   },
+   {
+    "tag": "typescript",
+    "count": 21
+   }
+  ]
+ }
+}

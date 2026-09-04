@@ -1,0 +1,107 @@
+{
+ "key": "v1-c16",
+ "label": "Stablecoin Payment Rails and Infrastructure",
+ "summary": "This cluster focuses on bridging digital and traditional finance through stablecoin-based payment systems that facilitate seamless cross-border transactions and instant fiat settlement.",
+ "projectCount": 202,
+ "winnerCount": 20,
+ "representativeProjects": [
+  {
+   "slug": "flowfi-pay",
+   "name": "FlowFi Pay",
+   "oneLiner": "Instant USDC-to-fiat payment gateway for businesses on Solana.",
+   "isWinner": false
+  },
+  {
+   "slug": "stablpay",
+   "name": "StablPay",
+   "oneLiner": "Cross-border payment infrastructure converting local currencies to stablecoins for seamless global settlement.",
+   "isWinner": false
+  },
+  {
+   "slug": "stableyard",
+   "name": "Stableyard",
+   "oneLiner": "A programmable infrastructure layer for stablecoin-based payments.",
+   "isWinner": false
+  },
+  {
+   "slug": "flipeet-pay",
+   "name": "Flipeet Pay",
+   "oneLiner": "A stablecoin payment rail providing seamless fiat on-ramp and off-ramp services.",
+   "isWinner": false
+  },
+  {
+   "slug": "crosspay",
+   "name": "CrossPay",
+   "oneLiner": "A crypto payment platform enabling seamless stablecoin-to-fiat transactions for merchants and consumers.",
+   "isWinner": false
+  }
+ ],
+ "topTags": {
+  "problemTags": [
+   {
+    "tag": "high remittance fees",
+    "count": 25
+   },
+   {
+    "tag": "slow cross-border payments",
+    "count": 16
+   },
+   {
+    "tag": "high cross-border fees",
+    "count": 13
+   },
+   {
+    "tag": "complex crypto onboarding",
+    "count": 12
+   },
+   {
+    "tag": "high transaction fees",
+    "count": 11
+   }
+  ],
+  "primitives": [
+   {
+    "tag": "payments",
+    "count": 124
+   },
+   {
+    "tag": "stablecoins",
+    "count": 103
+   },
+   {
+    "tag": "stablecoin",
+    "count": 83
+   },
+   {
+    "tag": "off-ramp",
+    "count": 37
+   },
+   {
+    "tag": "smart contracts",
+    "count": 24
+   }
+  ],
+  "techStack": [
+   {
+    "tag": "solana",
+    "count": 200
+   },
+   {
+    "tag": "react",
+    "count": 65
+   },
+   {
+    "tag": "rust",
+    "count": 39
+   },
+   {
+    "tag": "typescript",
+    "count": 30
+   },
+   {
+    "tag": "anchor",
+    "count": 26
+   }
+  ]
+ }
+}

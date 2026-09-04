@@ -1,0 +1,883 @@
+{
+ "results": [
+  {
+   "slug": "ellisium",
+   "name": "Ellisium",
+   "oneLiner": "Privacy-preserving dark pool on Solana using encrypted order pipelines to eliminate MEV and front-running.",
+   "similarity": 0.05625,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/dvrvsimi/ellisium",
+    "demo": null,
+    "presentation": "https://youtu.be/04YUYxPxBRI",
+    "technicalDemo": "https://youtu.be/JhelYKS12Qo",
+    "twitter": "https://twitter.com/dvrvsimi",
+    "colosseum": "https://colosseum.com/projects/explore/ellisium"
+   },
+   "evidence": [
+    "Dark pool on Solana Ellisium provides privacy-preserving",
+    "Privacy-preserving dark pool on Solana using encrypted order pipelines to eliminate MEV and front-running."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 1
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "mev extraction",
+     "front-running",
+     "order book transparency",
+     "information leakage"
+    ],
+    "solutionTags": [
+     "dark pool",
+     "encrypted order pipeline",
+     "private order matching",
+     "confidential computing"
+    ],
+    "primitives": [
+     "dark pool",
+     "encryption",
+     "dex",
+     "mev-protection"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "institutional traders",
+     "whale traders",
+     "defi traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "solbid",
+   "name": "Solbid",
+   "oneLiner": "A high-frequency, fully on-chain CLOB on Solana using ephemeral rollups for sub-50ms execution.",
+   "similarity": 0.054377880184331796,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/reubendsouza/Solbid",
+    "demo": null,
+    "presentation": "https://www.loom.com/",
+    "technicalDemo": "https://www.loom.com/",
+    "twitter": "https://twitter.com/Solbid17",
+    "colosseum": "https://colosseum.com/projects/explore/solbid"
+   },
+   "evidence": [
+    "SolBid is a blazing-fast, fully on-chain",
+    "A high-frequency, fully on-chain CLOB on Solana using ephemeral rollups for sub-50ms execution."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "high latency in on-chain trading",
+     "expensive transaction costs",
+     "centralized exchange risks",
+     "slow order execution"
+    ],
+    "solutionTags": [
+     "ephemeral rollups",
+     "clob engine",
+     "high-frequency trading infrastructure",
+     "on-chain matching"
+    ],
+    "primitives": [
+     "clob",
+     "order book",
+     "rollup",
+     "dex"
+    ],
+    "techStack": [
+     "solana",
+     "ephemeral rollups",
+     "rust",
+     "react"
+    ],
+    "targetUsers": [
+     "hft traders",
+     "defi users",
+     "market makers",
+     "institutional traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "mev-bot",
+   "name": "mev-bot",
+   "oneLiner": "An automated on-chain program for executing MEV strategies and arbitrage on the Solana blockchain.",
+   "similarity": 0.05011520737327189,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "renaissance/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/jito-labs/searcher-examples",
+    "demo": null,
+    "presentation": "https://jito-labs.gitbook.io/mev/searcher-resources/bundles",
+    "technicalDemo": null,
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/mev-bot"
+   },
+   "evidence": [
+    "Solana mev bot program",
+    "An automated on-chain program for executing MEV strategies and arbitrage on the Solana blockchain."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "mev extraction",
+     "arbitrage opportunities",
+     "transaction slippage"
+    ],
+    "solutionTags": [
+     "automated trading bot",
+     "on-chain mev program",
+     "transaction bundling"
+    ],
+    "primitives": [
+     "mev",
+     "arbitrage",
+     "on-chain program"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "mev searchers",
+     "arbitrageurs",
+     "defi traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "cypherdex.org",
+   "name": "cypherdex.org",
+   "oneLiner": "Confidential DEX layer on Solana using MPC and encrypted orders to prevent MEV and copy-trading.",
+   "similarity": 0.04917293233082706,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/AtharvPorate1/cypherdex",
+    "demo": null,
+    "presentation": "https://youtu.be/gZBej4Ps4ww",
+    "technicalDemo": "https://youtu.be/C9i_rg0H9mU",
+    "twitter": "https://twitter.com/Cypherdex_org",
+    "colosseum": "https://colosseum.com/projects/explore/cypherdex.org"
+   },
+   "evidence": [
+    "CypherDEX is the Confidential DEX Layer for Solana",
+    "Confidential DEX layer on Solana using MPC and encrypted orders to prevent MEV and copy-trading."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "mev frontrunning",
+     "copy-trading",
+     "herd behavior",
+     "lack of trade privacy"
+    ],
+    "solutionTags": [
+     "confidential spl tokens",
+     "mpc proofs",
+     "private intents",
+     "encrypted order submission"
+    ],
+    "primitives": [
+     "dex",
+     "mpc",
+     "confidential tokens",
+     "zk-proof"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "confidential spl"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "institutional traders",
+     "privacy-conscious users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "solana-cntt-16",
+   "name": "Solana CNTT-16",
+   "oneLiner": "A consumer-focused application built on Solana for the Radar hackathon.",
+   "similarity": 0.03125,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "Consumer",
+     "key": "radar/consumer"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/HoangHa2004/Solana",
+    "demo": null,
+    "presentation": "https://www.canva.com/design/DAGSh9i7zi0/uZucI2onmU0GTA80RBhdTg/edit",
+    "technicalDemo": null,
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/solana-cntt-16"
+   },
+   "evidence": [
+    "About my team\u2019s project",
+    "A consumer-focused application built on Solana for the Radar hackathon."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "lack of consumer dapps",
+     "complex blockchain interactions"
+    ],
+    "solutionTags": [
+     "user-friendly interface",
+     "solana-based infrastructure"
+    ],
+    "primitives": [
+     "token",
+     "smart-contracts"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "typescript"
+    ],
+    "targetUsers": [
+     "web3 consumers",
+     "solana users"
+    ]
+   },
+   "crowdedness": 223,
+   "cluster": {
+    "key": "v1-c26",
+    "label": "Simplified Solana Payment Solutions"
+   }
+  },
+  {
+   "slug": "rush-1",
+   "name": "Rush",
+   "oneLiner": "High-speed prediction market on Solana for 10-second price movement bets using ephemeral rollups.",
+   "similarity": 0.03981481481481482,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/dhruvja/tap-trading-mbe",
+    "demo": null,
+    "presentation": "https://youtu.be/OaBhgy-qMHI",
+    "technicalDemo": "https://www.loom.com/share/2664cdec83f84ab6b1b51fbc17a092ed",
+    "twitter": "https://twitter.com/rush_trade_app",
+    "colosseum": "https://colosseum.com/projects/explore/rush-1"
+   },
+   "evidence": [
+    "Crypto moves fast. Rush turns that volatility into",
+    "High-speed prediction market on Solana for 10-second price movement bets using ephemeral rollups."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "slow prediction market settlement",
+     "high latency in defi",
+     "friction in short-term trading"
+    ],
+    "solutionTags": [
+     "ephemeral rollups",
+     "high-frequency prediction markets",
+     "mobile-first trading"
+    ],
+    "primitives": [
+     "prediction market",
+     "rollups",
+     "oracle",
+     "settlement engine"
+    ],
+    "techStack": [
+     "solana",
+     "magicblock",
+     "ephemeral rollups",
+     "android",
+     "rust"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "degen traders",
+     "mobile crypto users"
+    ]
+   },
+   "crowdedness": 149,
+   "cluster": {
+    "key": "v1-c3",
+    "label": "Solana Prediction Markets"
+   }
+  },
+  {
+   "slug": "solana-dev-ai-helper",
+   "name": "Solana DEV AI Helper",
+   "oneLiner": "AI-powered assistant for building, debugging, and navigating the Solana development ecosystem.",
+   "similarity": 0.02857142857142857,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "AI",
+     "key": "breakout/ai"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/xilibi2003/solana-code-mcp",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/3bba93e97dc141359fb08eb09de58c6a?sid=86879db9-1446-4648-80dd-a7efcc4ee6a0",
+    "technicalDemo": "https://www.youtube.com/watch?v=lJD2HCBp95U",
+    "twitter": "https://twitter.com/tinyxiong_eth",
+    "colosseum": "https://colosseum.com/projects/explore/solana-dev-ai-helper"
+   },
+   "evidence": [
+    "Solana DEV AI Helper",
+    "AI-powered assistant for building, debugging, and navigating the Solana development ecosystem."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "high barrier to entry for solana dev",
+     "complex anchor syntax",
+     "debugging rust errors",
+     "fragmented documentation"
+    ],
+    "solutionTags": [
+     "ai-assisted development",
+     "natural language to code",
+     "automated error analysis",
+     "interactive dev bot"
+    ],
+    "primitives": [
+     "llm",
+     "ai-agent"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "openai",
+     "typescript"
+    ],
+    "targetUsers": [
+     "solana developers",
+     "rust engineers",
+     "web3 builders"
+    ]
+   },
+   "crowdedness": 325,
+   "cluster": {
+    "key": "v1-c14",
+    "label": "Solana AI Agent Infrastructure"
+   }
+  },
+  {
+   "slug": "solana-buildpack",
+   "name": "Solana Buildpack",
+   "oneLiner": "A Cloud Native Buildpack for automated installation and configuration of the Solana Tool Suite.",
+   "similarity": 0.027777777777777776,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "Infrastructure",
+     "key": "renaissance/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/amp-buildpacks/solana",
+    "demo": null,
+    "presentation": "https://github.com/amp-buildpacks/solana/blob/main/README.md",
+    "technicalDemo": null,
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/solana-buildpack"
+   },
+   "evidence": [
+    "A Cloud Native Buildpack that provides the Solana",
+    "A Cloud Native Buildpack for automated installation and configuration of the Solana Tool Suite."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "complex environment setup",
+     "inconsistent build environments",
+     "manual toolchain installation",
+     "ci/cd configuration overhead"
+    ],
+    "solutionTags": [
+     "cloud native buildpacks",
+     "automated toolchain provisioning",
+     "standardized build environments"
+    ],
+    "primitives": [
+     "infrastructure",
+     "developer tools"
+    ],
+    "techStack": [
+     "solana",
+     "cloud native buildpacks",
+     "docker",
+     "bash",
+     "rust"
+    ],
+    "targetUsers": [
+     "solana developers",
+     "devops engineers",
+     "smart contract developers"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c5",
+    "label": "Solana Data and Monitoring Infrastructure"
+   }
+  },
+  {
+   "slug": "isabilibrary",
+   "name": "IsabiLibrary ",
+   "oneLiner": "A decentralized digital library on Solana for censorship-resistant book publishing and ownership.",
+   "similarity": 0.025,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "RWAs",
+     "key": "cypherpunk/rwas"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "cypherpunk/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/iamspezekiel/isabilibrary",
+    "demo": null,
+    "presentation": "https://youtu.be/YtO-46jPVf0",
+    "technicalDemo": "https://youtu.be/bgKTycbkVyM",
+    "twitter": "https://twitter.com/isabilibrary",
+    "colosseum": "https://colosseum.com/projects/explore/isabilibrary"
+   },
+   "evidence": [
+    "Decentralized Digital Books Library on Solana",
+    "A decentralized digital library on Solana for censorship-resistant book publishing and ownership."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "centralized content control",
+     "lack of digital ownership",
+     "high publishing fees"
+    ],
+    "solutionTags": [
+     "decentralized storage",
+     "nft-based access",
+     "on-chain metadata"
+    ],
+    "primitives": [
+     "nft",
+     "token-gating",
+     "stablecoins"
+    ],
+    "techStack": [
+     "solana"
+    ],
+    "targetUsers": [
+     "readers",
+     "authors",
+     "collectors"
+    ]
+   },
+   "crowdedness": 192,
+   "cluster": {
+    "key": "v1-c12",
+    "label": "Blockchain Music and Royalty Platforms"
+   }
+  },
+  {
+   "slug": "match",
+   "name": "Match",
+   "oneLiner": "A decentralized marketplace on Solana connecting buyers and sellers for optimized product and service discovery.",
+   "similarity": 0.024390243902439025,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "Payments",
+     "key": "radar/payments"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/kingsmennn/match-solana",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/bc0b315cb2b44c00a1bcf03224831c33",
+    "technicalDemo": null,
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/match"
+   },
+   "evidence": [
+    "Match is a decentralized application (dApp) built on",
+    "A decentralized marketplace on Solana connecting buyers and sellers for optimized product and service discovery."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "centralized marketplace fees",
+     "inefficient price discovery",
+     "intermediary friction"
+    ],
+    "solutionTags": [
+     "p2p marketplace",
+     "on-chain matching engine",
+     "decentralized commerce"
+    ],
+    "primitives": [
+     "payments",
+     "escrow",
+     "smart contracts"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "online shoppers",
+     "independent sellers",
+     "e-commerce merchants"
+    ]
+   },
+   "crowdedness": 184,
+   "cluster": {
+    "key": "v1-c11",
+    "label": "Solana-Based Decentralized E-commerce"
+   }
+  },
+  {
+   "slug": "blockberg",
+   "name": "Blockberg ",
+   "oneLiner": "A professional crypto trading terminal on Solana featuring gasless paper trading and real-time data.",
+   "similarity": 0.042630385487528344,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Undefined",
+     "key": "cypherpunk/undefined"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/neot3/blockberg",
+    "demo": null,
+    "presentation": "https://youtu.be/ThNk-XLwH90",
+    "technicalDemo": "https://youtu.be/K_xvfNAKBIM",
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/blockberg"
+   },
+   "evidence": [
+    "The Bloomberg Terminal for Crypto only on Solana",
+    "A professional crypto trading terminal on Solana featuring gasless paper trading and real-time data."
+   ],
+   "prize": null,
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented trading data",
+     "high gas fees for practice",
+     "lack of professional trading interfaces",
+     "limited paper trading options"
+    ],
+    "solutionTags": [
+     "ephemeral runtime execution",
+     "unified trading terminal",
+     "oracle-integrated competitions",
+     "gasless simulation"
+    ],
+    "primitives": [
+     "oracle",
+     "ephemeral rollups",
+     "paper trading",
+     "derivatives"
+    ],
+    "techStack": [
+     "solana",
+     "magicblock",
+     "pyth",
+     "react",
+     "vercel"
+    ],
+    "targetUsers": [
+     "crypto traders",
+     "defi users",
+     "professional traders",
+     "trading enthusiasts"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "mato",
+   "name": "Mato",
+   "oneLiner": "A DEX implementing a time-weighted order book for continuous, streaming order execution and MEV protection.",
+   "similarity": 0.04242424242424242,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/nightshade-labs/mato-ui",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/fa0120c4beb14e749adf775975d7f1af",
+    "technicalDemo": "https://www.loom.com/share/0fb1edef164643c691db83d9d1c77173",
+    "twitter": "https://twitter.com/MatoExchange",
+    "colosseum": "https://colosseum.com/projects/explore/mato"
+   },
+   "evidence": [
+    "Mato is a DEX that implements a time",
+    "A DEX implementing a time-weighted order book for continuous, streaming order execution and MEV protection."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 3
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "front-running",
+     "high price impact",
+     "toxic flow",
+     "mev"
+    ],
+    "solutionTags": [
+     "time-weighted order book",
+     "continuous execution",
+     "streaming trades"
+    ],
+    "primitives": [
+     "dex",
+     "order book",
+     "liquidity provision"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "liquidity providers",
+     "institutional traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  }
+ ],
+ "filtersApplied": {},
+ "totalFound": 13,
+ "hasMore": true
+}

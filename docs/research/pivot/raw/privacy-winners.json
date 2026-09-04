@@ -1,0 +1,1256 @@
+{
+ "results": [
+  {
+   "slug": "blackpool",
+   "name": "Blackpool",
+   "oneLiner": "A privacy-preserving, MEV-resistant decentralized exchange on Solana using zero-knowledge proofs.",
+   "similarity": 0.09032258064516129,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "radar/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/vitorpy/cyklon",
+    "demo": null,
+    "presentation": "https://drive.proton.me/urls/6CMM1YVN8C#O7MWVtEGNi8Y",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://x.com/blackpooldao",
+    "colosseum": "https://colosseum.com/projects/explore/blackpool"
+   },
+   "evidence": [
+    "with lightning-fast, private, and MEV-resistant trades. Our secret weapon? Privacy-preserving execution powered by zero-knowledge proofs. This cutting-edge technology shields your trades from prying eyes while maintaining transparency. Say ",
+    "A privacy-preserving, MEV-resistant decentralized exchange on Solana using zero-knowledge proofs."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - DeFi",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "DeFi"
+   },
+   "accelerator": {
+    "companySlug": "darklake-1",
+    "companyName": "DARKLAKE",
+    "batchKey": "accelerator/c2",
+    "batchName": "C2"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "front-running",
+     "mev exploitation",
+     "lack of trade privacy",
+     "inefficient execution"
+    ],
+    "solutionTags": [
+     "zk-proof execution",
+     "private order matching",
+     "mev-resistant dex",
+     "shielded transactions"
+    ],
+    "primitives": [
+     "dex",
+     "zk-proof",
+     "mev-protection",
+     "privacy"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "zero-knowledge proofs"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "institutional investors",
+     "privacy-conscious users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "encifher",
+   "name": "Encifher",
+   "oneLiner": "A privacy layer for Solana DeFi enabling encrypted on-chain actions and strategy execution without revealing alpha.",
+   "similarity": 0.07903582485625829,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/RizeLabs/encifher-vaults",
+    "demo": null,
+    "presentation": "https://youtu.be/bR2cwWmASy0",
+    "technicalDemo": "https://youtu.be/1LHF4lHOzbo",
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/encifher"
+   },
+   "evidence": [
+    "Encifher enable private DeFi on Solana The core",
+    "A privacy layer for Solana DeFi enabling encrypted on-chain actions and strategy execution without revealing alpha."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "3rd Place - DeFi",
+    "placement": 3,
+    "amount": 15000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 5
+   },
+   "tags": {
+    "problemTags": [
+     "alpha leakage",
+     "public transaction history",
+     "lack of privacy on solana",
+     "forced bridging for privacy"
+    ],
+    "solutionTags": [
+     "encrypted on-chain actions",
+     "private defi layer",
+     "confidential transactions",
+     "compliant privacy"
+    ],
+    "primitives": [
+     "zk-proofs",
+     "encryption",
+     "confidential transfers",
+     "defi"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "institutional investors",
+     "strategy developers"
+    ]
+   },
+   "crowdedness": 260,
+   "cluster": {
+    "key": "v1-c13",
+    "label": "Solana Privacy and Identity Management"
+   }
+  },
+  {
+   "slug": "urani",
+   "name": "URANI",
+   "oneLiner": "Intent-based swap aggregator on Solana providing MEV protection and price optimization for secure trading.",
+   "similarity": 0.07375933245498463,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    },
+    {
+     "name": "Consumer Apps",
+     "key": "renaissance/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/urani-labs",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/84014b7877ab42e6929c0f381cbb8cd1?sid=545d0aaa-57b6-424c-8b6e-8a3239d615d0",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/urani_labs",
+    "colosseum": "https://colosseum.com/projects/explore/urani"
+   },
+   "evidence": [
+    "Solana's intent-based swap aggregator, bringing protection against toxic MEV at the application layer and ensuring secure trading for the next billion users. Together with limit orders by design, a competitive liquidity marketplace",
+    "Intent-based swap aggregator on Solana providing MEV protection and price optimization for secure trading."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - DeFi & Payments",
+    "placement": 1,
+    "amount": 30000,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": {
+    "companySlug": "urani",
+    "companyName": "Urani",
+    "batchKey": "accelerator/c1",
+    "batchName": "C1"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "toxic mev",
+     "slippage",
+     "front-running",
+     "sandwich attacks",
+     "inefficient price discovery"
+    ],
+    "solutionTags": [
+     "intent-based swaps",
+     "swap aggregation",
+     "mev mitigation",
+     "batch auctions",
+     "liquidity marketplace"
+    ],
+    "primitives": [
+     "dex aggregator",
+     "limit orders",
+     "mev protection",
+     "intents"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "market makers",
+     "searchers",
+     "retail users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "shadow-book",
+   "name": "Shadow Book",
+   "oneLiner": "FHE infrastructure for the SVM enabling non-interactive shared private state and compliant confidentiality.",
+   "similarity": 0.07316017316017316,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "AI",
+     "key": "breakout/ai"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/kkoshiya/svm-fhe",
+    "demo": null,
+    "presentation": "https://youtu.be/FWxCFTDNoEQ",
+    "technicalDemo": "https://youtu.be/g9EZaFD2IV0",
+    "twitter": "https://twitter.com/cipherbaylabs",
+    "colosseum": "https://colosseum.com/projects/explore/shadow-book"
+   },
+   "evidence": [
+    "order to operate through on-chain pointers without decrypting their respective ciphertexts. We are focusing on compliant confidentiality versus anonymity/obfuscation. Our demo use cases, are Dark Pools, Agent Frame work Integration, encrypt",
+    "FHE infrastructure for the SVM enabling non-interactive shared private state and compliant confidentiality."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - Infrastructure",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "Infrastructure"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "on-chain data transparency",
+     "lack of private state on svm",
+     "complex interactive privacy protocols",
+     "regulatory compliance in privacy"
+    ],
+    "solutionTags": [
+     "fully homomorphic encryption",
+     "symbolic execution",
+     "encrypted orderbooks",
+     "encrypted rag"
+    ],
+    "primitives": [
+     "fhe",
+     "dark pool",
+     "confidential computing",
+     "svm"
+    ],
+    "techStack": [
+     "solana",
+     "svm",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "ai agents",
+     "privacy-focused developers",
+     "institutional investors"
+    ]
+   },
+   "crowdedness": 260,
+   "cluster": {
+    "key": "v1-c13",
+    "label": "Solana Privacy and Identity Management"
+   }
+  },
+  {
+   "slug": "archer-exchange",
+   "name": "Archer Exchange",
+   "oneLiner": "MEV-resistant exchange primitive using dual flow batch auctions to protect market makers and traders.",
+   "similarity": 0.07144607843137254,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "cypherpunk/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/Archer-Exchange/toy-dfba",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/cf7f20166bf744cba921fda1a2c43c6f",
+    "technicalDemo": "https://www.loom.com/share/2801b13bc3174b1f870830abcbcb69a3",
+    "twitter": "https://twitter.com/ArcherExchange_",
+    "colosseum": "https://colosseum.com/projects/explore/archer-exchange"
+   },
+   "evidence": [
+    "Archer is an MEV resistant exchange primitive that delivers the most competitive prices for traders by shielding market makers from adverse selection and latency wars. Our novel matching engine allows market makers to compete purely",
+    "MEV-resistant exchange primitive using dual flow batch auctions to protect market makers and traders."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "4th Place - DeFi",
+    "placement": 4,
+    "amount": 10000,
+    "trackName": "DeFi"
+   },
+   "accelerator": {
+    "companySlug": "archer-exchange",
+    "companyName": "Archer Exchange",
+    "batchKey": "accelerator/c4",
+    "batchName": "C4"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "mev extraction",
+     "adverse selection",
+     "latency competition",
+     "toxic flow"
+    ],
+    "solutionTags": [
+     "dual flow batch auctions",
+     "batch matching engine",
+     "fair price discovery"
+    ],
+    "primitives": [
+     "dex",
+     "batch auction",
+     "mev protection",
+     "matching engine"
+    ],
+    "techStack": [
+     "solana"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "market makers",
+     "institutional liquidity providers"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "vanish",
+   "name": "Vanish ",
+   "oneLiner": "On-chain privacy solution for Solana enabling private SPL-native swaps through trade routing and position pooling.",
+   "similarity": 0.06793028322440087,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/vanish-trade/vanish-main",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/5ae45f2027ee4aa0ba46643927272cc8?sid=088434de-be27-406a-a78a-42dcfdda0509",
+    "technicalDemo": "https://www.youtube.com/watch?v=Kk3KOY6Ot28",
+    "twitter": "https://twitter.com/vanishtrade",
+    "colosseum": "https://colosseum.com/projects/explore/vanish"
+   },
+   "evidence": [
+    "allows anyone from high-volume traders, token teams, institutions and everyday users to execute large SPL-native swaps without leaving a public trail. By combining smart trade routing with position pooling, Vanish prevents wallet-tracking",
+    "On-chain privacy solution for Solana enabling private SPL-native swaps through trade routing and position pooling."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - DeFi",
+    "placement": 1,
+    "amount": 25000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 8
+   },
+   "tags": {
+    "problemTags": [
+     "wallet tracking",
+     "copy-trading",
+     "on-chain correlation",
+     "public trade history"
+    ],
+    "solutionTags": [
+     "smart trade routing",
+     "position pooling",
+     "private swaps",
+     "traceable privacy"
+    ],
+    "primitives": [
+     "privacy",
+     "dex",
+     "swap",
+     "position pooling",
+     "spl-token"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "high-volume traders",
+     "token teams",
+     "institutions",
+     "defi users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "mato",
+   "name": "Mato",
+   "oneLiner": "A DEX implementing a time-weighted order book for continuous, streaming order execution and MEV protection.",
+   "similarity": 0.0664934164934165,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/nightshade-labs/mato-ui",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/fa0120c4beb14e749adf775975d7f1af",
+    "technicalDemo": "https://www.loom.com/share/0fb1edef164643c691db83d9d1c77173",
+    "twitter": "https://twitter.com/MatoExchange",
+    "colosseum": "https://colosseum.com/projects/explore/mato"
+   },
+   "evidence": [
+    "Mato is a DEX that implements a time-weighted order book (TWOB) for order matching and settlement. The TWOB is a new market structure designed to fix the fundamental flaws in financial markets. Instead",
+    "A DEX implementing a time-weighted order book for continuous, streaming order execution and MEV protection."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 3
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "front-running",
+     "high price impact",
+     "toxic flow",
+     "mev"
+    ],
+    "solutionTags": [
+     "time-weighted order book",
+     "continuous execution",
+     "streaming trades"
+    ],
+    "primitives": [
+     "dex",
+     "order book",
+     "liquidity provision"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "liquidity providers",
+     "institutional traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "cloak-or-solana-privacy-layer",
+   "name": "Cloak | Solana Privacy Layer",
+   "oneLiner": "A privacy layer for Solana enabling anonymous payments through decentralized pools and miner-driven anonymity sets.",
+   "similarity": 0.062152475055700866,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "cypherpunk/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/Machine-Labz/cloak",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/d46a6ee19449467d815ab719e4ee6ccc",
+    "technicalDemo": "https://youtu.be/csxQMtTNtuk",
+    "twitter": "https://twitter.com/cloaklabz",
+    "colosseum": "https://colosseum.com/projects/explore/cloak-or-solana-privacy-layer"
+   },
+   "evidence": [
+    "only sees \u201cpool \u2192 recipient,\u201d never \u201csender \u2192 recipient,\u201d while every new deposit and mined withdrawal expands the overall anonymity set. Cloak keeps the system running smoothly and decentralized \u2014 users transact privately, miners earn rewa",
+    "A privacy layer for Solana enabling anonymous payments through decentralized pools and miner-driven anonymity sets."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "3rd Place - Stablecoins",
+    "placement": 3,
+    "amount": 15000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": {
+    "companySlug": "cloak",
+    "companyName": "Cloak",
+    "batchKey": "accelerator/c4",
+    "batchName": "C4"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "transaction traceability",
+     "public ledger exposure",
+     "lack of financial privacy"
+    ],
+    "solutionTags": [
+     "privacy pool",
+     "transaction mixing",
+     "miner-generated volume"
+    ],
+    "primitives": [
+     "privacy pool",
+     "token-mixing",
+     "incentivized mining"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "privacy-conscious users",
+     "defi traders",
+     "crypto miners"
+    ]
+   },
+   "crowdedness": 260,
+   "cluster": {
+    "key": "v1-c13",
+    "label": "Solana Privacy and Identity Management"
+   }
+  },
+  {
+   "slug": "bananazone",
+   "name": "BananaZone",
+   "oneLiner": "A gamified trading platform combining perpetual swaps and prediction markets with a high-energy, chaotic UX.",
+   "similarity": 0.05349787810148663,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Gaming",
+     "key": "breakout/gaming"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/memeworldorg/banana-contracts",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/b0f2da18d954421289248a116668a0a5?sid=4ee81bbb-40be-4ac2-9bfc-3aef7e9fad59",
+    "technicalDemo": "https://www.loom.com/share/500d32c6d339499584ee1d3ffe150649?sid=e6f96231-5eea-4167-921e-535089f07cdc",
+    "twitter": "https://twitter.com/BananaZoneApp",
+    "colosseum": "https://colosseum.com/projects/explore/bananazone"
+   },
+   "evidence": [
+    "Welcome to the Banana Zone. A new trading",
+    "A gamified trading platform combining perpetual swaps and prediction markets with a high-energy, chaotic UX."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "4th Place - DeFi",
+    "placement": 4,
+    "amount": 10000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 1
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "boring trading interfaces",
+     "lack of engagement in defi",
+     "fragmented prediction and perp markets"
+    ],
+    "solutionTags": [
+     "gamified ux",
+     "social trading",
+     "unified perp and prediction platform"
+    ],
+    "primitives": [
+     "perpetual swaps",
+     "prediction markets",
+     "amm"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "degen traders",
+     "crypto gamers",
+     "prediction market participants"
+    ]
+   },
+   "crowdedness": 149,
+   "cluster": {
+    "key": "v1-c3",
+    "label": "Solana Prediction Markets"
+   }
+  },
+  {
+   "slug": "exponent",
+   "name": "Exponent",
+   "oneLiner": "A yield derivatives protocol on Solana for trading, hedging, and fixing yields of DeFi products.",
+   "similarity": 0.05142857142857143,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "renaissance/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/exponent-finance/xpon",
+    "demo": null,
+    "presentation": "https://docsend.com/view/rgra8a9ed7pk2ej3",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/ExponentFinance",
+    "colosseum": "https://colosseum.com/projects/explore/exponent"
+   },
+   "evidence": [
+    "team of three (ex Kamino, Solana, Raydium), Exponent is a derivatives protocol for trading the yield of DeFi products on Solana. It enables DeFi participants to have better yield control and predictability over their positions",
+    "A yield derivatives protocol on Solana for trading, hedging, and fixing yields of DeFi products."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "5th Place - DeFi & Payments",
+    "placement": 5,
+    "amount": 5000,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "volatile defi yields",
+     "unpredictable borrowing costs",
+     "lack of yield hedging tools",
+     "yield risk management"
+    ],
+    "solutionTags": [
+     "yield derivatives",
+     "yield stripping",
+     "fixed-rate lending",
+     "yield trading"
+    ],
+    "primitives": [
+     "derivatives",
+     "yield-bearing tokens",
+     "amm",
+     "fixed-rate"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "liquidity providers",
+     "yield farmers",
+     "institutional investors"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "h2o-finance",
+   "name": "H2O Finance",
+   "oneLiner": "Splits Solana validator yield into issuance and MEV components for targeted speculation and hedging.",
+   "similarity": 0.05,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/H2O-Nodes-GmbH/h2o.finance",
+    "demo": null,
+    "presentation": "https://youtu.be/OhqZyzc5d1k",
+    "technicalDemo": "https://youtu.be/lAl0E_db254",
+    "twitter": "https://twitter.com/H2Oyield",
+    "colosseum": "https://colosseum.com/projects/explore/h2o-finance"
+   },
+   "evidence": [
+    "Solana MEV rewards. By splitting validator yield into its components (issuance rewards & MEV) you can allocate your capital torward only the yield you want. The MEV token's trading on dexes and rate-trading protocols",
+    "Splits Solana validator yield into issuance and MEV components for targeted speculation and hedging."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 4
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "undifferentiated validator yield",
+     "lack of mev hedging tools",
+     "on-chain activity volatility"
+    ],
+    "solutionTags": [
+     "yield stripping",
+     "mev tokenization",
+     "rate trading"
+    ],
+    "primitives": [
+     "liquid staking",
+     "mev",
+     "yield stripping",
+     "tokenization"
+    ],
+    "techStack": [
+     "solana",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "validators",
+     "yield farmers"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "destreet:-trade-onchain-with-friends",
+   "name": "DeStreet: Trade onchain with friends",
+   "oneLiner": "A non-custodial social trading platform on Solana Mobile for sharing and joining trades via links.",
+   "similarity": 0.04725218284540318,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DAOs & Communities",
+     "key": "renaissance/daos--communities"
+    },
+    {
+     "name": "Consumer Apps",
+     "key": "renaissance/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/DeStreetDAO/destreet-monorepo",
+    "demo": null,
+    "presentation": "https://www.youtube.com/watch?v=9eRZkIt9gD0",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/destreetdapp",
+    "colosseum": "https://colosseum.com/projects/explore/destreet:-trade-onchain-with-friends"
+   },
+   "evidence": [
+    "DeStreet is a non-custodial dApp built on",
+    "A non-custodial social trading platform on Solana Mobile for sharing and joining trades via links."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - DAOs & Communities",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "DAOs & Communities"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented social trading",
+     "custodial risk in copy trading",
+     "complex trade execution for groups",
+     "lack of mobile-native defi"
+    ],
+    "solutionTags": [
+     "vault-based trade execution",
+     "link-based trade sharing",
+     "non-custodial asset management",
+     "mobile dapp"
+    ],
+    "primitives": [
+     "vault",
+     "amm",
+     "social trading",
+     "non-custodial",
+     "smart contract"
+    ],
+    "techStack": [
+     "solana",
+     "jupiter",
+     "solana mobile stack",
+     "saga",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "social media influencers",
+     "crypto communities",
+     "mobile users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "earlybird",
+   "name": "Earlybird",
+   "oneLiner": "A platform for trading tokenized shares of private companies like OpenAI and SpaceX on-chain.",
+   "similarity": 0.043859649122807015,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "AI",
+     "key": "breakout/ai"
+    },
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/Try-Early-Bird/earlybird-solana-program",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/d9fb8fb7ca8a4cde95ccf859a66d9f7c?sid=a402ea36-6908-497a-97c9-f01c5c2cce9c",
+    "technicalDemo": "https://youtu.be/rZXiWQenxhc",
+    "twitter": "https://twitter.com/joinearlybird",
+    "colosseum": "https://colosseum.com/projects/explore/earlybird"
+   },
+   "evidence": [
+    "Earlybird enables you to trade your favorite private",
+    "A platform for trading tokenized shares of private companies like OpenAI and SpaceX on-chain."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "illiquidity of private equity",
+     "limited access to pre-ipo companies",
+     "high entry barriers for private markets"
+    ],
+    "solutionTags": [
+     "tokenized equity",
+     "on-chain secondary market",
+     "fractionalized ownership"
+    ],
+    "primitives": [
+     "tokenization",
+     "rwa",
+     "amm",
+     "secondary market"
+    ],
+    "techStack": [
+     "solana"
+    ],
+    "targetUsers": [
+     "retail investors",
+     "private equity holders",
+     "defi traders"
+    ]
+   },
+   "crowdedness": 204,
+   "cluster": {
+    "key": "v1-c1",
+    "label": "Solana Real Estate Tokenization"
+   }
+  },
+  {
+   "slug": "toaster.trade",
+   "name": "toaster.trade",
+   "oneLiner": "TikTok-style social trading platform for Solana perpetuals powered by Hyperliquid.",
+   "similarity": 0.04342046964997785,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/toaster-trade/colosseum-hackathon",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/a0facf4c80e0430e8578a8dc3faed259",
+    "technicalDemo": "https://youtu.be/DQYa-UoO8Pc",
+    "twitter": "https://twitter.com/ToasterDotTrade",
+    "colosseum": "https://colosseum.com/projects/explore/toaster.trade"
+   },
+   "evidence": [
+    "TikTok of casual trading for Solana, powered by",
+    "TikTok-style social trading platform for Solana perpetuals powered by Hyperliquid."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "4th Place - Consumer Apps",
+    "placement": 4,
+    "amount": 10000,
+    "trackName": "Consumer Apps"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 2
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "complex trading interfaces",
+     "high barrier to entry for perps",
+     "low engagement in defi"
+    ],
+    "solutionTags": [
+     "gamified trading feed",
+     "abstracted cross-chain liquidity",
+     "social discovery"
+    ],
+    "primitives": [
+     "perpetual exchange",
+     "social trading",
+     "order book"
+    ],
+    "techStack": [
+     "solana",
+     "hyperliquid",
+     "react native"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "casual investors",
+     "mobile users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "prism",
+   "name": "Prism",
+   "oneLiner": "A browser extension wallet and trading suite for seamless token discovery and execution across the web.",
+   "similarity": 0.043255813953488376,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/PRISM-Aggregator/prism-extension",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/8491d17edc1841299df264c3b5d5f221?sid=40f6f9d6-dfbc-4200-813a-53f4d2f0279d",
+    "technicalDemo": "https://www.loom.com/share/49d61993b24346bc8a43ac91ba320160?sid=340c8873-4ac0-42b7-8469-b3a174869d39",
+    "twitter": "https://twitter.com/prism_wallet",
+    "colosseum": "https://colosseum.com/projects/explore/prism"
+   },
+   "evidence": [
+    "A wallet for daytraders and memecoin enjoyers. Prism",
+    "A browser extension wallet and trading suite for seamless token discovery and execution across the web."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented trading experience",
+     "slow execution on social media",
+     "manual token address copying",
+     "clunky wallet interfaces"
+    ],
+    "solutionTags": [
+     "browser extension wallet",
+     "in-page trading overlay",
+     "automated token detection",
+     "social media integration"
+    ],
+    "primitives": [
+     "wallet",
+     "dex-aggregator",
+     "token-swap"
+    ],
+    "techStack": [
+     "solana",
+     "javascript",
+     "chrome-extension-api",
+     "react"
+    ],
+    "targetUsers": [
+     "memecoin traders",
+     "daytraders",
+     "crypto-native social media users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  }
+ ],
+ "filtersApplied": {
+  "filters": {
+   "winnersOnly": true
+  }
+ },
+ "totalFound": 16,
+ "hasMore": true
+}

@@ -1,0 +1,1318 @@
+{
+ "results": [
+  {
+   "slug": "nectarfi-1",
+   "name": "NECTARFI ",
+   "oneLiner": "Converts yield-bearing stablecoin savings into collateral for over-collateralized lending vaults.",
+   "similarity": 0.09032258064516129,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/Nectarfi/web",
+    "demo": null,
+    "presentation": "https://youtu.be/SBRoEzu85G0",
+    "technicalDemo": "https://www.loom.com/share/917e3d895b9b4fad94ae9a7032387488?sid=be793b5a-e8f2-4c8d-bbcb-75655e9313d9",
+    "twitter": "https://twitter.com/Nectar_finance",
+    "colosseum": "https://colosseum.com/projects/explore/nectarfi-1"
+   },
+   "evidence": [
+    "nectarfi and we \"convert stablecoin savings to colleteral\". Our core 3 feature products are 1 Yield bearing saving accounts powered by perena 2 Milestone savings 3 Over-colleterized lending vaults",
+    "Converts yield-bearing stablecoin savings into collateral for over-collateralized lending vaults."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - Stablecoins",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "idle stablecoin capital",
+     "lack of utility for savings",
+     "limited collateral options",
+     "low yield on savings"
+    ],
+    "solutionTags": [
+     "yield-bearing collateral",
+     "milestone savings",
+     "over-collateralized lending",
+     "stablecoin yield"
+    ],
+    "primitives": [
+     "stablecoins",
+     "lending",
+     "yield-bearing tokens",
+     "vaults",
+     "collateral"
+    ],
+    "techStack": [
+     "solana",
+     "perena",
+     "react"
+    ],
+    "targetUsers": [
+     "stablecoin holders",
+     "defi savers",
+     "borrowers",
+     "retail investors"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "gaian-2",
+   "name": "Gaian",
+   "oneLiner": "Pay via QR codes using stablecoin interest while merchants receive local fiat on Solana.",
+   "similarity": 0.08317465192465193,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/GaianProtocol/protocol-v2",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/0c50a257906d40aca717712736b0f2d8",
+    "technicalDemo": "https://www.loom.com/share/8d57f7ea2fb044a1bf305dd3e326bfb3?sid=9e04af4b-fb7a-4b0b-887c-3be1016082c9",
+    "twitter": "https://twitter.com/Gaian_hq",
+    "colosseum": "https://colosseum.com/projects/explore/gaian-2"
+   },
+   "evidence": [
+    "stablecoins while merchants receive local fiat. We support all major Solana stablecoins (USDC, USDT, USD*) for both payments and staking. When you deposit, we automatically stake your funds in high-yield vaults",
+    "Pay via QR codes using stablecoin interest while merchants receive local fiat on Solana."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - Stablecoins",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 1
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "low yield on idle stablecoins",
+     "merchant crypto adoption barriers",
+     "complex off-ramping",
+     "payment friction"
+    ],
+    "solutionTags": [
+     "yield-bearing payments",
+     "qr code gateway",
+     "stablecoin-to-fiat bridge",
+     "automated vault staking"
+    ],
+    "primitives": [
+     "stablecoins",
+     "staking",
+     "yield-aggregator",
+     "payments",
+     "fiat-off-ramp"
+    ],
+    "techStack": [
+     "solana",
+     "usdc",
+     "usdt",
+     "qr-codes"
+    ],
+    "targetUsers": [
+     "crypto holders",
+     "retail shoppers",
+     "merchants",
+     "yield seekers"
+    ]
+   },
+   "crowdedness": 202,
+   "cluster": {
+    "key": "v1-c16",
+    "label": "Stablecoin Payment Rails and Infrastructure"
+   }
+  },
+  {
+   "slug": "relay",
+   "name": "Relay",
+   "oneLiner": "Unified liquidity pool providing diversified, risk-managed yield through the sUSDr yield-bearing stablecoin.",
+   "similarity": 0.07798319327731093,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/voltrxyz/relay",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/dd12b1fcccea438382e73f48d4cd96b3?sid=254f3f03-f62a-41f3-8497-4cf8e8a9aa5e",
+    "technicalDemo": "https://youtu.be/TTa5WGJt1Vw",
+    "twitter": "https://twitter.com/voltrxyz",
+    "colosseum": "https://colosseum.com/projects/explore/relay"
+   },
+   "evidence": [
+    "Relay is the yield layer for stablecoins \u2014 a",
+    "Unified liquidity pool providing diversified, risk-managed yield through the sUSDr yield-bearing stablecoin."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented stablecoin yield",
+     "high risk in single-protocol yield",
+     "lack of composable yield assets",
+     "complex yield management"
+    ],
+    "solutionTags": [
+     "unified liquidity pool",
+     "yield aggregation",
+     "risk management framework",
+     "liquid staking for stablecoins"
+    ],
+    "primitives": [
+     "stablecoin",
+     "yield-bearing token",
+     "liquidity pool",
+     "yield aggregator"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "stablecoin holders",
+     "defi protocols",
+     "yield farmers",
+     "dao treasuries"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "remlo",
+   "name": "Remlo",
+   "oneLiner": "A decentralized on-chain bank offering yield-bearing savings, business invoicing, and payroll using compressed tokens.",
+   "similarity": 0.07401960784313726,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/chappie1998/remlo-web",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/836bca9ba5d34005be3fa3fe42d265d4",
+    "technicalDemo": "https://www.loom.com/share/b629d71de22f48e491a275423176334f?sid=297ef6db-4a60-40d1-988b-35c9bfef77c7",
+    "twitter": "https://twitter.com/chappie_1998",
+    "colosseum": "https://colosseum.com/projects/explore/remlo"
+   },
+   "evidence": [
+    "Remlo \u2013 The On-Chain Stablecoin Bank Remlo is",
+    "A decentralized on-chain bank offering yield-bearing savings, business invoicing, and payroll using compressed tokens."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - Stablecoins",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "high banking fees",
+     "slow cross-border payments",
+     "low interest on savings",
+     "complex payroll management"
+    ],
+    "solutionTags": [
+     "stablecoin banking",
+     "compressed tokens",
+     "yield-bearing synthetic dollar",
+     "on-chain invoicing"
+    ],
+    "primitives": [
+     "stablecoin",
+     "yield-bearing token",
+     "compressed tokens",
+     "payroll",
+     "invoicing"
+    ],
+    "techStack": [
+     "solana",
+     "light protocol",
+     "react native",
+     "smart contracts"
+    ],
+    "targetUsers": [
+     "small businesses",
+     "remote workers",
+     "defi savers",
+     "web3 startups"
+    ]
+   },
+   "crowdedness": 202,
+   "cluster": {
+    "key": "v1-c16",
+    "label": "Stablecoin Payment Rails and Infrastructure"
+   }
+  },
+  {
+   "slug": "zerocut",
+   "name": "Zerocut",
+   "oneLiner": "A business payment and treasury platform integrating DeFi yield into everyday operations and payroll.",
+   "similarity": 0.06979107848673066,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "Consumer",
+     "key": "radar/consumer"
+    },
+    {
+     "name": "DeFi",
+     "key": "radar/defi"
+    },
+    {
+     "name": "Payments",
+     "key": "radar/payments"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/zerocut/gringotts/, https://github.com/zerocut/zerocut/",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/fdf049e7f02f4ba18907eb32778c9d85?sid=51078e0f-f5b2-4dfc-ac8a-a58d63f2803f",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://x.com/zer0cut",
+    "colosseum": "https://colosseum.com/projects/explore/zerocut"
+   },
+   "evidence": [
+    "layer for DeFi, seamlessly integrating yield-generating capabilities into everyday business operations. Our platform enables zero-fee payments, instant settlements, and continuous yield generation on every dollar, all while integrating with",
+    "A business payment and treasury platform integrating DeFi yield into everyday operations and payroll."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - Payments",
+    "placement": null,
+    "amount": null,
+    "trackName": "Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "high payment fees",
+     "idle treasury capital",
+     "slow settlement times",
+     "complex defi onboarding for businesses"
+    ],
+    "solutionTags": [
+     "smart account treasury",
+     "yield-bearing payments",
+     "automated payroll",
+     "on-chain business operations"
+    ],
+    "primitives": [
+     "smart accounts",
+     "yield aggregator",
+     "stablecoins",
+     "payments"
+    ],
+    "techStack": [
+     "solana",
+     "anchor",
+     "react",
+     "typescript"
+    ],
+    "targetUsers": [
+     "smes",
+     "web3 startups",
+     "dao operators",
+     "treasury managers"
+    ]
+   },
+   "crowdedness": 202,
+   "cluster": {
+    "key": "v1-c16",
+    "label": "Stablecoin Payment Rails and Infrastructure"
+   }
+  },
+  {
+   "slug": "kormos",
+   "name": "Kormos",
+   "oneLiner": "A fractional reserve yield aggregator on Solana optimizing returns through liquid and illiquid asset allocation.",
+   "similarity": 0.06909461152882206,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "RWAs",
+     "key": "cypherpunk/rwas"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "cypherpunk/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/kormos-fi/korm",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/fcdf21a5d85847dbb67919f8e4f6aea7",
+    "technicalDemo": "https://www.loom.com/share/c767a447d8814a2891c7a9ca969ee6f8",
+    "twitter": "https://twitter.com/Kormos_Finance",
+    "colosseum": "https://colosseum.com/projects/explore/kormos"
+   },
+   "evidence": [
+    "Bringing higher yields without leverage to Solana with",
+    "A fractional reserve yield aggregator on Solana optimizing returns through liquid and illiquid asset allocation."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - DeFi",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "DeFi"
+   },
+   "accelerator": {
+    "companySlug": "kormos",
+    "companyName": "Kormos",
+    "batchKey": "accelerator/c4",
+    "batchName": "C4"
+   },
+   "metrics": {
+    "updatesCount": 4
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "low defi yields",
+     "inefficient capital allocation",
+     "lack of fixed-term yield options",
+     "liquidity-yield trade-off"
+    ],
+    "solutionTags": [
+     "fractional reserve banking model",
+     "liquid and illiquid asset balancing",
+     "senior/junior tranche risk management",
+     "fifo redemption queues"
+    ],
+    "primitives": [
+     "vaults",
+     "yield-aggregator",
+     "fractional-reserve",
+     "tranching",
+     "lending"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "react"
+    ],
+    "targetUsers": [
+     "yield farmers",
+     "defi investors",
+     "institutional depositors",
+     "stablecoin holders"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "bore.fi-1",
+   "name": "BORE.FI",
+   "oneLiner": "Tokenized SME private equity protocol on Solana providing stablecoin yield from cash-flowing real-world businesses.",
+   "similarity": 0.061547619047619045,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "RWAs",
+     "key": "cypherpunk/rwas"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "cypherpunk/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/RentityTT/borefi",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/5a90b4c6c9b64f78af110097ac04d158",
+    "technicalDemo": "https://www.loom.com/share/ec494aad792a44f1abe690150e0b6de4",
+    "twitter": null,
+    "colosseum": "https://colosseum.com/projects/explore/bore.fi-1"
+   },
+   "evidence": [
+    "The world is full of wonderfully boring, cash",
+    "Tokenized SME private equity protocol on Solana providing stablecoin yield from cash-flowing real-world businesses."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - RWAs",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "RWAs"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "limited access to private equity",
+     "low yield on stablecoins",
+     "illiquidity of sme investments",
+     "lack of transparent rwa yield"
+    ],
+    "solutionTags": [
+     "tokenization of smes",
+     "on-chain private equity fund",
+     "rwa-backed stablecoin yield",
+     "fractional ownership"
+    ],
+    "primitives": [
+     "rwa",
+     "stablecoin",
+     "tokenization",
+     "yield-farming",
+     "governance"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "retail investors",
+     "stablecoin holders",
+     "defi yield seekers",
+     "sme owners"
+    ]
+   },
+   "crowdedness": 204,
+   "cluster": {
+    "key": "v1-c1",
+    "label": "Solana Real Estate Tokenization"
+   }
+  },
+  {
+   "slug": "credible-finance-1",
+   "name": "Credible Finance",
+   "oneLiner": "A stablecoin-powered USD-INR remittance rail for businesses offering guaranteed FX rates 2% better than competitors.",
+   "similarity": 0.056797483026991225,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "cypherpunk/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/crediblefinance/credible_finance_merchant_server",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/c95da2598bc34332b9de6970ca99d410",
+    "technicalDemo": "https://www.loom.com/share/df76d0853af9408daf70ceda074e1833",
+    "twitter": "https://twitter.com/crediblefin",
+    "colosseum": "https://colosseum.com/projects/explore/credible-finance-1"
+   },
+   "evidence": [
+    "first USD\u2013INR remittance rail powered by stablecoins built for banks, fintechs, and businesses\u2014offering a guaranteed minimum FX rate that\u2019s 2% better than Wise, XE, or Remitly",
+    "A stablecoin-powered USD-INR remittance rail for businesses offering guaranteed FX rates 2% better than competitors."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - Stablecoins",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": {
+    "companySlug": "credible",
+    "companyName": "Credible",
+    "batchKey": "accelerator/c4",
+    "batchName": "C4"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "high remittance fees",
+     "fx rate volatility",
+     "slow cross-border payments",
+     "expensive usd-inr transfers"
+    ],
+    "solutionTags": [
+     "stablecoin remittance rail",
+     "guaranteed fx pricing",
+     "api-first cross-border payments",
+     "liquidity aggregation"
+    ],
+    "primitives": [
+     "stablecoin",
+     "payment-rail",
+     "oracle",
+     "liquidity-pool"
+    ],
+    "techStack": [
+     "solana",
+     "api",
+     "dune-analytics"
+    ],
+    "targetUsers": [
+     "banks",
+     "fintechs",
+     "businesses",
+     "cross-border enterprises"
+    ]
+   },
+   "crowdedness": 202,
+   "cluster": {
+    "key": "v1-c16",
+    "label": "Stablecoin Payment Rails and Infrastructure"
+   }
+  },
+  {
+   "slug": "cargobill",
+   "name": "CargoBill",
+   "oneLiner": "Stablecoin payments platform for supply chain logistics using multisig wallets and enterprise onramps on Solana.",
+   "similarity": 0.05669979323684386,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "breakout/infrastructure"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/adrian-petrykiw/cargobill-dashboard",
+    "demo": null,
+    "presentation": "https://vimeo.com/1085190844/7313f0d092?share=copy",
+    "technicalDemo": "https://vimeo.com/1085190188/b570044acf?share=copy",
+    "twitter": "https://twitter.com/cargobilldotai",
+    "colosseum": "https://colosseum.com/projects/explore/cargobill"
+   },
+   "evidence": [
+    "CargoBill, is the stablecoin payments platform for supply chain. Execute real-world logistics payments in seconds, cut transaction costs by 2x, improve your liquidity, and earn cashback on operational expenses using non-custodial multisig b",
+    "Stablecoin payments platform for supply chain logistics using multisig wallets and enterprise onramps on Solana."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - Stablecoins",
+    "placement": 1,
+    "amount": 25000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": {
+    "companySlug": "cargobill",
+    "companyName": "CargoBill",
+    "batchKey": "accelerator/c3",
+    "batchName": "C3"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "high logistics transaction costs",
+     "slow cross-border payments",
+     "local currency volatility",
+     "liquidity constraints in supply chain"
+    ],
+    "solutionTags": [
+     "stablecoin payments",
+     "multisig business wallets",
+     "fiat-to-crypto onramps",
+     "automated cashback",
+     "short-term financing"
+    ],
+    "primitives": [
+     "stablecoin",
+     "multisig",
+     "payments",
+     "yield",
+     "lending"
+    ],
+    "techStack": [
+     "solana",
+     "stablecoins",
+     "multisig"
+    ],
+    "targetUsers": [
+     "logistics companies",
+     "supply chain operators",
+     "freight forwarders",
+     "global trade businesses"
+    ]
+   },
+   "crowdedness": 202,
+   "cluster": {
+    "key": "v1-c16",
+    "label": "Stablecoin Payment Rails and Infrastructure"
+   }
+  },
+  {
+   "slug": "localpay",
+   "name": "LocalPay",
+   "oneLiner": "Non-custodial mobile wallet for stablecoin payments via QR codes in emerging markets.",
+   "similarity": 0.05437859240342369,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "breakout/consumer-apps"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "breakout/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/yaetiya/localpay-app",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/69e16541a69e4e2bb942904d1e98a158?sid=683e5328-d15a-474f-909d-3e7650a24f61",
+    "technicalDemo": "https://youtu.be/nDbkEy6-ID8",
+    "twitter": "https://twitter.com/localpayasia",
+    "colosseum": "https://colosseum.com/projects/explore/localpay"
+   },
+   "evidence": [
+    "Enabling 160+ million of existing stablecoin holders to use their assets for day-to-day payments in the emerging markets",
+    "Non-custodial mobile wallet for stablecoin payments via QR codes in emerging markets."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "3rd Place - Stablecoins",
+    "placement": 3,
+    "amount": 15000,
+    "trackName": "Stablecoins"
+   },
+   "accelerator": {
+    "companySlug": "localpay",
+    "companyName": "LocalPay",
+    "batchKey": "accelerator/c3",
+    "batchName": "C3"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "lack of banking access",
+     "limited stablecoin utility for daily spend",
+     "unbanked population",
+     "high transaction costs"
+    ],
+    "solutionTags": [
+     "qr code payments",
+     "non-custodial mobile wallet",
+     "stablecoin neobank",
+     "local payment rail integration"
+    ],
+    "primitives": [
+     "stablecoins",
+     "non-custodial wallet",
+     "payments",
+     "token"
+    ],
+    "techStack": [
+     "solana",
+     "mobile app"
+    ],
+    "targetUsers": [
+     "unbanked individuals",
+     "stablecoin holders",
+     "emerging market consumers",
+     "merchants"
+    ]
+   },
+   "crowdedness": 202,
+   "cluster": {
+    "key": "v1-c16",
+    "label": "Stablecoin Payment Rails and Infrastructure"
+   }
+  },
+  {
+   "slug": "oro",
+   "name": "ORO",
+   "oneLiner": "Yield-generating tokenized gold protocol on Solana providing liquidity and returns for physical assets.",
+   "similarity": 0.05334281650071124,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "radar/defi"
+    },
+    {
+     "name": "Consumer",
+     "key": "radar/consumer"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/JuanMarchetto/oro",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/614551d234df466299f7237df25c6071",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://x.com/_orogold",
+    "colosseum": "https://colosseum.com/projects/explore/oro"
+   },
+   "evidence": [
+    "Yield-generating tokenized gold on Solana",
+    "Yield-generating tokenized gold protocol on Solana providing liquidity and returns for physical assets."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": null,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "gold illiquidity",
+     "lack of yield on physical assets",
+     "high storage costs for gold",
+     "limited accessibility to gold markets"
+    ],
+    "solutionTags": [
+     "real world asset tokenization",
+     "yield-bearing tokens",
+     "fractional gold ownership",
+     "defi integration for rwas"
+    ],
+    "primitives": [
+     "rwa",
+     "tokenization",
+     "yield-bearing token",
+     "stablecoin"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "retail investors",
+     "defi users",
+     "gold bugs",
+     "institutional investors"
+    ]
+   },
+   "crowdedness": 204,
+   "cluster": {
+    "key": "v1-c1",
+    "label": "Solana Real Estate Tokenization"
+   }
+  },
+  {
+   "slug": "lifted-finance",
+   "name": "Lifted Finance",
+   "oneLiner": "Yield-maximizing stablecoin on Solana using AI agents to automate DeFi yield optimization.",
+   "similarity": 0.05103359173126615,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "cypherpunk/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/Lifted-Finance/lifted-finance-programs",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/24281699f16242ffb692a1f9eb73f632",
+    "technicalDemo": "https://www.loom.com/share/a44de2356b5a440989ee69e7342b070f",
+    "twitter": "https://twitter.com/lifted_fi",
+    "colosseum": "https://colosseum.com/projects/explore/lifted-finance"
+   },
+   "evidence": [
+    "Yield-maximizing stablecoin on Solana",
+    "Yield-maximizing stablecoin on Solana using AI agents to automate DeFi yield optimization."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": null,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "low yield on stablecoins",
+     "complex manual yield farming",
+     "fragmented defi liquidity",
+     "high maintenance for yield optimization"
+    ],
+    "solutionTags": [
+     "agentic stablecoin",
+     "automated rebalancing",
+     "yield aggregation",
+     "cross-protocol routing"
+    ],
+    "primitives": [
+     "stablecoin",
+     "yield aggregator",
+     "ai agents",
+     "liquidity management"
+    ],
+    "techStack": [
+     "solana",
+     "drift protocol"
+    ],
+    "targetUsers": [
+     "stablecoin holders",
+     "defi investors",
+     "yield farmers"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "vitalfi",
+   "name": "VitalFi",
+   "oneLiner": "Solana-based DeFi protocol tokenizing Brazilian medical receivables to provide sustainable USDT yield.",
+   "similarity": 0.049249249249249255,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "RWAs",
+     "key": "cypherpunk/rwas"
+    },
+    {
+     "name": "Stablecoins",
+     "key": "cypherpunk/stablecoins"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/credit-markets/cypherpunk",
+    "demo": null,
+    "presentation": "https://youtu.be/UgupRFrYzd8",
+    "technicalDemo": "https://www.youtube.com/watch?v=ms9BTaBAHOQ",
+    "twitter": "https://twitter.com/vitalfi_sol",
+    "colosseum": "https://colosseum.com/projects/explore/vitalfi"
+   },
+   "evidence": [
+    "VitalFi is a Solana-based DeFi protocol that",
+    "Solana-based DeFi protocol tokenizing Brazilian medical receivables to provide sustainable USDT yield."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - RWAs",
+    "placement": null,
+    "amount": null,
+    "trackName": "RWAs"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "liquidity gaps in healthcare",
+     "high cost of capital for medical providers",
+     "lack of transparent yield for stablecoins"
+    ],
+    "solutionTags": [
+     "rwa tokenization",
+     "on-chain credit vaults",
+     "receivables financing"
+    ],
+    "primitives": [
+     "rwa",
+     "vaults",
+     "stablecoin",
+     "yield-farming"
+    ],
+    "techStack": [
+     "solana",
+     "anchor",
+     "rust",
+     "react",
+     "usdt"
+    ],
+    "targetUsers": [
+     "defi investors",
+     "healthcare providers",
+     "stablecoin holders"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "ratex",
+   "name": "RateX",
+   "oneLiner": "A margin yield trading protocol for synthetic yield-bearing assets on Solana.",
+   "similarity": 0.048538011695906436,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/RateX-Protocol/ratex-program; https://github.com/RateX-Protocol/Backend",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/d8de5149f02f43c7b05983b283c73bf1?sid=61547bd4-0764-4aab-97eb-c80eb28236f8",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/RateX_Dex",
+    "colosseum": "https://colosseum.com/projects/explore/ratex"
+   },
+   "evidence": [
+    "RateX is a margin yield trading and synthetic",
+    "A margin yield trading protocol for synthetic yield-bearing assets on Solana."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi & Payments",
+    "placement": null,
+    "amount": null,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "yield volatility",
+     "lack of leverage in yield markets",
+     "capital inefficiency",
+     "limited yield trading instruments"
+    ],
+    "solutionTags": [
+     "margin yield trading",
+     "synthetic assets",
+     "yield rate swaps",
+     "leveraged yield exposure"
+    ],
+    "primitives": [
+     "margin trading",
+     "synthetic assets",
+     "yield farming",
+     "derivatives",
+     "amm"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "yield farmers",
+     "institutional hedgers",
+     "liquidity providers"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "exponent",
+   "name": "Exponent",
+   "oneLiner": "A yield derivatives protocol on Solana for trading, hedging, and fixing yields of DeFi products.",
+   "similarity": 0.04738562091503268,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "renaissance/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/exponent-finance/xpon",
+    "demo": null,
+    "presentation": "https://docsend.com/view/rgra8a9ed7pk2ej3",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/ExponentFinance",
+    "colosseum": "https://colosseum.com/projects/explore/exponent"
+   },
+   "evidence": [
+    "Built by a team of three (ex Kamino",
+    "A yield derivatives protocol on Solana for trading, hedging, and fixing yields of DeFi products."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "5th Place - DeFi & Payments",
+    "placement": 5,
+    "amount": 5000,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "volatile defi yields",
+     "unpredictable borrowing costs",
+     "lack of yield hedging tools",
+     "yield risk management"
+    ],
+    "solutionTags": [
+     "yield derivatives",
+     "yield stripping",
+     "fixed-rate lending",
+     "yield trading"
+    ],
+    "primitives": [
+     "derivatives",
+     "yield-bearing tokens",
+     "amm",
+     "fixed-rate"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "liquidity providers",
+     "yield farmers",
+     "institutional investors"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  }
+ ],
+ "filtersApplied": {
+  "filters": {
+   "winnersOnly": true
+  }
+ },
+ "totalFound": 16,
+ "hasMore": true
+}

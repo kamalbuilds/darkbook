@@ -1,0 +1,537 @@
+{
+ "totalsA": {
+  "projects": 293,
+  "winners": 293
+ },
+ "totalsB": {
+  "projects": 5428,
+  "winners": 293
+ },
+ "results": {
+  "problemTags": [
+   {
+    "key": "fragmented liquidity",
+    "label": "fragmented liquidity",
+    "countA": 13,
+    "shareA": 0.04436860068259386,
+    "countB": 120,
+    "shareB": 0.02210759027266028,
+    "lift": 1.0069397042093287,
+    "delta": 0.022261010409933578,
+    "examplesA": [
+     "armor-wallet",
+     "cashmerelabs-1"
+    ],
+    "examplesB": [
+     "mecha",
+     "lince"
+    ]
+   },
+   {
+    "key": "information overload",
+    "label": "information overload",
+    "countA": 3,
+    "shareA": 0.010238907849829351,
+    "countB": 87,
+    "shareB": 0.016028002947678702,
+    "lift": -0.36118630104742855,
+    "delta": -0.005789095097849351,
+    "examplesA": [
+     "daiko",
+     "lomen-ai-perplexity-for-solana"
+    ],
+    "examplesB": [
+     "marketwizard",
+     "pie.fun"
+    ]
+   },
+   {
+    "key": "high platform fees",
+    "label": "high platform fees",
+    "countA": 0,
+    "shareA": 0,
+    "countB": 68,
+    "shareB": 0.012527634487840826,
+    "lift": -1,
+    "delta": -0.012527634487840826,
+    "examplesA": [],
+    "examplesB": [
+     "fan-live-~web3-streaming~",
+     "finuverse"
+    ]
+   },
+   {
+    "key": "high barrier to entry",
+    "label": "high barrier to entry",
+    "countA": 0,
+    "shareA": 0,
+    "countB": 66,
+    "shareB": 0.012159174649963155,
+    "lift": -1,
+    "delta": -0.012159174649963155,
+    "examplesA": [],
+    "examplesB": [
+     "wealthsphere-1",
+     "web3k-wallet"
+    ]
+   },
+   {
+    "key": "complex web3 onboarding",
+    "label": "complex web3 onboarding",
+    "countA": 2,
+    "shareA": 0.006825938566552901,
+    "countB": 58,
+    "shareB": 0.010685335298452468,
+    "lift": -0.36118630104742844,
+    "delta": -0.003859396731899567,
+    "examplesA": [
+     "chakra-drive",
+     "typex-keyboard"
+    ],
+    "examplesB": [
+     "pett.ai-on-solana",
+     "openauth"
+    ]
+   },
+   {
+    "key": "lack of transparency",
+    "label": "lack of transparency",
+    "countA": 0,
+    "shareA": 0,
+    "countB": 55,
+    "shareB": 0.010132645541635961,
+    "lift": -1,
+    "delta": -0.010132645541635961,
+    "examplesA": [],
+    "examplesB": [
+     "request-on-chain-ticketing",
+     "solibra-wallet"
+    ]
+   },
+   {
+    "key": "capital inefficiency",
+    "label": "capital inefficiency",
+    "countA": 4,
+    "shareA": 0.013651877133105802,
+    "countB": 41,
+    "shareB": 0.007553426676492263,
+    "lift": 0.8073753433780071,
+    "delta": 0.0060984504566135396,
+    "examplesA": [
+     "feels.fun",
+     "ratex"
+    ],
+    "examplesB": [
+     "brrr-day",
+     "propmet"
+    ]
+   },
+   {
+    "key": "low community engagement",
+    "label": "low community engagement",
+    "countA": 1,
+    "shareA": 0.0034129692832764505,
+    "countB": 41,
+    "shareB": 0.007553426676492263,
+    "lift": -0.5481561641554982,
+    "delta": -0.0041404573932158125,
+    "examplesA": [
+     "barnfight"
+    ],
+    "examplesB": [
+     "priddi.market",
+     "safe-staker"
+    ]
+   },
+   {
+    "key": "rug pulls",
+    "label": "rug pulls",
+    "countA": 3,
+    "shareA": 0.010238907849829351,
+    "countB": 37,
+    "shareB": 0.0068165070007369195,
+    "lift": 0.5020754542938843,
+    "delta": 0.0034224008490924317,
+    "examplesA": [
+     "hype3",
+     "chosendotfun"
+    ],
+    "examplesB": [
+     "big-fish-alert",
+     "prophetsentinel-airiskguardianfordefi"
+    ]
+   },
+   {
+    "key": "high transaction fees",
+    "label": "high transaction fees",
+    "countA": 2,
+    "shareA": 0.006825938566552901,
+    "countB": 36,
+    "shareB": 0.006632277081798084,
+    "lift": 0.029199848312476462,
+    "delta": 0.00019366148475481737,
+    "examplesA": [
+     "xeno-money",
+     "scrim"
+    ],
+    "examplesB": [
+     "chainpay-1",
+     "uadep"
+    ]
+   }
+  ],
+  "solutionTags": [
+   {
+    "key": "rwa tokenization",
+    "label": "rwa tokenization",
+    "countA": 6,
+    "shareA": 0.020477815699658702,
+    "countB": 112,
+    "shareB": 0.020633750921149593,
+    "lift": -0.007557289127254951,
+    "delta": -0.000155935221490891,
+    "examplesA": [
+     "watchtower",
+     "vitalfi"
+    ],
+    "examplesB": [
+     "defi-reit",
+     "h2u"
+    ]
+   },
+   {
+    "key": "tokenized rewards",
+    "label": "tokenized rewards",
+    "countA": 0,
+    "shareA": 0,
+    "countB": 95,
+    "shareB": 0.01750184229918939,
+    "lift": -1,
+    "delta": -0.01750184229918939,
+    "examplesA": [],
+    "examplesB": [
+     "quantum-compass",
+     "runverse"
+    ]
+   },
+   {
+    "key": "decentralized marketplace",
+    "label": "decentralized marketplace",
+    "countA": 1,
+    "shareA": 0.0034129692832764505,
+    "countB": 69,
+    "shareB": 0.012711864406779662,
+    "lift": -0.7315130830489193,
+    "delta": -0.00929889512350321,
+    "examplesA": [
+     "bizzed"
+    ],
+    "examplesB": [
+     "g'sprout",
+     "nft-game-market"
+    ]
+   },
+   {
+    "key": "smart contract escrow",
+    "label": "smart contract escrow",
+    "countA": 0,
+    "shareA": 0,
+    "countB": 67,
+    "shareB": 0.01234340456890199,
+    "lift": -1,
+    "delta": -0.01234340456890199,
+    "examplesA": [],
+    "examplesB": [
+     "stellar_crowdfunding",
+     "veladao"
+    ]
+   },
+   {
+    "key": "on-chain verification",
+    "label": "on-chain verification",
+    "countA": 0,
+    "shareA": 0,
+    "countB": 55,
+    "shareB": 0.010132645541635961,
+    "lift": -1,
+    "delta": -0.010132645541635961,
+    "examplesA": [],
+    "examplesB": [
+     "request-on-chain-ticketing",
+     "edubuk"
+    ]
+   },
+   {
+    "key": "natural language processing",
+    "label": "natural language processing",
+    "countA": 3,
+    "shareA": 0.010238907849829351,
+    "countB": 45,
+    "shareB": 0.008290346352247605,
+    "lift": 0.23503981797497153,
+    "delta": 0.0019485614975817463,
+    "examplesA": [
+     "lomen-ai-perplexity-for-solana",
+     "lexicon"
+    ],
+    "examplesB": [
+     "solviz",
+     "discord-digester"
+    ]
+   },
+   {
+    "key": "gamification",
+    "label": "gamification",
+    "countA": 1,
+    "shareA": 0.0034129692832764505,
+    "countB": 43,
+    "shareB": 0.007921886514369933,
+    "lift": -0.5691721565203587,
+    "delta": -0.004508917231093482,
+    "examplesA": [
+     "trump.fun"
+    ],
+    "examplesB": [
+     "big-fish-alert",
+     "bible-by-heart"
+    ]
+   },
+   {
+    "key": "stablecoin payments",
+    "label": "stablecoin payments",
+    "countA": 5,
+    "shareA": 0.017064846416382253,
+    "countB": 43,
+    "shareB": 0.007921886514369933,
+    "lift": 1.1541392173982064,
+    "delta": 0.00914295990201232,
+    "examplesA": [
+     "xeno-money",
+     "cargobill"
+    ],
+    "examplesB": [
+     "ledger-and-pay",
+     "ouh!-1"
+    ]
+   },
+   {
+    "key": "decentralized identity",
+    "label": "decentralized identity",
+    "countA": 2,
+    "shareA": 0.006825938566552901,
+    "countB": 43,
+    "shareB": 0.007921886514369933,
+    "lift": -0.13834431304071748,
+    "delta": -0.0010959479478170322,
+    "examplesA": [
+     "pow-cards",
+     "humanship-id"
+    ],
+    "examplesB": [
+     "skillful",
+     "streaks.quest"
+    ]
+   },
+   {
+    "key": "decentralized physical infrastructure",
+    "label": "decentralized physical infrastructure",
+    "countA": 7,
+    "shareA": 0.023890784982935155,
+    "countB": 42,
+    "shareB": 0.007737656595431098,
+    "lift": 2.087599544937429,
+    "delta": 0.016153128387504056,
+    "examplesA": [
+     "netsepio",
+     "trekn-1"
+    ],
+    "examplesB": [
+     "kyro",
+     "ketchup-republic"
+    ]
+   }
+  ],
+  "primitives": [
+   {
+    "key": "nft",
+    "label": "nft",
+    "countA": 25,
+    "shareA": 0.08532423208191127,
+    "countB": 1355,
+    "shareB": 0.24963154016212233,
+    "lift": -0.6581993123685503,
+    "delta": -0.16430730808021105,
+    "examplesA": [
+     "blockride",
+     "jogojogo"
+    ],
+    "examplesB": [
+     "perkpal",
+     "nectart"
+    ]
+   },
+   {
+    "key": "payments",
+    "label": "payments",
+    "countA": 29,
+    "shareA": 0.09897610921501707,
+    "countB": 635,
+    "shareB": 0.11698599852616065,
+    "lift": -0.15394910107226356,
+    "delta": -0.018009889311143584,
+    "examplesA": [
+     "aquanode",
+     "split-finance"
+    ],
+    "examplesB": [
+     "dansr",
+     "github-solana-dispenser-solidpull"
+    ]
+   },
+   {
+    "key": "token-gating",
+    "label": "token-gating",
+    "countA": 14,
+    "shareA": 0.04778156996587031,
+    "countB": 583,
+    "shareB": 0.10740604274134119,
+    "lift": -0.5551314549318284,
+    "delta": -0.05962447277547088,
+    "examplesA": [
+     "detask:-on-chain-work-on-solana",
+     "tokengator"
+    ],
+    "examplesB": [
+     "uni-sol-bridge",
+     "perkpal"
+    ]
+   },
+   {
+    "key": "oracle",
+    "label": "oracle",
+    "countA": 39,
+    "shareA": 0.13310580204778158,
+    "countB": 568,
+    "shareB": 0.10464259395725865,
+    "lift": 0.27200403787915217,
+    "delta": 0.028463208090522926,
+    "examplesA": [
+     "flowgate",
+     "riverboat"
+    ],
+    "examplesB": [
+     "regret-market",
+     "x402-prediction-market"
+    ]
+   },
+   {
+    "key": "smart contracts",
+    "label": "smart contracts",
+    "countA": 18,
+    "shareA": 0.06143344709897611,
+    "countB": 537,
+    "shareB": 0.09893146647015476,
+    "lift": -0.37903025911872945,
+    "delta": -0.03749801937117865,
+    "examplesA": [
+     "agent-arc",
+     "xcrow"
+    ],
+    "examplesB": [
+     "sodh",
+     "secret-hitler"
+    ]
+   },
+   {
+    "key": "dao",
+    "label": "dao",
+    "countA": 20,
+    "shareA": 0.06825938566552901,
+    "countB": 431,
+    "shareB": 0.07940309506263818,
+    "lift": -0.14034351417055346,
+    "delta": -0.011143709397109167,
+    "examplesA": [
+     "bizzed",
+     "marshmallow"
+    ],
+    "examplesB": [
+     "uni-sol-bridge",
+     "nectart"
+    ]
+   },
+   {
+    "key": "token",
+    "label": "token",
+    "countA": 10,
+    "shareA": 0.034129692832764506,
+    "countB": 423,
+    "shareB": 0.07792925571112749,
+    "lift": -0.5620426177393718,
+    "delta": -0.04379956287836299,
+    "examplesA": [
+     "carrot",
+     "marshmallow"
+    ],
+    "examplesB": [
+     "carrot",
+     "mintory"
+    ]
+   },
+   {
+    "key": "staking",
+    "label": "staking",
+    "countA": 24,
+    "shareA": 0.08191126279863481,
+    "countB": 420,
+    "shareB": 0.07737656595431099,
+    "lift": 0.05860555826426128,
+    "delta": 0.004534696844323824,
+    "examplesA": [
+     "split-finance",
+     "marshmallow"
+    ],
+    "examplesB": [
+     "deep-dungeon-duel",
+     "challengex-challenge-to-be-healthy-and-incentivize-on-solana"
+    ]
+   },
+   {
+    "key": "tokenization",
+    "label": "tokenization",
+    "countA": 28,
+    "shareA": 0.09556313993174062,
+    "countB": 410,
+    "shareB": 0.07553426676492263,
+    "lift": 0.2651627403646051,
+    "delta": 0.020028873166817993,
+    "examplesA": [
+     "blockride",
+     "soltera"
+    ],
+    "examplesB": [
+     "munki.ai",
+     "blockride"
+    ]
+   },
+   {
+    "key": "escrow",
+    "label": "escrow",
+    "countA": 15,
+    "shareA": 0.051194539249146756,
+    "countB": 408,
+    "shareB": 0.07516580692704496,
+    "lift": -0.31891186508733194,
+    "delta": -0.0239712676778982,
+    "examplesA": [
+     "xcrow",
+     "localsolana"
+    ],
+    "examplesB": [
+     "terrafund",
+     "tinder-tutor"
+    ]
+   }
+  ]
+ }
+}

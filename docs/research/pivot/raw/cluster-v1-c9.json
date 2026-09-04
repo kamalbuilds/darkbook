@@ -1,0 +1,107 @@
+{
+ "key": "v1-c9",
+ "label": "Solana DEX and Trading Infrastructure",
+ "summary": "This cluster focuses on decentralized exchange solutions and advanced trading tools on the Solana blockchain, including liquidity aggregation, automated strategy execution, and perpetual markets.",
+ "projectCount": 323,
+ "winnerCount": 23,
+ "representativeProjects": [
+  {
+   "slug": "dex-platform",
+   "name": "DEX Platform",
+   "oneLiner": "A multi-chain decentralized exchange providing unified liquidity and cross-chain asset trading.",
+   "isWinner": false
+  },
+  {
+   "slug": "dexter-finance",
+   "name": "Dexter Finance",
+   "oneLiner": "A Solana-based DEX aggregator optimizing trading rates and liquidity through smart routing and Orca Whirlpools.",
+   "isWinner": false
+  },
+  {
+   "slug": "copyfi",
+   "name": "Copyfi",
+   "oneLiner": "On-chain copy-trading platform that automatically replicates trades from successful wallets.",
+   "isWinner": false
+  },
+  {
+   "slug": "punk",
+   "name": "PUNK",
+   "oneLiner": "Concentrated liquidity perpetual AMM on Solana providing high capital efficiency for pro traders and meme tokens.",
+   "isWinner": false
+  },
+  {
+   "slug": "atlas",
+   "name": "Atlas",
+   "oneLiner": "Automation platform and liquidity aggregator for Solana DEXs, offering arbitrage, limit orders, and modular SDKs.",
+   "isWinner": false
+  }
+ ],
+ "topTags": {
+  "problemTags": [
+   {
+    "tag": "fragmented liquidity",
+    "count": 53
+   },
+   {
+    "tag": "liquidity fragmentation",
+    "count": 13
+   },
+   {
+    "tag": "impermanent loss",
+    "count": 10
+   },
+   {
+    "tag": "front-running",
+    "count": 9
+   },
+   {
+    "tag": "complex trading interfaces",
+    "count": 9
+   }
+  ],
+  "primitives": [
+   {
+    "tag": "amm",
+    "count": 99
+   },
+   {
+    "tag": "dex",
+    "count": 70
+   },
+   {
+    "tag": "oracle",
+    "count": 34
+   },
+   {
+    "tag": "bridge",
+    "count": 31
+   },
+   {
+    "tag": "smart contracts",
+    "count": 29
+   }
+  ],
+  "techStack": [
+   {
+    "tag": "solana",
+    "count": 322
+   },
+   {
+    "tag": "rust",
+    "count": 147
+   },
+   {
+    "tag": "react",
+    "count": 121
+   },
+   {
+    "tag": "anchor",
+    "count": 89
+   },
+   {
+    "tag": "typescript",
+    "count": 59
+   }
+  ]
+ }
+}

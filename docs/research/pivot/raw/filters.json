@@ -1,0 +1,1223 @@
+{
+ "tracks": [
+  {
+   "key": "cypherpunk/consumer-apps",
+   "name": "Consumer Apps",
+   "hackathonSlug": "cypherpunk",
+   "projectCount": 1090
+  },
+  {
+   "key": "breakout/consumer-apps",
+   "name": "Consumer Apps",
+   "hackathonSlug": "breakout",
+   "projectCount": 923
+  },
+  {
+   "key": "radar/consumer",
+   "name": "Consumer",
+   "hackathonSlug": "radar",
+   "projectCount": 867
+  },
+  {
+   "key": "cypherpunk/defi",
+   "name": "DeFi",
+   "hackathonSlug": "cypherpunk",
+   "projectCount": 752
+  },
+  {
+   "key": "breakout/defi",
+   "name": "DeFi",
+   "hackathonSlug": "breakout",
+   "projectCount": 593
+  },
+  {
+   "key": "cypherpunk/infrastructure",
+   "name": "Infrastructure",
+   "hackathonSlug": "cypherpunk",
+   "projectCount": 570
+  },
+  {
+   "key": "renaissance/consumer-apps",
+   "name": "Consumer Apps",
+   "hackathonSlug": "renaissance",
+   "projectCount": 554
+  },
+  {
+   "key": "breakout/ai",
+   "name": "AI",
+   "hackathonSlug": "breakout",
+   "projectCount": 501
+  },
+  {
+   "key": "cypherpunk/undefined",
+   "name": "Undefined",
+   "hackathonSlug": "cypherpunk",
+   "projectCount": 491
+  },
+  {
+   "key": "radar/defi",
+   "name": "DeFi",
+   "hackathonSlug": "radar",
+   "projectCount": 465
+  },
+  {
+   "key": "breakout/infrastructure",
+   "name": "Infrastructure",
+   "hackathonSlug": "breakout",
+   "projectCount": 385
+  },
+  {
+   "key": "renaissance/defi--payments",
+   "name": "DeFi & Payments",
+   "hackathonSlug": "renaissance",
+   "projectCount": 355
+  },
+  {
+   "key": "radar/infrastructure",
+   "name": "Infrastructure",
+   "hackathonSlug": "radar",
+   "projectCount": 330
+  },
+  {
+   "key": "radar/payments",
+   "name": "Payments",
+   "hackathonSlug": "radar",
+   "projectCount": 324
+  },
+  {
+   "key": "renaissance/daos--communities",
+   "name": "DAOs & Communities",
+   "hackathonSlug": "renaissance",
+   "projectCount": 277
+  },
+  {
+   "key": "radar/gaming",
+   "name": "Gaming",
+   "hackathonSlug": "radar",
+   "projectCount": 272
+  },
+  {
+   "key": "cypherpunk/stablecoins",
+   "name": "Stablecoins",
+   "hackathonSlug": "cypherpunk",
+   "projectCount": 271
+  },
+  {
+   "key": "breakout/gaming",
+   "name": "Gaming",
+   "hackathonSlug": "breakout",
+   "projectCount": 271
+  },
+  {
+   "key": "cypherpunk/rwas",
+   "name": "RWAs",
+   "hackathonSlug": "cypherpunk",
+   "projectCount": 263
+  },
+  {
+   "key": "renaissance/infrastructure",
+   "name": "Infrastructure",
+   "hackathonSlug": "renaissance",
+   "projectCount": 223
+  },
+  {
+   "key": "radar/daos--network-states",
+   "name": "DAOs & Network States",
+   "hackathonSlug": "radar",
+   "projectCount": 221
+  },
+  {
+   "key": "breakout/stablecoins",
+   "name": "Stablecoins",
+   "hackathonSlug": "breakout",
+   "projectCount": 214
+  },
+  {
+   "key": "renaissance/gaming",
+   "name": "Gaming",
+   "hackathonSlug": "renaissance",
+   "projectCount": 206
+  },
+  {
+   "key": "breakout/depin",
+   "name": "DePIN",
+   "hackathonSlug": "breakout",
+   "projectCount": 187
+  },
+  {
+   "key": "radar/depin",
+   "name": "DePIN",
+   "hackathonSlug": "radar",
+   "projectCount": 163
+  },
+  {
+   "key": "renaissance/depin",
+   "name": "DePin",
+   "hackathonSlug": "renaissance",
+   "projectCount": 127
+  }
+ ],
+ "hackathons": [
+  {
+   "slug": "renaissance",
+   "name": "Renaissance",
+   "startDate": "2024-03-04",
+   "projectCount": 1076,
+   "winnerCount": 85
+  },
+  {
+   "slug": "radar",
+   "name": "Radar",
+   "startDate": "2024-09-02",
+   "projectCount": 1360,
+   "winnerCount": 58
+  },
+  {
+   "slug": "breakout",
+   "name": "Breakout",
+   "startDate": "2025-04-14",
+   "projectCount": 1416,
+   "winnerCount": 85
+  },
+  {
+   "slug": "cypherpunk",
+   "name": "Cypherpunk",
+   "startDate": "2025-09-25",
+   "projectCount": 1576,
+   "winnerCount": 65
+  }
+ ],
+ "acceleratorBatches": [
+  {
+   "key": "accelerator/c1",
+   "name": "C1",
+   "companyCount": 10
+  },
+  {
+   "key": "accelerator/c2",
+   "name": "C2",
+   "companyCount": 12
+  },
+  {
+   "key": "accelerator/c3",
+   "name": "C3",
+   "companyCount": 9
+  },
+  {
+   "key": "accelerator/c4",
+   "name": "C4",
+   "companyCount": 10
+  }
+ ],
+ "prizeTypes": [
+  "MOBILE_AWARD",
+  "CLIMATE_AWARD",
+  "TRACK_PRIZE",
+  "UNIVERSITY_AWARD",
+  "PUBLIC_GOODS_AWARD",
+  "GRAND_PRIZE",
+  "HONORABLE_MENTION"
+ ],
+ "prizePlacements": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6
+ ],
+ "problemTags": [
+  {
+   "tag": "fragmented liquidity",
+   "count": 120
+  },
+  {
+   "tag": "information overload",
+   "count": 87
+  },
+  {
+   "tag": "high platform fees",
+   "count": 68
+  },
+  {
+   "tag": "high barrier to entry",
+   "count": 66
+  },
+  {
+   "tag": "complex web3 onboarding",
+   "count": 58
+  },
+  {
+   "tag": "lack of transparency",
+   "count": 55
+  },
+  {
+   "tag": "capital inefficiency",
+   "count": 41
+  },
+  {
+   "tag": "low community engagement",
+   "count": 41
+  },
+  {
+   "tag": "rug pulls",
+   "count": 37
+  },
+  {
+   "tag": "high transaction fees",
+   "count": 36
+  },
+  {
+   "tag": "liquidity fragmentation",
+   "count": 36
+  },
+  {
+   "tag": "information asymmetry",
+   "count": 34
+  },
+  {
+   "tag": "high barrier to entry for defi",
+   "count": 34
+  },
+  {
+   "tag": "high intermediary fees",
+   "count": 34
+  },
+  {
+   "tag": "lack of asset ownership",
+   "count": 32
+  },
+  {
+   "tag": "complex crypto onboarding",
+   "count": 32
+  },
+  {
+   "tag": "complex trading interfaces",
+   "count": 31
+  },
+  {
+   "tag": "lack of creator monetization",
+   "count": 29
+  },
+  {
+   "tag": "centralized data silos",
+   "count": 29
+  },
+  {
+   "tag": "complex defi interfaces",
+   "count": 28
+  },
+  {
+   "tag": "complex onboarding",
+   "count": 28
+  },
+  {
+   "tag": "high remittance fees",
+   "count": 28
+  },
+  {
+   "tag": "ticket scalping",
+   "count": 25
+  },
+  {
+   "tag": "high transaction costs",
+   "count": 25
+  },
+  {
+   "tag": "centralized platform fees",
+   "count": 25
+  }
+ ],
+ "solutionTags": [
+  {
+   "tag": "rwa tokenization",
+   "count": 112
+  },
+  {
+   "tag": "tokenized rewards",
+   "count": 95
+  },
+  {
+   "tag": "decentralized marketplace",
+   "count": 69
+  },
+  {
+   "tag": "smart contract escrow",
+   "count": 67
+  },
+  {
+   "tag": "on-chain verification",
+   "count": 55
+  },
+  {
+   "tag": "natural language processing",
+   "count": 45
+  },
+  {
+   "tag": "stablecoin payments",
+   "count": 43
+  },
+  {
+   "tag": "decentralized identity",
+   "count": 43
+  },
+  {
+   "tag": "gamification",
+   "count": 43
+  },
+  {
+   "tag": "tokenized incentives",
+   "count": 42
+  },
+  {
+   "tag": "decentralized physical infrastructure",
+   "count": 42
+  },
+  {
+   "tag": "smart contract automation",
+   "count": 40
+  },
+  {
+   "tag": "telegram bot interface",
+   "count": 39
+  },
+  {
+   "tag": "decentralized storage",
+   "count": 38
+  },
+  {
+   "tag": "decentralized physical infrastructure network",
+   "count": 36
+  },
+  {
+   "tag": "depin",
+   "count": 33
+  },
+  {
+   "tag": "ai agents",
+   "count": 31
+  },
+  {
+   "tag": "zero-knowledge proofs",
+   "count": 27
+  },
+  {
+   "tag": "stablecoin settlement",
+   "count": 25
+  },
+  {
+   "tag": "decentralized governance",
+   "count": 25
+  },
+  {
+   "tag": "yield aggregation",
+   "count": 25
+  },
+  {
+   "tag": "unified dashboard",
+   "count": 24
+  },
+  {
+   "tag": "on-chain reputation",
+   "count": 24
+  },
+  {
+   "tag": "gamified learning",
+   "count": 24
+  },
+  {
+   "tag": "dao governance",
+   "count": 24
+  }
+ ],
+ "primitives": [
+  {
+   "tag": "nft",
+   "count": 1355
+  },
+  {
+   "tag": "payments",
+   "count": 635
+  },
+  {
+   "tag": "token-gating",
+   "count": 583
+  },
+  {
+   "tag": "oracle",
+   "count": 568
+  },
+  {
+   "tag": "smart contracts",
+   "count": 537
+  },
+  {
+   "tag": "dao",
+   "count": 431
+  },
+  {
+   "tag": "token",
+   "count": 423
+  },
+  {
+   "tag": "staking",
+   "count": 420
+  },
+  {
+   "tag": "tokenization",
+   "count": 410
+  },
+  {
+   "tag": "escrow",
+   "count": 408
+  },
+  {
+   "tag": "rwa",
+   "count": 366
+  },
+  {
+   "tag": "marketplace",
+   "count": 350
+  },
+  {
+   "tag": "stablecoins",
+   "count": 329
+  },
+  {
+   "tag": "depin",
+   "count": 326
+  },
+  {
+   "tag": "stablecoin",
+   "count": 274
+  },
+  {
+   "tag": "governance",
+   "count": 262
+  },
+  {
+   "tag": "amm",
+   "count": 261
+  },
+  {
+   "tag": "wallet",
+   "count": 253
+  },
+  {
+   "tag": "token rewards",
+   "count": 224
+  },
+  {
+   "tag": "smart-contracts",
+   "count": 215
+  },
+  {
+   "tag": "gaming",
+   "count": 199
+  },
+  {
+   "tag": "lending",
+   "count": 178
+  },
+  {
+   "tag": "token-incentives",
+   "count": 178
+  },
+  {
+   "tag": "zk-proof",
+   "count": 160
+  },
+  {
+   "tag": "ai-agent",
+   "count": 156
+  }
+ ],
+ "techStack": [
+  {
+   "tag": "solana",
+   "count": 5404
+  },
+  {
+   "tag": "react",
+   "count": 2238
+  },
+  {
+   "tag": "rust",
+   "count": 1697
+  },
+  {
+   "tag": "anchor",
+   "count": 1171
+  },
+  {
+   "tag": "typescript",
+   "count": 744
+  },
+  {
+   "tag": "ai",
+   "count": 575
+  },
+  {
+   "tag": "llm",
+   "count": 218
+  },
+  {
+   "tag": "vercel",
+   "count": 208
+  },
+  {
+   "tag": "web3.js",
+   "count": 187
+  },
+  {
+   "tag": "javascript",
+   "count": 127
+  },
+  {
+   "tag": "python",
+   "count": 119
+  },
+  {
+   "tag": "react native",
+   "count": 102
+  },
+  {
+   "tag": "node.js",
+   "count": 99
+  },
+  {
+   "tag": "usdc",
+   "count": 91
+  },
+  {
+   "tag": "metaplex",
+   "count": 81
+  },
+  {
+   "tag": "iot",
+   "count": 69
+  },
+  {
+   "tag": "next.js",
+   "count": 64
+  },
+  {
+   "tag": "react-native",
+   "count": 62
+  },
+  {
+   "tag": "openai",
+   "count": 61
+  },
+  {
+   "tag": "unity",
+   "count": 61
+  },
+  {
+   "tag": "mobile",
+   "count": 55
+  },
+  {
+   "tag": "android",
+   "count": 54
+  },
+  {
+   "tag": "machine learning",
+   "count": 54
+  },
+  {
+   "tag": "ipfs",
+   "count": 53
+  },
+  {
+   "tag": "telegram api",
+   "count": 46
+  }
+ ],
+ "targetUsers": [
+  {
+   "tag": "content creators",
+   "count": 450
+  },
+  {
+   "tag": "defi traders",
+   "count": 433
+  },
+  {
+   "tag": "defi users",
+   "count": 388
+  },
+  {
+   "tag": "retail investors",
+   "count": 328
+  },
+  {
+   "tag": "nft collectors",
+   "count": 328
+  },
+  {
+   "tag": "web3 gamers",
+   "count": 240
+  },
+  {
+   "tag": "dao operators",
+   "count": 214
+  },
+  {
+   "tag": "gamers",
+   "count": 209
+  },
+  {
+   "tag": "yield farmers",
+   "count": 189
+  },
+  {
+   "tag": "casual gamers",
+   "count": 174
+  },
+  {
+   "tag": "community managers",
+   "count": 167
+  },
+  {
+   "tag": "dao members",
+   "count": 164
+  },
+  {
+   "tag": "dapp developers",
+   "count": 163
+  },
+  {
+   "tag": "defi investors",
+   "count": 161
+  },
+  {
+   "tag": "solana users",
+   "count": 159
+  },
+  {
+   "tag": "crypto investors",
+   "count": 156
+  },
+  {
+   "tag": "liquidity providers",
+   "count": 153
+  },
+  {
+   "tag": "retail traders",
+   "count": 137
+  },
+  {
+   "tag": "solana developers",
+   "count": 137
+  },
+  {
+   "tag": "event organizers",
+   "count": 129
+  },
+  {
+   "tag": "web3 developers",
+   "count": 127
+  },
+  {
+   "tag": "freelancers",
+   "count": 124
+  },
+  {
+   "tag": "crypto enthusiasts",
+   "count": 123
+  },
+  {
+   "tag": "social media users",
+   "count": 121
+  },
+  {
+   "tag": "merchants",
+   "count": 120
+  }
+ ],
+ "clusters": [
+  {
+   "key": "v1-c14",
+   "label": "Solana AI Agent Infrastructure",
+   "projectCount": 325
+  },
+  {
+   "key": "v1-c9",
+   "label": "Solana DEX and Trading Infrastructure",
+   "projectCount": 323
+  },
+  {
+   "key": "v1-c22",
+   "label": "AI-Powered Solana DeFi Assistants",
+   "projectCount": 270
+  },
+  {
+   "key": "v1-c13",
+   "label": "Solana Privacy and Identity Management",
+   "projectCount": 260
+  },
+  {
+   "key": "v1-c8",
+   "label": "Solana Yield and DeFi Optimization",
+   "projectCount": 257
+  },
+  {
+   "key": "v1-c5",
+   "label": "Solana Data and Monitoring Infrastructure",
+   "projectCount": 257
+  },
+  {
+   "key": "v1-c21",
+   "label": "Web3 Creator Economy Platforms",
+   "projectCount": 234
+  },
+  {
+   "key": "v1-c20",
+   "label": "Solana GameFi and Blockchain Gaming",
+   "projectCount": 225
+  },
+  {
+   "key": "v1-c26",
+   "label": "Simplified Solana Payment Solutions",
+   "projectCount": 223
+  },
+  {
+   "key": "v1-c1",
+   "label": "Solana Real Estate Tokenization",
+   "projectCount": 204
+  },
+  {
+   "key": "v1-c16",
+   "label": "Stablecoin Payment Rails and Infrastructure",
+   "projectCount": 202
+  },
+  {
+   "key": "v1-c12",
+   "label": "Blockchain Music and Royalty Platforms",
+   "projectCount": 192
+  },
+  {
+   "key": "v1-c10",
+   "label": "Solana DePIN Infrastructure Networks",
+   "projectCount": 189
+  },
+  {
+   "key": "v1-c11",
+   "label": "Solana-Based Decentralized E-commerce",
+   "projectCount": 184
+  },
+  {
+   "key": "v1-c25",
+   "label": "Solana Token Launchpads",
+   "projectCount": 183
+  },
+  {
+   "key": "v1-c18",
+   "label": "Solana Competitive Wagering and Betting",
+   "projectCount": 176
+  },
+  {
+   "key": "v1-c6",
+   "label": "Gamified Crypto Trading and Competition",
+   "projectCount": 163
+  },
+  {
+   "key": "v1-c24",
+   "label": "Gamified Web3 Education on Solana",
+   "projectCount": 162
+  },
+  {
+   "key": "v1-c15",
+   "label": "Decentralized Freelance Marketplaces",
+   "projectCount": 149
+  },
+  {
+   "key": "v1-c3",
+   "label": "Solana Prediction Markets",
+   "projectCount": 149
+  },
+  {
+   "key": "v1-c19",
+   "label": "Web3 Gaming Platforms and Infrastructure",
+   "projectCount": 146
+  },
+  {
+   "key": "v1-c29",
+   "label": "Solar Energy DePIN and Verification",
+   "projectCount": 138
+  },
+  {
+   "key": "v1-c2",
+   "label": "Solana-based Decentralized Voting Systems",
+   "projectCount": 130
+  },
+  {
+   "key": "v1-c28",
+   "label": "Web3 Loyalty and Reward Platforms",
+   "projectCount": 123
+  },
+  {
+   "key": "v1-c27",
+   "label": "Social Media Incentive Platforms",
+   "projectCount": 120
+  },
+  {
+   "key": "v1-c4",
+   "label": "Solana-Based Charitable Fundraising",
+   "projectCount": 111
+  },
+  {
+   "key": "v1-c17",
+   "label": "Blockchain-Incentivized Fitness and Wellness",
+   "projectCount": 107
+  },
+  {
+   "key": "v1-c7",
+   "label": "Solana-Based Healthcare Solutions",
+   "projectCount": 78
+  },
+  {
+   "key": "v1-c0",
+   "label": "Gamified Web3 Travel and Tourism",
+   "projectCount": 78
+  },
+  {
+   "key": "v1-c23",
+   "label": "NFT-Based Event Ticketing Platforms",
+   "projectCount": 70
+  }
+ ],
+ "archiveSources": [
+  {
+   "key": "satoshi_forum_posts",
+   "label": "Satoshi Nakamoto Forum Posts",
+   "documentCount": 473
+  },
+  {
+   "key": "satoshi_emails",
+   "label": "Satoshi Nakamoto Emails (Nakamoto Archive)",
+   "documentCount": 13
+  },
+  {
+   "key": "cryptography_mailing_list",
+   "label": "Cryptography Mailing List (metzdowd.com)",
+   "documentCount": 37546
+  },
+  {
+   "key": "nick_szabo_essays",
+   "label": "Nick Szabo's Essays (Satoshi Nakamoto Institute)",
+   "documentCount": 3
+  },
+  {
+   "key": "nick_szabo_blog",
+   "label": "Nick Szabo's Blog (unenumerated)",
+   "documentCount": 331
+  },
+  {
+   "key": "nick_szabo_legacy",
+   "label": "Nick Szabo's Legacy Essays (szabo.best.vwh.net)",
+   "documentCount": 50
+  },
+  {
+   "key": "robin_hanson_overcoming_bias",
+   "label": "Robin Hanson - Overcoming Bias (Substack)",
+   "documentCount": 4650
+  },
+  {
+   "key": "arxiv_crypto",
+   "label": "arXiv Cryptography + Crypto-econ",
+   "documentCount": 1784
+  },
+  {
+   "key": "solana_simd_repo",
+   "label": "Solana Improvement Documents (SIMD) Repo",
+   "documentCount": 102
+  },
+  {
+   "key": "solana_simd_discussions",
+   "label": "SIMD GitHub Discussions",
+   "documentCount": 35
+  },
+  {
+   "key": "solana_forum_developer_discourse",
+   "label": "Solana Developer Forum (all categories)",
+   "documentCount": 102
+  },
+  {
+   "key": "solana_core_community_calls",
+   "label": "Solana Foundation Core Community Call Notes",
+   "documentCount": 36
+  },
+  {
+   "key": "solana_core_community_call_transcripts",
+   "label": "Solana Core Community Call Transcripts",
+   "documentCount": 8
+  },
+  {
+   "key": "solana_foundation_delegation_program",
+   "label": "Solana Foundation Delegation Program",
+   "documentCount": 2
+  },
+  {
+   "key": "solana_docs",
+   "label": "Solana Docs (solana.com/docs)",
+   "documentCount": 59
+  },
+  {
+   "key": "agave_docs",
+   "label": "Agave Validator Docs (docs.anza.xyz)",
+   "documentCount": 113
+  },
+  {
+   "key": "spl_docs",
+   "label": "Solana Program Library Docs (spl.solana.com)",
+   "documentCount": 24
+  },
+  {
+   "key": "solana_repo_issues",
+   "label": "Solana Core Repo Issues + PRs",
+   "documentCount": 18611
+  },
+  {
+   "key": "solana_program_library_issues",
+   "label": "Solana Program Library Issues + PRs",
+   "documentCount": 2288
+  },
+  {
+   "key": "agave_repo_issues",
+   "label": "Agave (Anza) Repo Issues + PRs",
+   "documentCount": 7210
+  },
+  {
+   "key": "solana_simd_repo_issues",
+   "label": "SIMD Repo Issues",
+   "documentCount": 65
+  },
+  {
+   "key": "solana_stackexchange",
+   "label": "Solana Stack Exchange Q&A",
+   "documentCount": 3920
+  },
+  {
+   "key": "colosseum_blog",
+   "label": "Colosseum Blog & Podcast",
+   "documentCount": 122
+  },
+  {
+   "key": "solana_news",
+   "label": "Solana Official News",
+   "documentCount": 242
+  },
+  {
+   "key": "helius_blog",
+   "label": "Helius Blog (RPC/Infra)",
+   "documentCount": 100
+  },
+  {
+   "key": "solana_cookbook",
+   "label": "Solana Cookbook (Developer Patterns)",
+   "documentCount": 32
+  },
+  {
+   "key": "superteam_blog",
+   "label": "Superteam Blog (Ecosystem)",
+   "documentCount": 138
+  },
+  {
+   "key": "jito_research",
+   "label": "Jito Research (MEV/Staking)",
+   "documentCount": 27
+  },
+  {
+   "key": "firedancer_docs",
+   "label": "Firedancer Docs (Validator Client)",
+   "documentCount": 36
+  },
+  {
+   "key": "triton_yellowstone_docs",
+   "label": "Triton Docs (Yellowstone, Solana, APIs)",
+   "documentCount": 76
+  },
+  {
+   "key": "yellowstone_grpc_repo",
+   "label": "Yellowstone gRPC Repo Docs",
+   "documentCount": 10
+  },
+  {
+   "key": "helius_rpc_docs",
+   "label": "Helius RPC / Data Docs",
+   "documentCount": 622
+  },
+  {
+   "key": "sec3_security_blog",
+   "label": "Sec3 Security Blog & Reports",
+   "documentCount": 35
+  },
+  {
+   "key": "ottersec_blog",
+   "label": "OtterSec Blog",
+   "documentCount": 25
+  },
+  {
+   "key": "neodyme_blog",
+   "label": "Neodyme Blog",
+   "documentCount": 33
+  },
+  {
+   "key": "magicblock_docs",
+   "label": "MagicBlock Gaming / Ephemeral Rollup Docs",
+   "documentCount": 119
+  },
+  {
+   "key": "magicblock_blog",
+   "label": "MagicBlock Engineering Blog",
+   "documentCount": 36
+  },
+  {
+   "key": "squads_docs",
+   "label": "Squads Governance & Dev Docs",
+   "documentCount": 111
+  },
+  {
+   "key": "squads_blog",
+   "label": "Squads Treasury & Governance Blog",
+   "documentCount": 60
+  },
+  {
+   "key": "realms_docs",
+   "label": "Realms DAO Governance Documentation",
+   "documentCount": 41
+  },
+  {
+   "key": "breakpoint_2022_transcripts",
+   "label": "Solana Breakpoint 2022 Talk Transcripts",
+   "documentCount": 3
+  },
+  {
+   "key": "breakpoint_2023_transcripts",
+   "label": "Solana Breakpoint 2023 Talk Transcripts",
+   "documentCount": 83
+  },
+  {
+   "key": "breakpoint_2024_transcripts",
+   "label": "Solana Breakpoint 2024 Talk Transcripts",
+   "documentCount": 125
+  },
+  {
+   "key": "breakpoint_2025_transcripts",
+   "label": "Solana Breakpoint 2025 Talk Transcripts",
+   "documentCount": 1
+  },
+  {
+   "key": "paradigm_research",
+   "label": "Paradigm Research",
+   "documentCount": 324
+  },
+  {
+   "key": "a16z_crypto",
+   "label": "a16z Crypto",
+   "documentCount": 910
+  },
+  {
+   "key": "multicoin_capital",
+   "label": "Multicoin Capital",
+   "documentCount": 394
+  },
+  {
+   "key": "pantera_capital",
+   "label": "Pantera Capital",
+   "documentCount": 31
+  },
+  {
+   "key": "paul_graham_essays",
+   "label": "Paul Graham Essays",
+   "documentCount": 199
+  },
+  {
+   "key": "sam_altman_blog",
+   "label": "Sam Altman Blog",
+   "documentCount": 119
+  },
+  {
+   "key": "chainalysis_research",
+   "label": "Chainalysis Blog & Research",
+   "documentCount": 896
+  },
+  {
+   "key": "jupiter_docs",
+   "label": "Jupiter Documentation",
+   "documentCount": 223
+  },
+  {
+   "key": "orca_docs",
+   "label": "Orca Documentation",
+   "documentCount": 143
+  },
+  {
+   "key": "raydium_docs",
+   "label": "Raydium Documentation",
+   "documentCount": 58
+  },
+  {
+   "key": "marinade_docs",
+   "label": "Marinade Documentation",
+   "documentCount": 38
+  },
+  {
+   "key": "tensor_docs",
+   "label": "Tensor Documentation",
+   "documentCount": 40
+  },
+  {
+   "key": "drift_docs",
+   "label": "Drift Documentation",
+   "documentCount": 124
+  },
+  {
+   "key": "nakamoto_institute",
+   "label": "Nakamoto Institute Library (Curated)",
+   "documentCount": 84
+  },
+  {
+   "key": "jito_docs",
+   "label": "Jito Documentation",
+   "documentCount": 79
+  },
+  {
+   "key": "meteora_docs",
+   "label": "Meteora Documentation",
+   "documentCount": 166
+  },
+  {
+   "key": "phantom_docs",
+   "label": "Phantom Documentation",
+   "documentCount": 127
+  },
+  {
+   "key": "placeholder_vc",
+   "label": "Placeholder VC",
+   "documentCount": 105
+  },
+  {
+   "key": "alliance_essays",
+   "label": "Alliance DAO Essays",
+   "documentCount": 52
+  },
+  {
+   "key": "electric_capital",
+   "label": "Electric Capital",
+   "documentCount": 6
+  },
+  {
+   "key": "galaxy_research",
+   "label": "Galaxy Research",
+   "documentCount": 589
+  },
+  {
+   "key": "coin_metrics",
+   "label": "Coin Metrics Research",
+   "documentCount": 13
+  }
+ ]
+}

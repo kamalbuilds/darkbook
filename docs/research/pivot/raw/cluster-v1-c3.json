@@ -1,0 +1,107 @@
+{
+ "key": "v1-c3",
+ "label": "Solana Prediction Markets",
+ "summary": "This cluster consists of decentralized platforms built on the Solana blockchain that enable users to bet on future events, memecoin performance, and continuous probability distributions.",
+ "projectCount": 149,
+ "winnerCount": 13,
+ "representativeProjects": [
+  {
+   "slug": "saga-prediction-market",
+   "name": "SAGA Prediction Market",
+   "oneLiner": "A decentralized prediction market on Solana using an AMM to trade conditional tokens for any event.",
+   "isWinner": false
+  },
+  {
+   "slug": "knostra",
+   "name": "Knostra",
+   "oneLiner": "A gamified prediction market platform designed for consumer engagement and social betting.",
+   "isWinner": false
+  },
+  {
+   "slug": "spulse",
+   "name": "Spulse",
+   "oneLiner": "A decentralized prediction market on Solana using Blinks for social media-based poll creation and staking.",
+   "isWinner": false
+  },
+  {
+   "slug": "bet-on-pump",
+   "name": "Bet on Pump",
+   "oneLiner": "A gamified prediction market for memecoin price movements featuring SocialFi and iGaming elements.",
+   "isWinner": false
+  },
+  {
+   "slug": "oracle's-edge:-solana-based-distribution-prediction-market",
+   "name": "Oracle\u2019s Edge: Solana based Distribution Prediction market",
+   "oneLiner": "Solana-based distribution prediction market using continuous probability curves for non-binary outcome trading.",
+   "isWinner": false
+  }
+ ],
+ "topTags": {
+  "problemTags": [
+   {
+    "tag": "information asymmetry",
+    "count": 8
+   },
+   {
+    "tag": "centralized prediction markets",
+    "count": 8
+   },
+   {
+    "tag": "high transaction costs",
+    "count": 5
+   },
+   {
+    "tag": "low engagement in prediction markets",
+    "count": 5
+   },
+   {
+    "tag": "front-running",
+    "count": 4
+   }
+  ],
+  "primitives": [
+   {
+    "tag": "prediction market",
+    "count": 127
+   },
+   {
+    "tag": "oracle",
+    "count": 110
+   },
+   {
+    "tag": "escrow",
+    "count": 31
+   },
+   {
+    "tag": "amm",
+    "count": 24
+   },
+   {
+    "tag": "staking",
+    "count": 22
+   }
+  ],
+  "techStack": [
+   {
+    "tag": "solana",
+    "count": 149
+   },
+   {
+    "tag": "rust",
+    "count": 66
+   },
+   {
+    "tag": "react",
+    "count": 64
+   },
+   {
+    "tag": "anchor",
+    "count": 51
+   },
+   {
+    "tag": "typescript",
+    "count": 30
+   }
+  ]
+ }
+}

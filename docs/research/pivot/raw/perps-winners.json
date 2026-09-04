@@ -1,0 +1,1261 @@
+{
+ "results": [
+  {
+   "slug": "mato",
+   "name": "Mato",
+   "oneLiner": "A DEX implementing a time-weighted order book for continuous, streaming order execution and MEV protection.",
+   "similarity": 0.08756109481915933,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "breakout/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/nightshade-labs/mato-ui",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/fa0120c4beb14e749adf775975d7f1af",
+    "technicalDemo": "https://www.loom.com/share/0fb1edef164643c691db83d9d1c77173",
+    "twitter": "https://twitter.com/MatoExchange",
+    "colosseum": "https://colosseum.com/projects/explore/mato"
+   },
+   "evidence": [
+    "Mato is a DEX that implements a time",
+    "A DEX implementing a time-weighted order book for continuous, streaming order execution and MEV protection."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": 5000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 3
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "front-running",
+     "high price impact",
+     "toxic flow",
+     "mev"
+    ],
+    "solutionTags": [
+     "time-weighted order book",
+     "continuous execution",
+     "streaming trades"
+    ],
+    "primitives": [
+     "dex",
+     "order book",
+     "liquidity provision"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "liquidity providers",
+     "institutional traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "toaster.trade",
+   "name": "toaster.trade",
+   "oneLiner": "TikTok-style social trading platform for Solana perpetuals powered by Hyperliquid.",
+   "similarity": 0.08462998102466793,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/toaster-trade/colosseum-hackathon",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/a0facf4c80e0430e8578a8dc3faed259",
+    "technicalDemo": "https://youtu.be/DQYa-UoO8Pc",
+    "twitter": "https://twitter.com/ToasterDotTrade",
+    "colosseum": "https://colosseum.com/projects/explore/toaster.trade"
+   },
+   "evidence": [
+    "TikTok of casual trading for Solana, powered by",
+    "TikTok-style social trading platform for Solana perpetuals powered by Hyperliquid."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "4th Place - Consumer Apps",
+    "placement": 4,
+    "amount": 10000,
+    "trackName": "Consumer Apps"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 2
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "complex trading interfaces",
+     "high barrier to entry for perps",
+     "low engagement in defi"
+    ],
+    "solutionTags": [
+     "gamified trading feed",
+     "abstracted cross-chain liquidity",
+     "social discovery"
+    ],
+    "primitives": [
+     "perpetual exchange",
+     "social trading",
+     "order book"
+    ],
+    "techStack": [
+     "solana",
+     "hyperliquid",
+     "react native"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "casual investors",
+     "mobile users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "bananazone",
+   "name": "BananaZone",
+   "oneLiner": "A gamified trading platform combining perpetual swaps and prediction markets with a high-energy, chaotic UX.",
+   "similarity": 0.0784126984126984,
+   "hackathon": {
+    "name": "Breakout",
+    "slug": "breakout",
+    "startDate": "2025-04-14"
+   },
+   "tracks": [
+    {
+     "name": "Gaming",
+     "key": "breakout/gaming"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/memeworldorg/banana-contracts",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/b0f2da18d954421289248a116668a0a5?sid=4ee81bbb-40be-4ac2-9bfc-3aef7e9fad59",
+    "technicalDemo": "https://www.loom.com/share/500d32c6d339499584ee1d3ffe150649?sid=e6f96231-5eea-4167-921e-535089f07cdc",
+    "twitter": "https://twitter.com/BananaZoneApp",
+    "colosseum": "https://colosseum.com/projects/explore/bananazone"
+   },
+   "evidence": [
+    "Welcome to the Banana Zone. A new trading",
+    "A gamified trading platform combining perpetual swaps and prediction markets with a high-energy, chaotic UX."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "4th Place - DeFi",
+    "placement": 4,
+    "amount": 10000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 1
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "boring trading interfaces",
+     "lack of engagement in defi",
+     "fragmented prediction and perp markets"
+    ],
+    "solutionTags": [
+     "gamified ux",
+     "social trading",
+     "unified perp and prediction platform"
+    ],
+    "primitives": [
+     "perpetual swaps",
+     "prediction markets",
+     "amm"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "degen traders",
+     "crypto gamers",
+     "prediction market participants"
+    ]
+   },
+   "crowdedness": 149,
+   "cluster": {
+    "key": "v1-c3",
+    "label": "Solana Prediction Markets"
+   }
+  },
+  {
+   "slug": "blackpool",
+   "name": "Blackpool",
+   "oneLiner": "A privacy-preserving, MEV-resistant decentralized exchange on Solana using zero-knowledge proofs.",
+   "similarity": 0.07385563701353175,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "radar/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/vitorpy/cyklon",
+    "demo": null,
+    "presentation": "https://drive.proton.me/urls/6CMM1YVN8C#O7MWVtEGNi8Y",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://x.com/blackpooldao",
+    "colosseum": "https://colosseum.com/projects/explore/blackpool"
+   },
+   "evidence": [
+    "Blackpool is revolutionizing decentralized trading on Solana. We",
+    "A privacy-preserving, MEV-resistant decentralized exchange on Solana using zero-knowledge proofs."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - DeFi",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "DeFi"
+   },
+   "accelerator": {
+    "companySlug": "darklake-1",
+    "companyName": "DARKLAKE",
+    "batchKey": "accelerator/c2",
+    "batchName": "C2"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "front-running",
+     "mev exploitation",
+     "lack of trade privacy",
+     "inefficient execution"
+    ],
+    "solutionTags": [
+     "zk-proof execution",
+     "private order matching",
+     "mev-resistant dex",
+     "shielded transactions"
+    ],
+    "primitives": [
+     "dex",
+     "zk-proof",
+     "mev-protection",
+     "privacy"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "zero-knowledge proofs"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "institutional investors",
+     "privacy-conscious users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "destreet:-trade-onchain-with-friends",
+   "name": "DeStreet: Trade onchain with friends",
+   "oneLiner": "A non-custodial social trading platform on Solana Mobile for sharing and joining trades via links.",
+   "similarity": 0.07218480444286896,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DAOs & Communities",
+     "key": "renaissance/daos--communities"
+    },
+    {
+     "name": "Consumer Apps",
+     "key": "renaissance/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/DeStreetDAO/destreet-monorepo",
+    "demo": null,
+    "presentation": "https://www.youtube.com/watch?v=9eRZkIt9gD0",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/destreetdapp",
+    "colosseum": "https://colosseum.com/projects/explore/destreet:-trade-onchain-with-friends"
+   },
+   "evidence": [
+    "DeStreet is a non-custodial dApp built on",
+    "A non-custodial social trading platform on Solana Mobile for sharing and joining trades via links."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "2nd Place - DAOs & Communities",
+    "placement": 2,
+    "amount": 20000,
+    "trackName": "DAOs & Communities"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 4
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented social trading",
+     "custodial risk in copy trading",
+     "complex trade execution for groups",
+     "lack of mobile-native defi"
+    ],
+    "solutionTags": [
+     "vault-based trade execution",
+     "link-based trade sharing",
+     "non-custodial asset management",
+     "mobile dapp"
+    ],
+    "primitives": [
+     "vault",
+     "amm",
+     "social trading",
+     "non-custodial",
+     "smart contract"
+    ],
+    "techStack": [
+     "solana",
+     "jupiter",
+     "solana mobile stack",
+     "saga",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "social media influencers",
+     "crypto communities",
+     "mobile users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "avici",
+   "name": "Avici ",
+   "oneLiner": "A self-custodial, mobile-first P2P decentralized exchange designed for users in emerging markets.",
+   "similarity": 0.07172917947666871,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    },
+    {
+     "name": "Consumer Apps",
+     "key": "renaissance/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://avici.gitbook.io/avici-labs/",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/3d177a127c0649f59620ff1b74bb9e5a?sid=7bb09508-e772-439c-b5a7-abcb0d9f32b1",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/aviciClub",
+    "colosseum": "https://colosseum.com/projects/explore/avici"
+   },
+   "evidence": [
+    "A self-custodial, P2P , mobile first DEX for",
+    "A self-custodial, mobile-first P2P decentralized exchange designed for users in emerging markets."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi & Payments",
+    "placement": null,
+    "amount": null,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "lack of access to global markets",
+     "high fees for cross-border payments",
+     "centralized exchange risks",
+     "poor mobile ux in defi"
+    ],
+    "solutionTags": [
+     "p2p trading engine",
+     "mobile-first interface",
+     "non-custodial wallet integration",
+     "localized payment rails"
+    ],
+    "primitives": [
+     "dex",
+     "p2p",
+     "self-custody",
+     "escrow"
+    ],
+    "techStack": [
+     "solana",
+     "react native",
+     "rust"
+    ],
+    "targetUsers": [
+     "emerging market users",
+     "p2p traders",
+     "unbanked populations",
+     "mobile-first crypto users"
+    ]
+   },
+   "crowdedness": 223,
+   "cluster": {
+    "key": "v1-c26",
+    "label": "Simplified Solana Payment Solutions"
+   }
+  },
+  {
+   "slug": "urani",
+   "name": "URANI",
+   "oneLiner": "Intent-based swap aggregator on Solana providing MEV protection and price optimization for secure trading.",
+   "similarity": 0.06793741109530584,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    },
+    {
+     "name": "Consumer Apps",
+     "key": "renaissance/consumer-apps"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/urani-labs",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/84014b7877ab42e6929c0f381cbb8cd1?sid=545d0aaa-57b6-424c-8b6e-8a3239d615d0",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/urani_labs",
+    "colosseum": "https://colosseum.com/projects/explore/urani"
+   },
+   "evidence": [
+    "Solana's intent-based swap aggregator, bringing protection against toxic MEV at the application layer and ensuring secure trading for the next billion users. Together with limit orders by design, a competitive liquidity marketplace",
+    "Intent-based swap aggregator on Solana providing MEV protection and price optimization for secure trading."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - DeFi & Payments",
+    "placement": 1,
+    "amount": 30000,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": {
+    "companySlug": "urani",
+    "companyName": "Urani",
+    "batchKey": "accelerator/c1",
+    "batchName": "C1"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "toxic mev",
+     "slippage",
+     "front-running",
+     "sandwich attacks",
+     "inefficient price discovery"
+    ],
+    "solutionTags": [
+     "intent-based swaps",
+     "swap aggregation",
+     "mev mitigation",
+     "batch auctions",
+     "liquidity marketplace"
+    ],
+    "primitives": [
+     "dex aggregator",
+     "limit orders",
+     "mev protection",
+     "intents"
+    ],
+    "techStack": [
+     "solana",
+     "rust"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "market makers",
+     "searchers",
+     "retail users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "fxswap",
+   "name": "FxSwap",
+   "oneLiner": "A decentralized exchange optimized for efficient foreign exchange (Forex) trading on Solana.",
+   "similarity": 0.06657754010695187,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "radar/defi"
+    },
+    {
+     "name": "Payments",
+     "key": "radar/payments"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/theISCTeam/fxswap-solana-public",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/ff9789ff36864be2bee5f2cb4afaa225",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://x.com/ISC_money",
+    "colosseum": "https://colosseum.com/projects/explore/fxswap"
+   },
+   "evidence": [
+    "FxSwap is a DEX that allows for efficient swap between Forex",
+    "A decentralized exchange optimized for efficient foreign exchange (Forex) trading on Solana."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - Payments",
+    "placement": 1,
+    "amount": 25000,
+    "trackName": "Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "high forex fees",
+     "limited on-chain forex liquidity",
+     "slow cross-border settlements",
+     "centralized forex markets"
+    ],
+    "solutionTags": [
+     "automated market maker",
+     "stablecoin liquidity pools",
+     "decentralized forex exchange",
+     "on-chain settlement"
+    ],
+    "primitives": [
+     "amm",
+     "stablecoins",
+     "liquidity-pool",
+     "dex"
+    ],
+    "techStack": [
+     "solana",
+     "anchor",
+     "rust",
+     "react"
+    ],
+    "targetUsers": [
+     "forex traders",
+     "cross-border payment providers",
+     "defi users",
+     "liquidity providers"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "capitola",
+   "name": "Capitola",
+   "oneLiner": "A prediction market meta-aggregator providing the best prices and aggregated liquidity across multiple platforms.",
+   "similarity": 0.06485601355166572,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/ryanchern/capitola-app",
+    "demo": null,
+    "presentation": "https://youtu.be/dlZzcUcGkH0",
+    "technicalDemo": "https://youtu.be/cXRmUpj7sGk",
+    "twitter": "https://twitter.com/ryanchern",
+    "colosseum": "https://colosseum.com/projects/explore/capitola"
+   },
+   "evidence": [
+    "Capitola is a prediction markets meta-aggregator that",
+    "A prediction market meta-aggregator providing the best prices and aggregated liquidity across multiple platforms."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - Consumer Apps",
+    "placement": 1,
+    "amount": 25000,
+    "trackName": "Consumer Apps"
+   },
+   "accelerator": {
+    "companySlug": "capitola-research",
+    "companyName": "Capitola Research",
+    "batchKey": "accelerator/c4",
+    "batchName": "C4"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented liquidity",
+     "price disparity",
+     "inefficient market access",
+     "complex user experience"
+    ],
+    "solutionTags": [
+     "meta-aggregation",
+     "smart order routing",
+     "cross-platform integration"
+    ],
+    "primitives": [
+     "prediction market",
+     "aggregator",
+     "oracle"
+    ],
+    "techStack": [
+     "solana",
+     "react",
+     "typescript"
+    ],
+    "targetUsers": [
+     "prediction market traders",
+     "arbitrageurs",
+     "defi users"
+    ]
+   },
+   "crowdedness": 149,
+   "cluster": {
+    "key": "v1-c3",
+    "label": "Solana Prediction Markets"
+   }
+  },
+  {
+   "slug": "rekt",
+   "name": "Rekt",
+   "oneLiner": "Gamified mobile perpetuals trading app enabling retail users to trade BTC, ETH, and SOL with as little as $1.",
+   "similarity": 0.06166161105493764,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/anagrambuild/rekt-react-native",
+    "demo": null,
+    "presentation": "https://youtu.be/Ax9633Jt5j4",
+    "technicalDemo": "https://youtu.be/D6uLqifkWtM",
+    "twitter": "https://twitter.com/GetRektApp",
+    "colosseum": "https://colosseum.com/projects/explore/rekt"
+   },
+   "evidence": [
+    "Rekt is a mobile trading app that gives",
+    "Gamified mobile perpetuals trading app enabling retail users to trade BTC, ETH, and SOL with as little as $1."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "3rd Place - DeFi",
+    "placement": 3,
+    "amount": 15000,
+    "trackName": "DeFi"
+   },
+   "accelerator": {
+    "companySlug": "rekt",
+    "companyName": "Rekt",
+    "batchKey": "accelerator/c4",
+    "batchName": "C4"
+   },
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "high capital requirements for trading",
+     "complex trading interfaces",
+     "lack of engagement in traditional defi",
+     "high barrier to entry for retail"
+    ],
+    "solutionTags": [
+     "gamified perpetuals trading",
+     "mobile-first trading interface",
+     "micro-betting mechanism",
+     "reward-based engagement"
+    ],
+    "primitives": [
+     "perpetuals",
+     "leverage",
+     "points system",
+     "leaderboard"
+    ],
+    "techStack": [
+     "solana",
+     "mobile app"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "casual gamers",
+     "defi beginners",
+     "mobile users"
+    ]
+   },
+   "crowdedness": 163,
+   "cluster": {
+    "key": "v1-c6",
+    "label": "Gamified Crypto Trading and Competition"
+   }
+  },
+  {
+   "slug": "opsonchain-1",
+   "name": "OPSONCHAIN",
+   "oneLiner": "Solana's first VWAP-based execution layer for automated, liquidity-aware large-scale trade execution.",
+   "similarity": 0.05858998144712431,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "cypherpunk/infrastructure"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/ArjunPanthula77/OPSONCHAIN",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/d1c4f772d862411f95e0f801102e42ed",
+    "technicalDemo": "https://www.loom.com/share/eee3338bb9f64688aa62a18da7fc42c7",
+    "twitter": "https://twitter.com/opsonchain",
+    "colosseum": "https://colosseum.com/projects/explore/opsonchain-1"
+   },
+   "evidence": [
+    "OPSONCHAIN is building Solana\u2019s first VWAP-based",
+    "Solana's first VWAP-based execution layer for automated, liquidity-aware large-scale trade execution."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi",
+    "placement": null,
+    "amount": null,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "high slippage on large trades",
+     "inefficient treasury management",
+     "lack of volume-weighted execution",
+     "market impact of large orders"
+    ],
+    "solutionTags": [
+     "vwap execution engine",
+     "automated trade slicing",
+     "real-time liquidity monitoring",
+     "algorithmic trading"
+    ],
+    "primitives": [
+     "trading engine",
+     "treasury management",
+     "on-chain execution",
+     "amm"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor"
+    ],
+    "targetUsers": [
+     "daos",
+     "treasury managers",
+     "institutional traders",
+     "whale traders"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "neutral-trade",
+   "name": "Neutral Trade",
+   "oneLiner": "On-chain multi-strategy hedge fund tokenizing delta-neutral trading strategies for retail and professional investors.",
+   "similarity": 0.05713418336369157,
+   "hackathon": {
+    "name": "Radar",
+    "slug": "radar",
+    "startDate": "2024-09-02"
+   },
+   "tracks": [
+    {
+     "name": "Consumer",
+     "key": "radar/consumer"
+    },
+    {
+     "name": "DeFi",
+     "key": "radar/defi"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/neutral-trade/",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/f777f88bce2548b186a6d89697451650?sid=0931d219-a01f-432d-8100-9da15770b836 ;;; https://docs.google.com/presentation/d/1ScN-63FAD-8fzoKKDN8aXJpuU8sGGvMezRQl8_ViDiQ/edit#slide=id.g30659f6030f_0_0",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://x.com/TradeNeutral",
+    "colosseum": "https://colosseum.com/projects/explore/neutral-trade"
+   },
+   "evidence": [
+    "investors and high net worth individuals, bringing it accessible to all. We aim to bring in off-exchange settlement solution such that we could tap into CeFi trading strategies if we get funding",
+    "On-chain multi-strategy hedge fund tokenizing delta-neutral trading strategies for retail and professional investors."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "4th Place - DeFi",
+    "placement": 4,
+    "amount": 10000,
+    "trackName": "DeFi"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 1
+   },
+   "tags": {
+    "problemTags": [
+     "high hedge fund entry barriers",
+     "lack of transparency in traditional funds",
+     "complex legal and kyc overhead",
+     "limited access to professional strategies"
+    ],
+    "solutionTags": [
+     "tokenized trading strategies",
+     "delta-neutral vaults",
+     "on-chain fund management",
+     "off-exchange settlement"
+    ],
+    "primitives": [
+     "vaults",
+     "perpetual-swaps",
+     "tokenization",
+     "yield-aggregator",
+     "non-custodial"
+    ],
+    "techStack": [
+     "solana",
+     "drift-protocol",
+     "jlp",
+     "rust",
+     "react"
+    ],
+    "targetUsers": [
+     "retail investors",
+     "quant traders",
+     "hedge fund managers",
+     "defi users"
+    ]
+   },
+   "crowdedness": 323,
+   "cluster": {
+    "key": "v1-c9",
+    "label": "Solana DEX and Trading Infrastructure"
+   }
+  },
+  {
+   "slug": "ratex",
+   "name": "RateX",
+   "oneLiner": "A margin yield trading protocol for synthetic yield-bearing assets on Solana.",
+   "similarity": 0.05416593322771812,
+   "hackathon": {
+    "name": "Renaissance",
+    "slug": "renaissance",
+    "startDate": "2024-03-04"
+   },
+   "tracks": [
+    {
+     "name": "DeFi & Payments",
+     "key": "renaissance/defi--payments"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/RateX-Protocol/ratex-program; https://github.com/RateX-Protocol/Backend",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/d8de5149f02f43c7b05983b283c73bf1?sid=61547bd4-0764-4aab-97eb-c80eb28236f8",
+    "technicalDemo": null,
+    "twitter": "https://twitter.com/https://twitter.com/RateX_Dex",
+    "colosseum": "https://colosseum.com/projects/explore/ratex"
+   },
+   "evidence": [
+    "RateX is a margin yield trading and synthetic",
+    "A margin yield trading protocol for synthetic yield-bearing assets on Solana."
+   ],
+   "prize": {
+    "type": "HONORABLE_MENTION",
+    "name": "Honorable Mention - DeFi & Payments",
+    "placement": null,
+    "amount": null,
+    "trackName": "DeFi & Payments"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 3
+   },
+   "tags": {
+    "problemTags": [
+     "yield volatility",
+     "lack of leverage in yield markets",
+     "capital inefficiency",
+     "limited yield trading instruments"
+    ],
+    "solutionTags": [
+     "margin yield trading",
+     "synthetic assets",
+     "yield rate swaps",
+     "leveraged yield exposure"
+    ],
+    "primitives": [
+     "margin trading",
+     "synthetic assets",
+     "yield farming",
+     "derivatives",
+     "amm"
+    ],
+    "techStack": [
+     "solana",
+     "rust",
+     "anchor",
+     "react"
+    ],
+    "targetUsers": [
+     "defi traders",
+     "yield farmers",
+     "institutional hedgers",
+     "liquidity providers"
+    ]
+   },
+   "crowdedness": 257,
+   "cluster": {
+    "key": "v1-c8",
+    "label": "Solana Yield and DeFi Optimization"
+   }
+  },
+  {
+   "slug": "fora",
+   "name": "Fora",
+   "oneLiner": "A group chat-based trading platform and prediction market protocol.",
+   "similarity": 0.04937229437229437,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "Consumer Apps",
+     "key": "cypherpunk/consumer-apps"
+    },
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "RWAs",
+     "key": "cypherpunk/rwas"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/kanelabs/dragon",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/1fb0051360f448fa97bf922bb00c8eeb",
+    "technicalDemo": "https://www.loom.com/share/14776c3cb0214937ae2fe2bd517f94f9",
+    "twitter": "https://twitter.com/ForaMarkets",
+    "colosseum": "https://colosseum.com/projects/explore/fora"
+   },
+   "evidence": [
+    "Fora is a group chat based trading platform",
+    "A group chat-based trading platform and prediction market protocol."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "3rd Place - Consumer Apps",
+    "placement": 3,
+    "amount": 15000,
+    "trackName": "Consumer Apps"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "fragmented trading experiences",
+     "low engagement in prediction markets",
+     "lack of social context in trading"
+    ],
+    "solutionTags": [
+     "chat-based trading interface",
+     "integrated prediction market protocol",
+     "real-time data streaming",
+     "social-first defi"
+    ],
+    "primitives": [
+     "prediction market",
+     "social trading",
+     "amm",
+     "token"
+    ],
+    "techStack": [
+     "solana",
+     "clickhouse",
+     "inngest",
+     "websockets",
+     "typescript"
+    ],
+    "targetUsers": [
+     "retail traders",
+     "social communities",
+     "prediction market participants"
+    ]
+   },
+   "crowdedness": 149,
+   "cluster": {
+    "key": "v1-c3",
+    "label": "Solana Prediction Markets"
+   }
+  },
+  {
+   "slug": "autonom-unleashing-rwas-in-solana",
+   "name": "Autonom - Unleashing RWAs in Solana",
+   "oneLiner": "Specialized RWA oracle for Solana adjusting for corporate actions to enable reliable equity-based DeFi.",
+   "similarity": 0.04912566525469751,
+   "hackathon": {
+    "name": "Cypherpunk",
+    "slug": "cypherpunk",
+    "startDate": "2025-09-25"
+   },
+   "tracks": [
+    {
+     "name": "DeFi",
+     "key": "cypherpunk/defi"
+    },
+    {
+     "name": "Infrastructure",
+     "key": "cypherpunk/infrastructure"
+    },
+    {
+     "name": "RWAs",
+     "key": "cypherpunk/rwas"
+    }
+   ],
+   "links": {
+    "github": "https://github.com/ElementalBrian/autonom",
+    "demo": null,
+    "presentation": "https://www.loom.com/share/28d00e8aaee94d7cb680f6786488c47b",
+    "technicalDemo": "https://youtu.be/vGVrYRoipk4",
+    "twitter": "https://twitter.com/AutonomRWA",
+    "colosseum": "https://colosseum.com/projects/explore/autonom-unleashing-rwas-in-solana"
+   },
+   "evidence": [
+    "Apart from Ostium (one standalone perp DEX), RWAs",
+    "Specialized RWA oracle for Solana adjusting for corporate actions to enable reliable equity-based DeFi."
+   ],
+   "prize": {
+    "type": "TRACK_PRIZE",
+    "name": "1st Place - RWAs",
+    "placement": 1,
+    "amount": 25000,
+    "trackName": "RWAs"
+   },
+   "accelerator": null,
+   "metrics": {
+    "updatesCount": 0
+   },
+   "team": {
+    "count": 2
+   },
+   "tags": {
+    "problemTags": [
+     "oracle price inaccuracy for equities",
+     "manual pricing risk in rwas",
+     "low leverage for rwas",
+     "unaccounted corporate actions"
+    ],
+    "solutionTags": [
+     "specialized rwa oracle",
+     "automated corporate action adjustments",
+     "dynamic leverage management",
+     "pull-based oracle architecture"
+    ],
+    "primitives": [
+     "oracle",
+     "perpetual futures",
+     "rwa",
+     "lending",
+     "risk management"
+    ],
+    "techStack": [
+     "solana",
+     "anchor",
+     "rust",
+     "react"
+    ],
+    "targetUsers": [
+     "perp dex developers",
+     "lending protocol developers",
+     "rwa traders",
+     "defi protocol operators"
+    ]
+   },
+   "crowdedness": 204,
+   "cluster": {
+    "key": "v1-c1",
+    "label": "Solana Real Estate Tokenization"
+   }
+  }
+ ],
+ "filtersApplied": {
+  "filters": {
+   "winnersOnly": true
+  }
+ },
+ "totalFound": 16,
+ "hasMore": true
+}
