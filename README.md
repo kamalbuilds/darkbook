@@ -1,22 +1,48 @@
 # DarkBook
 
-**Exact size hidden until settlement. Sub-50ms matching on MagicBlock. Atomic Solana settlement.**
+**The size-blind orderbook market makers quote on.** Exact taker size hidden until settlement. Sub-50ms matching on MagicBlock. Atomic Solana settlement.
 
-> The invention: **Dark Commit** — the deferred-reveal invariant every size-private order must satisfy.  
-> `commitment = SHA-256(salt ‖ size_lots ‖ leverage_bps ‖ trader)` published at place; exact size revealed only at settlement and verified on-chain.
+> The primitive: **Dark Commit**. `commitment = SHA-256(salt || size_lots || leverage_bps || trader)` is published at place; exact size is revealed only at settlement and verified on-chain. This is the commit-reveal protocol Canidio and Danos prove stops the most severe front-running ([arXiv 2301.13785](https://arxiv.org/abs/2301.13785)), run at Ephemeral Rollup latency so the two-phase delay stops mattering.
 
 Honest privacy model (what is public vs hidden): [docs/PRIVACY_MODEL.md](./docs/PRIVACY_MODEL.md)
 
 ---
 
+## Direction (Sept 2026)
+
+DarkBook started as a retail perps venue for whales. It is now being repositioned as **execution infrastructure for market makers**, and the customer change is the whole pivot. Full evidence in [docs/research/pivot/PIVOT_DECISION.md](./docs/research/pivot/PIVOT_DECISION.md). Short version:
+
+- Every privacy or MEV-resistant DEX that won a Colosseum prize since 2024 is either dead or pivoted to infra (Blackpool, Vanish, URANI, Mato gone; Archer and Encifher pivoted). Zero are still a private DEX.
+- Solana perps volume is $38B/30d and concentrated in GMTrade, Pacifica and Jupiter, none of which offer size privacy. A fourth retail venue does not win on volume.
+- Market makers are the party that actually pays for adverse-selection protection, and Solana Foundation's **Frontier Traders** program (Aug 2026) now pays rebates to venues that bring makers on. Archer and Flint joined in the same week.
+- RL market makers detect and adversely select split meta-orders ([2510.27334](https://arxiv.org/abs/2510.27334)); slicing a whale order does not hide it. A size-blind book is the structural fix.
+
+So: same engine, same commit-reveal, same ER matching. New one-liner, new counterparty, new go-to-market.
+
+**What changes**
+
+| Was | Is |
+|---|---|
+| Whale trader hides size from snipers | Market maker quotes without being picked off on size |
+| Retail perps terminal | Venue that plugs into Frontier Traders and aggregator flow |
+| "Privacy" pitch | "Adverse selection" pitch, with the rebate schedule following [2501.12591](https://arxiv.org/abs/2501.12591) |
+| Flat maker rebate | Frontier Traders funded rebate tiers |
+
+**Open question we are answering first (Ascent residency, Sept 21 to 28):** if a maker cannot see taker size, do they quote tighter or wider? The agent-based literature ([2606.05882](https://arxiv.org/abs/2606.05882)) predicts wider unless size bands carry enough signal. Five maker interviews decide whether the pivot holds or we move the engine to a size-private prediction-market book instead.
+
+**What is not claimed:** flow privacy. The fill tape after settlement leaks magnitude information ([2512.15720](https://arxiv.org/abs/2512.15720)). DarkBook hides pre-trade size, nothing more.
+
+---
+
 ## What it is
 
-DarkBook is a **size-private** central limit order book (CLOB) for perpetual futures on Solana. Orders match on a MagicBlock Ephemeral Rollup at sub-50ms latency. Exact lot size is bound by a SHA-256 commitment and revealed only at settlement. Side, price, leverage, size band (Small/Med/Large/Whale), and trader pubkey remain public on the book account. Settlement is atomic on Solana mainnet. PnL after fill is public.
+DarkBook is a **size-private** central limit order book (CLOB) on Solana, currently for perpetual futures. Orders match on a MagicBlock Ephemeral Rollup at sub-50ms latency. Exact lot size is bound by a SHA-256 commitment and revealed only at settlement. Side, price, leverage, size band (Small/Med/Large/Whale), and trader pubkey remain public on the book account. Settlement is atomic on Solana mainnet. PnL after fill is public.
 
-This is a performance-privacy tradeoff for Solana perps: hide exact size from mempool snipers without ZK prover latency, accept residual trust in the ER validator and settler path.
+This is a performance-privacy tradeoff: hide exact size from anyone reading the book before the match, without ZK prover latency, accepting residual trust in the ER validator and settler path.
 
 - Architecture: see [ARCHITECTURE.md](./ARCHITECTURE.md)
 - Privacy truth table: [docs/PRIVACY_MODEL.md](./docs/PRIVACY_MODEL.md)
+- Research log (Copilot data, winner outcomes, literature): [docs/research/](./docs/research/)
 
 ---
 
@@ -150,7 +176,7 @@ anchor test
 ```bash
 cd scripts
 bash deploy-devnet.sh
-# Outputs deployed program ID — set DARKBOOK_PROGRAM_ID in .env
+# Outputs deployed program ID, then set DARKBOOK_PROGRAM_ID in .env
 ```
 
 ### Initialize a market (SOL/USDC)
@@ -287,8 +313,8 @@ MIT
 
 ## Acknowledgements
 
-- **Anatoly Yakovenko** — Percolator (immutable risk engine, Feb 2026). DarkBook extends the Percolator pattern to a private order book context. Same operational-safety philosophy: immutable settlement contract, burned admin keys, permissionless liquidators.
-- **MagicBlock team** — Ephemeral Rollups SDK + devnet infrastructure that makes sub-50ms on-chain matching possible without a separate chain.
-- **Pyth Network** — Lazer sub-ms price feeds that eliminate oracle latency as a bottleneck for liquidation accuracy.
-- **Galaxy Digital** — ICM thesis (Oct 2025) framing Solana's destiny as "Nasdaq at the speed of light." DarkBook is infrastructure for that future.
+- **Anatoly Yakovenko**: Percolator (immutable risk engine, Feb 2026). DarkBook extends the Percolator pattern to a private order book context. Same operational-safety philosophy: immutable settlement contract, burned admin keys, permissionless liquidators.
+- **MagicBlock team**: Ephemeral Rollups SDK + devnet infrastructure that makes sub-50ms on-chain matching possible without a separate chain.
+- **Pyth Network**: Lazer sub-ms price feeds that eliminate oracle latency as a bottleneck for liquidation accuracy.
+- **Galaxy Digital**: ICM thesis (Oct 2025) framing Solana's destiny as "Nasdaq at the speed of light." DarkBook is infrastructure for that future.
 
